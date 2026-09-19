@@ -2,6 +2,7 @@ extends Control
 
 # Reeling Minigame HUD (Horizontal Bottom Bar style)
 signal reeling_finished(success: bool, fish_data: Dictionary)
+signal reeling_tick(progress_ratio: float, is_inside: bool, is_active: bool)
 
 @onready var track: Control = $Panel/Margin/VBox/Track
 @onready var catch_bar: Panel = $Panel/Margin/VBox/Track/CatchBar
@@ -183,6 +184,7 @@ func _process(delta: float) -> void:
 		
 	progress = clamp(progress, 0.0, 100.0)
 	progress_bar.value = progress
+	reeling_tick.emit(progress / 100.0, is_inside, is_active)
 	
 	# 4. Victory / Loss condition
 	if progress >= 100.0:
@@ -193,6 +195,7 @@ func _process(delta: float) -> void:
 func _end_reeling(success: bool) -> void:
 	is_active = false
 	set_process(false)
+	reeling_tick.emit(progress / 100.0, false, false)
 	
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 0.2)

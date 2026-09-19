@@ -22,6 +22,7 @@ var pending_fish: Dictionary = {}
 @onready var bobber_icon: Label = $Bobber/BobberIcon
 @onready var alert_icon: Label = $Bobber/AlertIcon
 @onready var ripple_ring: Panel = $Bobber/RippleRing
+@onready var splash_particles: CPUParticles2D = $Bobber/SplashParticles
 @onready var lbl_prompt: Label = $HUD/LblPrompt
 
 @onready var reeling_hud: Control = $HUD/ReelingHUD
@@ -38,6 +39,12 @@ var pending_fish: Dictionary = {}
 
 var _bobber_origin_y: float = 0.0
 var _anim_time: float = 0.0
+var _cast_pos: Vector2 = Vector2(640.0, 520.0)
+var _player_pos: Vector2 = Vector2(640.0, 660.0)
+var _far_pos: Vector2 = Vector2(640.0, 400.0)
+var _reeling_progress: float = 0.35
+var _is_reeling_inside: bool = false
+var _is_reeling_active: bool = false
 
 func _ready() -> void:
 	btn_back.pressed.connect(_on_back_pressed)
@@ -45,6 +52,7 @@ func _ready() -> void:
 	water_surface.gui_input.connect(_on_water_clicked)
 	
 	reeling_hud.reeling_finished.connect(_on_reeling_finished)
+	reeling_hud.reeling_tick.connect(_on_reeling_tick)
 	catch_dialog.dialog_closed.connect(_on_catch_dialog_closed)
 	
 	if GameManager:
@@ -65,9 +73,16 @@ func _ready() -> void:
 	reeling_hud.visible = false
 	catch_dialog.visible = false
 	tackle_dialog.visible = false
+	if splash_particles:
+		splash_particles.emitting = false
 	
 	_update_bait_display()
 	_set_state(FishingState.IDLE)
+
+func _on_reeling_tick(progress_ratio: float, is_inside: bool, is_active: bool) -> void:
+	_reeling_progress = progress_ratio
+	_is_reeling_inside = is_inside
+	_is_reeling_active = is_active
 
 func _process(delta: float) -> void:
 	_anim_time += delta
@@ -75,10 +90,55 @@ func _process(delta: float) -> void:
 	# Gentle floating animation on bobber in water
 	if bobber.visible and current_state == FishingState.WAITING:
 		bobber.position.y = _bobber_origin_y + sin(_anim_time * 4.0) * 4.0
+		bobber.rotation = sin(_anim_time * 2.0) * 0.05
 		
-	if current_state == FishingState.BITING:
-		# Exclamation mark jumping pulse
+	elif current_state == FishingState.BITING:
+		# Exclamation mark jumping pulse and quick bobber dip
 		alert_icon.position.y = -55.0 + sin(_anim_time * 18.0) * 6.0
+		bobber.position.y = _bobber_origin_y + 8.0 + sin(_anim_time * 14.0) * 3.0
+		bobber.rotation = sin(_anim_time * 16.0) * 0.12
+		
+	elif current_state == FishingState.REELING and _is_reeling_active and bobber.visible:
+		# Dynamic bobber minigame behavior:
+		# 1. Pulling (inside bar) -> bobber approaches player (bottom center) & wobbles
+		# 2. Miss (outside bar) -> fish pulls away deeper into water & thrashes erratically
+		# 3. Water splashes reflect current action
+		
+		if _is_reeling_inside:
+			# Player successfully reels! Bobber pulled towards player (bottom center)
+			var target_base = _cast_pos.lerp(_player_pos, _reeling_progress)
+			
+			# Bobber wobbles as it cuts through water under tension
+			var wobble_x = sin(_anim_time * 26.0) * 7.5
+			var wobble_y = cos(_anim_time * 24.0) * 3.0
+			var wobble_rot = sin(_anim_time * 24.0) * 0.2
+			
+			bobber.position = bobber.position.lerp(target_base + Vector2(wobble_x, wobble_y), delta * 5.5)
+			bobber.rotation = lerp_angle(bobber.rotation, wobble_rot, delta * 8.0)
+			
+			if splash_particles:
+				splash_particles.emitting = true
+				splash_particles.amount = 12
+				splash_particles.initial_velocity_min = 60.0
+				splash_particles.initial_velocity_max = 130.0
+		else:
+			# Player misses / fish fights back! Bobber moves away into deeper water
+			var miss_factor = clamp((1.0 - _reeling_progress) * 1.25, 0.0, 1.0)
+			var target_base = _cast_pos.lerp(_far_pos, miss_factor)
+			
+			# Erratic thrashing of fish pulling against line
+			var thrash_x = sin(_anim_time * 36.0) * 13.0 + sin(_anim_time * 14.0) * 6.0
+			var thrash_y = cos(_anim_time * 30.0) * 5.5
+			var thrash_rot = sin(_anim_time * 30.0) * 0.35
+			
+			bobber.position = bobber.position.lerp(target_base + Vector2(thrash_x, thrash_y), delta * 4.2)
+			bobber.rotation = lerp_angle(bobber.rotation, thrash_rot, delta * 10.0)
+			
+			if splash_particles:
+				splash_particles.emitting = true
+				splash_particles.amount = 18
+				splash_particles.initial_velocity_min = 90.0
+				splash_particles.initial_velocity_max = 180.0
 
 func _set_state(new_state: FishingState) -> void:
 	current_state = new_state
@@ -95,6 +155,9 @@ func _set_state(new_state: FishingState) -> void:
 			alert_icon.visible = false
 			ripple_ring.visible = false
 			bobber.visible = false
+			bobber.rotation = 0.0
+			if splash_particles:
+				splash_particles.emitting = false
 		FishingState.CASTING:
 			lbl_prompt.text = ""
 			alert_icon.visible = false
@@ -102,14 +165,20 @@ func _set_state(new_state: FishingState) -> void:
 			lbl_prompt.text = ""
 			ripple_ring.visible = true
 			alert_icon.visible = false
+			if splash_particles:
+				splash_particles.emitting = false
 		FishingState.BITING:
 			lbl_prompt.text = ""
 		FishingState.REELING:
 			lbl_prompt.text = ""
 			alert_icon.visible = false
+			bobber.visible = true
+			_is_reeling_active = true
 		FishingState.ESCAPED:
 			alert_icon.visible = false
-			bobber.visible = false
+			if splash_particles:
+				splash_particles.emitting = false
+			bobber.rotation = 0.0
 
 func _on_water_clicked(event: InputEvent) -> void:
 	if not (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed):
@@ -127,20 +196,33 @@ func _cast_line(target_pos: Vector2) -> void:
 	# Clamp click within water bounds
 	var clamped_x = clamp(target_pos.x, 320.0, 1100.0)
 	var clamped_y = clamp(target_pos.y, 420.0, 640.0)
-	var final_pos = Vector2(clamped_x, clamped_y)
+	_cast_pos = Vector2(clamped_x, clamped_y)
 	
-	bobber.position = Vector2(final_pos.x, final_pos.y - 120.0)
-	_bobber_origin_y = final_pos.y
+	# Player stands at bottom center; far escape point is deeper in the water
+	_player_pos = Vector2(clamp(_cast_pos.x * 0.25 + 640.0 * 0.75, 520.0, 760.0), 660.0)
+	_far_pos = Vector2(_cast_pos.x + randf_range(-30.0, 30.0), clamp(_cast_pos.y - 120.0, 360.0, 520.0))
+	
+	bobber.position = Vector2(_cast_pos.x, _cast_pos.y - 120.0)
+	bobber.rotation = 0.0
+	_bobber_origin_y = _cast_pos.y
 	bobber.visible = true
 	bobber.modulate.a = 0.0
 	
+	_reeling_progress = 0.35
+	_is_reeling_inside = false
+	_is_reeling_active = false
+	if splash_particles:
+		splash_particles.emitting = false
+	
 	# Splash arc tween
 	var tween = create_tween().set_parallel()
-	tween.tween_property(bobber, "position:y", final_pos.y, 0.35).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_property(bobber, "position:y", _cast_pos.y, 0.35).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tween.tween_property(bobber, "modulate:a", 1.0, 0.2)
 	
 	await tween.finished
 	_spawn_water_ripple()
+	if splash_particles:
+		splash_particles.restart()
 	_set_state(FishingState.WAITING)
 	
 	# Random wait time until bite (significantly affected by bait tier & lure_speed)
@@ -219,18 +301,32 @@ func _fish_escaped(reason: String) -> void:
 	lbl_prompt.text = reason
 	lbl_prompt.modulate = Color(1, 0.4, 0.35)
 	
-	var tween = create_tween()
-	tween.tween_property(bobber, "modulate:a", 0.0, 0.4)
+	if splash_particles:
+		splash_particles.emitting = false
+	_spawn_water_ripple()
+	
+	# Bobber gets dragged away deep into water and fades
+	var tween = create_tween().set_parallel()
+	tween.tween_property(bobber, "position:y", bobber.position.y - 45.0, 0.4).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_property(bobber, "modulate:a", 0.0, 0.35)
 	await tween.finished
 	bobber.visible = false
+	bobber.rotation = 0.0
 	
 	get_tree().create_timer(1.2).timeout.connect(func():
-		_set_state(FishingState.IDLE)
+		if current_state == FishingState.ESCAPED:
+			_set_state(FishingState.IDLE)
 	)
 
 func _on_reeling_finished(success: bool, fish_data: Dictionary) -> void:
+	_is_reeling_active = false
+	if splash_particles:
+		splash_particles.emitting = false
+	bobber.rotation = 0.0
+	
 	if success:
 		_set_state(FishingState.RESULT)
+		_spawn_water_ripple()
 		bobber.visible = false
 		catch_dialog.show_catch(fish_data)
 	else:
