@@ -49,34 +49,39 @@ func refresh_almanac() -> void:
 		var card = _create_fish_card(data, is_caught)
 		grid_container.add_child(card)
 
+const FONT_OUTFIT = preload("res://assets/fonts/Outfit-Bold.ttf")
+
 func _create_fish_card(data: Dictionary, is_caught: bool) -> PanelContainer:
 	var card = PanelContainer.new()
 	card.custom_minimum_size = Vector2(330, 160)
 	
 	var style = StyleBoxFlat.new()
-	style.corner_radius_top_left = 12
-	style.corner_radius_top_right = 12
-	style.corner_radius_bottom_left = 12
-	style.corner_radius_bottom_right = 12
+	style.corner_radius_top_left = 14
+	style.corner_radius_top_right = 14
+	style.corner_radius_bottom_left = 14
+	style.corner_radius_bottom_right = 14
 	style.content_margin_left = 16
 	style.content_margin_right = 16
 	style.content_margin_top = 12
 	style.content_margin_bottom = 12
+	style.shadow_size = 6
+	style.shadow_offset = Vector2(0, 3)
+	style.shadow_color = Color(0, 0, 0, 0.35)
 	
 	if is_caught:
-		style.bg_color = Color(0.12, 0.18, 0.22, 0.9)
-		style.border_width_left = 1
-		style.border_width_top = 1
-		style.border_width_right = 1
-		style.border_width_bottom = 1
-		style.border_color = Color(0.35, 0.65, 0.8, 0.5)
+		style.bg_color = Color(0.12, 0.18, 0.24, 0.95)
+		style.border_width_left = 2
+		style.border_width_top = 2
+		style.border_width_right = 2
+		style.border_width_bottom = 2
+		style.border_color = Color(0.4, 0.75, 0.9, 0.75)
 	else:
-		style.bg_color = Color(0.08, 0.1, 0.12, 0.75)
+		style.bg_color = Color(0.08, 0.1, 0.13, 0.8)
 		style.border_width_left = 1
 		style.border_width_top = 1
 		style.border_width_right = 1
 		style.border_width_bottom = 1
-		style.border_color = Color(0.2, 0.25, 0.3, 0.3)
+		style.border_color = Color(0.25, 0.3, 0.35, 0.5)
 		
 	card.add_theme_stylebox_override("panel", style)
 	
@@ -96,6 +101,7 @@ func _create_fish_card(data: Dictionary, is_caught: bool) -> PanelContainer:
 	
 	var name_lbl = Label.new()
 	name_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_lbl.add_theme_font_override("font", FONT_OUTFIT)
 	name_lbl.add_theme_font_size_override("font_size", 16)
 	
 	if is_caught:

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/wardrobe/wardrobe.gd" id="1_script"]
 [ext_resource type="Texture2D" path="res://assets/textures/day.jpeg" id="2_bg"]
+[ext_resource type="FontFile" path="res://assets/fonts/Outfit-Bold.ttf" id="3_font_outfit"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_back"]
 bg_color = Color(0.12, 0.16, 0.22, 0.9)
@@ -82,18 +83,19 @@ shadow_size = 12
 shadow_color = Color(0, 0, 0, 0.5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_detail_panel"]
-bg_color = Color(0.08, 0.11, 0.16, 0.94)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.35, 0.65, 0.8, 0.5)
+bg_color = Color(0.08, 0.11, 0.16, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.45, 0.78, 0.95, 0.85)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_left = 20
 corner_radius_bottom_right = 20
-shadow_size = 16
-shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 14
+shadow_offset = Vector2(0, 8)
+shadow_color = Color(0, 0, 0, 0.55)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_silhouette"]
 bg_color = Color(0.1, 0.15, 0.22, 0.8)
@@ -162,6 +164,7 @@ theme_override_constants/separation = 20
 [node name="BtnBack" type="Button" parent="TopBar/Margin/HBox"]
 custom_minimum_size = Vector2(110, 44)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_font_outfit")
 theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_back")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_back_hover")
@@ -174,6 +177,7 @@ alignment = 1
 
 [node name="LblTitle" type="Label" parent="TopBar/Margin/HBox/TitleBox"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_font_outfit")
 theme_override_colors/font_color = Color(1, 0.9, 0.65, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7)
 theme_override_constants/shadow_offset_y = 2
@@ -195,6 +199,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_cahs_badge")
 
 [node name="LblCahs" type="Label" parent="TopBar/Margin/HBox/CahsBadge"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_font_outfit")
 theme_override_colors/font_color = Color(1, 0.88, 0.35, 1)
 theme_override_font_sizes/font_size = 16
 text = "🪙 0 Cahs"
@@ -323,6 +328,7 @@ theme_override_constants/separation = 2
 
 [node name="LblName" type="Label" parent="StageArea/DetailPanel/Margin/VBox/HeaderBox"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_font_outfit")
 theme_override_colors/font_color = Color(1, 0.9, 0.6, 1)
 theme_override_font_sizes/font_size = 30
 text = "Jia"
@@ -369,6 +375,7 @@ theme_override_constants/separation = 8
 
 [node name="LblCostStatus" type="Label" parent="StageArea/DetailPanel/Margin/VBox/ActionBox"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_font_outfit")
 theme_override_font_sizes/font_size = 15
 text = "Active Angler"
 horizontal_alignment = 1
@@ -376,6 +383,7 @@ horizontal_alignment = 1
 [node name="BtnAction" type="Button" parent="StageArea/DetailPanel/Margin/VBox/ActionBox"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_font_outfit")
 theme_override_font_sizes/font_size = 16
 text = "SELECT ANGLER"
 

@@ -1,20 +1,22 @@
 [gd_scene format=3 uid="uid://almanacdialog01"]
 
 [ext_resource type="Script" path="res://scenes/ui/almanac_dialog.gd" id="1_script"]
+[ext_resource type="FontFile" path="res://assets/fonts/Outfit-Bold.ttf" id="2_font_outfit"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
-bg_color = Color(0.08, 0.12, 0.16, 0.96)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.4, 0.7, 0.8, 0.6)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_left = 16
-corner_radius_bottom_right = 16
-shadow_size = 12
-shadow_color = Color(0, 0, 0, 0.5)
+bg_color = Color(0.08, 0.12, 0.16, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.45, 0.78, 0.95, 0.85)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_left = 18
+corner_radius_bottom_right = 18
+shadow_size = 14
+shadow_offset = Vector2(0, 8)
+shadow_color = Color(0, 0, 0, 0.55)
 
 [node name="AlmanacDialog" type="Control"]
 layout_mode = 3
@@ -69,6 +71,7 @@ size_flags_horizontal = 3
 
 [node name="Title" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HeaderBox/TitleBox"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_font_sizes/font_size = 24
 theme_override_colors/font_color = Color(0.95, 0.85, 0.65, 1)
 text = "📖 FISH ALMANAC"
@@ -81,6 +84,7 @@ text = "Mysterious lake compendium. Every fish caught can also be hooked as bait
 
 [node name="LblProgress" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HeaderBox"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.4, 0.95, 0.6, 1)
 text = "Discovered: 1 / 6 Species"
@@ -88,6 +92,7 @@ text = "Discovered: 1 / 6 Species"
 [node name="BtnClose" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HeaderBox"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_font_sizes/font_size = 16
 text = "✕"
 

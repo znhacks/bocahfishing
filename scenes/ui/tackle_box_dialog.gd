@@ -78,29 +78,39 @@ func refresh_items() -> void:
 		var card = _create_item_card(item_id, data, amount)
 		item_container.add_child(card)
 
+const FONT_OUTFIT = preload("res://assets/fonts/Outfit-Bold.ttf")
+
 func _create_item_card(item_id: String, data: Dictionary, amount: int) -> PanelContainer:
 	var card = PanelContainer.new()
 	var is_equipped = (item_id == GameManager.equipped_bait)
 	
 	var style = StyleBoxFlat.new()
-	style.corner_radius_top_left = 10
-	style.corner_radius_top_right = 10
-	style.corner_radius_bottom_left = 10
-	style.corner_radius_bottom_right = 10
+	style.corner_radius_top_left = 12
+	style.corner_radius_top_right = 12
+	style.corner_radius_bottom_left = 12
+	style.corner_radius_bottom_right = 12
 	style.content_margin_left = 16
 	style.content_margin_right = 16
 	style.content_margin_top = 10
 	style.content_margin_bottom = 10
+	style.shadow_size = 4
+	style.shadow_offset = Vector2(0, 2)
+	style.shadow_color = Color(0, 0, 0, 0.3)
 	
 	if is_equipped:
-		style.bg_color = Color(0.18, 0.45, 0.3, 0.9)
+		style.bg_color = Color(0.18, 0.48, 0.32, 0.95)
 		style.border_width_left = 2
 		style.border_width_top = 2
 		style.border_width_right = 2
 		style.border_width_bottom = 2
-		style.border_color = Color(0.4, 0.9, 0.5)
+		style.border_color = Color(0.45, 0.95, 0.6)
 	else:
-		style.bg_color = Color(0.15, 0.2, 0.25, 0.85)
+		style.bg_color = Color(0.12, 0.17, 0.22, 0.9)
+		style.border_width_left = 1
+		style.border_width_top = 1
+		style.border_width_right = 1
+		style.border_width_bottom = 1
+		style.border_color = Color(0.28, 0.38, 0.48, 0.6)
 		
 	card.add_theme_stylebox_override("panel", style)
 	
@@ -123,11 +133,13 @@ func _create_item_card(item_id: String, data: Dictionary, amount: int) -> PanelC
 	var title_box = HBoxContainer.new()
 	var name_lbl = Label.new()
 	name_lbl.text = data.get("name", "Item")
+	name_lbl.add_theme_font_override("font", FONT_OUTFIT)
 	name_lbl.add_theme_font_size_override("font_size", 18)
 	title_box.add_child(name_lbl)
 	
 	var qty_lbl = Label.new()
 	qty_lbl.text = "x%d" % amount
+	qty_lbl.add_theme_font_override("font", FONT_OUTFIT)
 	qty_lbl.modulate = Color(0.8, 0.9, 1.0, 0.8)
 	title_box.add_child(qty_lbl)
 	

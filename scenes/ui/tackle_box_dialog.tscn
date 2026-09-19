@@ -1,36 +1,41 @@
 [gd_scene format=3 uid="uid://tackleboxdialog01"]
 
 [ext_resource type="Script" path="res://scenes/ui/tackle_box_dialog.gd" id="1_script"]
+[ext_resource type="FontFile" path="res://assets/fonts/Outfit-Bold.ttf" id="2_font_outfit"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
-bg_color = Color(0.08, 0.12, 0.16, 0.96)
+bg_color = Color(0.08, 0.12, 0.16, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.45, 0.78, 0.95, 0.85)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_left = 18
+corner_radius_bottom_right = 18
+shadow_size = 14
+shadow_offset = Vector2(0, 8)
+shadow_color = Color(0, 0, 0, 0.55)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_sell"]
+bg_color = Color(0.18, 0.48, 0.3, 0.95)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.4, 0.7, 0.8, 0.6)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_left = 16
-corner_radius_bottom_right = 16
-shadow_size = 12
-shadow_color = Color(0, 0, 0, 0.5)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_sell"]
-bg_color = Color(0.18, 0.45, 0.28, 0.9)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.4, 0.85, 0.5, 0.8)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_left = 8
-corner_radius_bottom_right = 8
-content_margin_left = 12
+border_color = Color(0.45, 0.95, 0.6, 0.9)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_left = 10
+corner_radius_bottom_right = 10
+content_margin_left = 14
 content_margin_top = 6
-content_margin_right = 12
+content_margin_right = 14
 content_margin_bottom = 6
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+shadow_color = Color(0, 0, 0, 0.3)
 
 
 [node name="TackleBoxDialog" type="Control"]
@@ -87,6 +92,7 @@ size_flags_horizontal = 3
 
 [node name="Title" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HeaderBox/TitleBox"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_font_sizes/font_size = 24
 theme_override_colors/font_color = Color(0.95, 0.85, 0.65, 1)
 text = "🎒 INVENTORY"
@@ -99,6 +105,7 @@ text = "Hook anything from your pockets onto your fishing line! (Everything is B
 
 [node name="LblCahs" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HeaderBox"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_colors/font_color = Color(1, 0.88, 0.35, 1)
 theme_override_font_sizes/font_size = 15
 text = "🪙 0 Cahs"
@@ -106,12 +113,14 @@ text = "🪙 0 Cahs"
 [node name="BtnSellAll" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HeaderBox"]
 custom_minimum_size = Vector2(110, 34)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_sell")
 text = "Sell All Fish 🪙"
 
 [node name="BtnClose" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HeaderBox"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_font_sizes/font_size = 16
 text = "✕"
 

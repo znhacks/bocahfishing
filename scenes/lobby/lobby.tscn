@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/almanac_dialog.tscn" id="4_almanac"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_dialog.tscn" id="5_settings"]
 [ext_resource type="PackedScene" path="res://scenes/ui/stats_dialog.tscn" id="6_stats"]
+[ext_resource type="FontFile" path="res://assets/fonts/Outfit-Bold.ttf" id="7_font_outfit"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_clock_badge"]
 bg_color = Color(0.08, 0.12, 0.16, 0.9)
@@ -44,31 +45,33 @@ shadow_size = 6
 shadow_color = Color(0, 0, 0, 0.35)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_play"]
-bg_color = Color(0.18, 0.58, 0.38, 0.95)
+bg_color = Color(0.18, 0.62, 0.4, 0.98)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
-border_color = Color(0.5, 0.95, 0.65, 0.9)
-corner_radius_top_left = 24
-corner_radius_top_right = 24
-corner_radius_bottom_left = 24
-corner_radius_bottom_right = 24
+border_color = Color(0.55, 1, 0.72, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_left = 22
+corner_radius_bottom_right = 22
 shadow_size = 8
-shadow_color = Color(0, 0, 0, 0.4)
+shadow_offset = Vector2(0, 4)
+shadow_color = Color(0, 0, 0, 0.45)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_play_hover"]
-bg_color = Color(0.24, 0.7, 0.46, 1)
+bg_color = Color(0.24, 0.74, 0.48, 1)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
-border_color = Color(0.7, 1, 0.8, 1)
-corner_radius_top_left = 24
-corner_radius_top_right = 24
-corner_radius_bottom_left = 24
-corner_radius_bottom_right = 24
+border_color = Color(0.75, 1, 0.85, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_left = 22
+corner_radius_bottom_right = 22
 shadow_size = 12
+shadow_offset = Vector2(0, 5)
 shadow_color = Color(0, 0, 0, 0.5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bait_card"]
@@ -162,6 +165,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_clock_badge")
 
 [node name="LblClock" type="Label" parent="HUD/TopLeftBar/ClockBadge"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("7_font_outfit")
 theme_override_colors/font_color = Color(0.88, 0.95, 1, 1)
 theme_override_font_sizes/font_size = 15
 text = "☀️ 06:00"
@@ -185,6 +189,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_cahs_badge")
 
 [node name="LblCahs" type="Label" parent="HUD/TopRightBar/CahsBadge"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("7_font_outfit")
 theme_override_colors/font_color = Color(1, 0.88, 0.35, 1)
 theme_override_font_sizes/font_size = 15
 text = "🪙 0 Cahs"
@@ -240,19 +245,27 @@ alignment = 1
 
 [node name="Title" type="Label" parent="HUD/TitleContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 48
+theme_override_fonts/font = ExtResource("7_font_outfit")
+theme_override_font_sizes/font_size = 52
 theme_override_colors/font_color = Color(1, 0.96, 0.88, 1)
-theme_override_colors/font_shadow_color = Color(0.1, 0.15, 0.2, 0.9)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 3
+theme_override_colors/font_outline_color = Color(0.08, 0.12, 0.18, 1)
+theme_override_constants/outline_size = 8
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.65)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 4
 text = "BOCAH FISHING"
 horizontal_alignment = 1
 
 [node name="Subtitle" type="Label" parent="HUD/TitleContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("7_font_outfit")
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.95, 0.85, 0.55, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.6)
+theme_override_colors/font_color = Color(1, 0.85, 0.45, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.1, 0.14, 0.95)
+theme_override_constants/outline_size = 4
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
 text = "Everything is Bait"
 horizontal_alignment = 1
 
@@ -267,21 +280,22 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="BtnPlay" type="Button" parent="HUD/CenterButtons"]
-custom_minimum_size = Vector2(240, 64)
+custom_minimum_size = Vector2(250, 68)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -120.0
+offset_left = -125.0
 offset_top = 40.0
-offset_right = 120.0
-offset_bottom = 104.0
+offset_right = 125.0
+offset_bottom = 108.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(120, 32)
-theme_override_font_sizes/font_size = 22
+pivot_offset = Vector2(125, 34)
+theme_override_fonts/font = ExtResource("7_font_outfit")
+theme_override_font_sizes/font_size = 23
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_play")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_play_hover")
 text = "🎣 GO FISHING"
@@ -332,6 +346,7 @@ text = "EQUIPPED BAIT:"
 
 [node name="LblBaitName" type="Label" parent="HUD/BottomBar/BaitInfoContainer/HBoxBait/VBoxBaitInfo"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("7_font_outfit")
 theme_override_font_sizes/font_size = 17
 theme_override_colors/font_color = Color(1, 0.92, 0.7, 1)
 text = "Earthworm (x5)"

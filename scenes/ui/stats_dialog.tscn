@@ -1,36 +1,41 @@
 [gd_scene format=3 uid="uid://ddndf4tacuxyy"]
 
 [ext_resource type="Script" path="res://scenes/ui/stats_dialog.gd" id="1_script"]
+[ext_resource type="FontFile" path="res://assets/fonts/Outfit-Bold.ttf" id="2_font_outfit"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
-bg_color = Color(0.08, 0.12, 0.16, 0.96)
+bg_color = Color(0.08, 0.12, 0.16, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.45, 0.78, 0.95, 0.85)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_left = 18
+corner_radius_bottom_right = 18
+shadow_size = 14
+shadow_offset = Vector2(0, 8)
+shadow_color = Color(0, 0, 0, 0.55)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+bg_color = Color(0.12, 0.16, 0.22, 0.9)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.35, 0.65, 0.8, 0.6)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_left = 16
-corner_radius_bottom_right = 16
-shadow_size = 14
-shadow_color = Color(0, 0, 0, 0.55)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
-bg_color = Color(0.12, 0.16, 0.22, 0.85)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.35, 0.55, 0.7, 0.4)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_left = 10
-corner_radius_bottom_right = 10
+border_color = Color(0.35, 0.65, 0.8, 0.55)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_left = 12
+corner_radius_bottom_right = 12
 content_margin_left = 14
 content_margin_top = 8
 content_margin_right = 14
 content_margin_bottom = 8
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+shadow_color = Color(0, 0, 0, 0.3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stat_row"]
 bg_color = Color(0.1, 0.14, 0.19, 0.85)
@@ -103,6 +108,7 @@ theme_override_constants/separation = 2
 
 [node name="Title" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HeaderBox/TitleBox"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_colors/font_color = Color(1, 0.9, 0.65, 1)
 theme_override_font_sizes/font_size = 22
 text = "📊 TOTAL ANGLER & GEAR STATS"
@@ -117,6 +123,7 @@ text = "Combined passive modifiers affecting catch safe zone, lure speed, and li
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_font_sizes/font_size = 16
 text = "✕"
 
@@ -158,6 +165,7 @@ alignment = 1
 
 [node name="LblCharName" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ContentBox/AnglerCard/HBox/VBox"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_colors/font_color = Color(1, 0.92, 0.7, 1)
 theme_override_font_sizes/font_size = 17
 text = "Jia"
@@ -310,12 +318,14 @@ alignment = 1
 
 [node name="LblAlmanac" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/CareerBox/HBox"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_colors/font_color = Color(0.7, 0.9, 1, 1)
 theme_override_font_sizes/font_size = 13
 text = "📖 Almanac: 2 / 12 (17%)"
 
 [node name="LblCahs" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/CareerBox/HBox"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_colors/font_color = Color(1, 0.88, 0.4, 1)
 theme_override_font_sizes/font_size = 13
 text = "🪙 Balance: 10 Cahs"

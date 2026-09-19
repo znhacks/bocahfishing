@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/gameplay/reeling_hud.tscn" id="3_reeling"]
 [ext_resource type="PackedScene" path="res://scenes/ui/catch_dialog.tscn" id="4_catch"]
 [ext_resource type="PackedScene" path="res://scenes/ui/tackle_box_dialog.tscn" id="5_tackle"]
+[ext_resource type="FontFile" path="res://assets/fonts/Outfit-Bold.ttf" id="6_font_outfit"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ripple"]
 bg_color = Color(1, 1, 1, 0)
@@ -19,76 +20,91 @@ corner_radius_bottom_left = 40
 corner_radius_bottom_right = 40
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_back"]
-bg_color = Color(0.09, 0.14, 0.18, 0.85)
+bg_color = Color(0.09, 0.14, 0.19, 0.92)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.35, 0.6, 0.7, 0.6)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_left = 12
-corner_radius_bottom_right = 12
+border_color = Color(0.4, 0.75, 0.95, 0.75)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_left = 14
+corner_radius_bottom_right = 14
 content_margin_left = 16
 content_margin_top = 8
 content_margin_right = 16
 content_margin_bottom = 8
+shadow_size = 6
+shadow_offset = Vector2(0, 3)
+shadow_color = Color(0, 0, 0, 0.35)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_back_hover"]
-bg_color = Color(0.18, 0.28, 0.36, 0.95)
+bg_color = Color(0.18, 0.3, 0.4, 0.98)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.65, 0.9, 1, 0.95)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_left = 12
-corner_radius_bottom_right = 12
+border_color = Color(0.65, 0.95, 1, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_left = 14
+corner_radius_bottom_right = 14
 content_margin_left = 16
 content_margin_top = 8
 content_margin_right = 16
 content_margin_bottom = 8
+shadow_size = 8
+shadow_offset = Vector2(0, 4)
+shadow_color = Color(0, 0, 0, 0.45)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bait_card"]
-bg_color = Color(0.07, 0.11, 0.15, 0.85)
+bg_color = Color(0.07, 0.12, 0.16, 0.9)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.35, 0.65, 0.75, 0.6)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_left = 12
-corner_radius_bottom_right = 12
+border_color = Color(0.35, 0.7, 0.8, 0.7)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_left = 14
+corner_radius_bottom_right = 14
 content_margin_left = 16
 content_margin_top = 8
 content_margin_right = 16
 content_margin_bottom = 8
+shadow_size = 6
+shadow_offset = Vector2(0, 3)
+shadow_color = Color(0, 0, 0, 0.35)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon_btn"]
-bg_color = Color(0.09, 0.14, 0.18, 0.85)
+bg_color = Color(0.09, 0.14, 0.18, 0.9)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.4, 0.65, 0.75, 0.6)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_left = 12
-corner_radius_bottom_right = 12
+border_color = Color(0.4, 0.7, 0.8, 0.7)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_left = 14
+corner_radius_bottom_right = 14
+shadow_size = 6
+shadow_offset = Vector2(0, 3)
+shadow_color = Color(0, 0, 0, 0.35)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon_btn_hover"]
-bg_color = Color(0.18, 0.28, 0.36, 0.95)
+bg_color = Color(0.18, 0.28, 0.38, 0.95)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.65, 0.9, 1, 0.95)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_left = 12
-corner_radius_bottom_right = 12
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_left = 14
+corner_radius_bottom_right = 14
+shadow_size = 8
+shadow_offset = Vector2(0, 4)
+shadow_color = Color(0, 0, 0, 0.45)
 
 [node name="FishingSpot" type="Control"]
 layout_mode = 3
@@ -226,6 +242,8 @@ theme_override_constants/separation = 14
 [node name="BtnBack" type="Button" parent="HUD/TopBar"]
 custom_minimum_size = Vector2(110, 46)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("6_font_outfit")
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_back")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_back_hover")
 text = "← Lobby"
@@ -236,6 +254,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_bait_card")
 
 [node name="LblClock" type="Label" parent="HUD/TopBar/ClockCard"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("6_font_outfit")
 theme_override_colors/font_color = Color(0.88, 0.95, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "☀️ 06:00"
@@ -250,6 +269,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_bait_card")
 
 [node name="LblCahs" type="Label" parent="HUD/TopBar/CahsCard"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("6_font_outfit")
 theme_override_colors/font_color = Color(1, 0.88, 0.35, 1)
 theme_override_font_sizes/font_size = 14
 text = "🪙 0 Cahs"
@@ -260,6 +280,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_bait_card")
 
 [node name="LblBaitInfo" type="Label" parent="HUD/TopBar/BaitCard"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("6_font_outfit")
 theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(1, 0.9, 0.6, 1)
 text = "🪱 Earthworm (x5)"
@@ -277,15 +298,18 @@ text = "🧰"
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -300.0
-offset_top = 90.0
-offset_right = 300.0
-offset_bottom = 130.0
+offset_left = -320.0
+offset_top = 88.0
+offset_right = 320.0
+offset_bottom = 128.0
 grow_horizontal = 2
+theme_override_fonts/font = ExtResource("6_font_outfit")
 theme_override_font_sizes/font_size = 20
+theme_override_colors/font_outline_color = Color(0.06, 0.1, 0.15, 0.9)
+theme_override_constants/outline_size = 4
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7)
 theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_offset_y = 3
 text = "Click the calm water to cast your line!"
 horizontal_alignment = 1
 
