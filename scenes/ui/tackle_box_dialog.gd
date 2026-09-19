@@ -6,8 +6,6 @@ extends Control
 signal closed()
 
 @onready var item_container: VBoxContainer = $PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ItemContainer
-@onready var lbl_current_bait: Label = $PanelContainer/MarginContainer/VBoxContainer/HeaderBox/LblCurrentBait
-@onready var btn_unequip_header: Button = $PanelContainer/MarginContainer/VBoxContainer/HeaderBox/BtnUnequipHeader
 @onready var btn_close: Button = $PanelContainer/MarginContainer/VBoxContainer/HeaderBox/BtnClose
 @onready var lbl_cahs: Label = $PanelContainer/MarginContainer/VBoxContainer/HeaderBox/LblCahs
 @onready var btn_sell_all: Button = $PanelContainer/MarginContainer/VBoxContainer/HeaderBox/BtnSellAll
@@ -15,8 +13,6 @@ signal closed()
 func _ready() -> void:
 	btn_close.pressed.connect(_on_close_pressed)
 	btn_sell_all.pressed.connect(_on_sell_all_pressed)
-	if btn_unequip_header:
-		btn_unequip_header.pressed.connect(_on_unequip_pressed)
 	
 	if GameManager:
 		GameManager.inventory_updated.connect(refresh_items)
@@ -41,32 +37,12 @@ func close() -> void:
 func _on_close_pressed() -> void:
 	close()
 
-func _on_unequip_pressed() -> void:
-	GameManager.unequip_bait()
-
 func refresh_items() -> void:
 	if not is_inside_tree() or not item_container:
 		return
 		
 	if lbl_cahs:
 		lbl_cahs.text = "🪙 %d Cahs" % GameManager.cahs
-		
-	var current_data = GameManager.get_equipped_bait_data()
-	var has_bait = not GameManager.equipped_bait.is_empty() and not current_data.is_empty()
-	
-	if not has_bait:
-		lbl_current_bait.text = "Equipped Bait: None"
-		if btn_unequip_header:
-			btn_unequip_header.visible = false
-	else:
-		var qty = GameManager.inventory.get(GameManager.equipped_bait, 0)
-		lbl_current_bait.text = "Equipped: %s %s (x%d)" % [
-			current_data.get("icon_symbol", "🎣"),
-			current_data.get("name", ""),
-			qty
-		]
-		if btn_unequip_header:
-			btn_unequip_header.visible = true
 	
 	for child in item_container.get_children():
 		child.queue_free()

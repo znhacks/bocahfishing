@@ -81,20 +81,6 @@ corner_radius_bottom_right = 16
 shadow_size = 12
 shadow_color = Color(0, 0, 0, 0.5)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pedestal"]
-bg_color = Color(0.04, 0.08, 0.12, 0.8)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.35, 0.7, 0.85, 0.4)
-corner_radius_top_left = 80
-corner_radius_top_right = 80
-corner_radius_bottom_left = 80
-corner_radius_bottom_right = 80
-shadow_size = 20
-shadow_color = Color(0.1, 0.4, 0.6, 0.25)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_detail_panel"]
 bg_color = Color(0.08, 0.11, 0.16, 0.94)
 border_width_left = 2
@@ -248,28 +234,11 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 
-[node name="Pedestal" type="Panel" parent="StageArea/CenterShowcase/Stage"]
-custom_minimum_size = Vector2(280, 48)
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -140.0
-offset_top = -54.0
-offset_right = 140.0
-offset_bottom = -6.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_pedestal")
-
 [node name="CharTexture" type="TextureRect" parent="StageArea/CenterShowcase/Stage"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 1
