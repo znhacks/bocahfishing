@@ -133,8 +133,16 @@ func _process(delta: float) -> void:
 		fish_timer = randf_range(fish_change_interval * 0.6, fish_change_interval * 1.4)
 		fish_target_x = randf_range(16.0, TRACK_WIDTH - 36.0)
 		
+	var mods = GameManager.get_character_modifiers() if GameManager else {}
+	var resilience: float = mods.get("resilience", 1.0)
+	
+	# High resilience stabilizes erratic thrashing
+	var speed_mult: float = 1.0
+	if resilience > 1.0:
+		speed_mult = 1.0 - (resilience - 1.0) * 0.35
+		
 	var prev_x = fish_x
-	fish_x = move_toward(fish_x, fish_target_x, fish_speed * delta)
+	fish_x = move_toward(fish_x, fish_target_x, fish_speed * speed_mult * delta)
 	fish_icon.position.x = fish_x
 	
 	# Flip fish sprite based on swim direction
@@ -153,13 +161,25 @@ func _process(delta: float) -> void:
 		lbl_status.text = "▲ REEL +%d%%" % int(FILL_RATE)
 		lbl_status.modulate = Color(0.35, 1.0, 0.65)
 	else:
-		var mods = GameManager.get_character_modifiers() if GameManager else {}
-		var resilience = mods.get("resilience", 1.0)
-		var effective_drain = DRAIN_RATE / resilience
+		# Resilience scales escape drain significantly
+		var effective_drain: float
+		if resilience >= 1.0:
+			effective_drain = DRAIN_RATE / (1.0 + (resilience - 1.0) * 2.0)
+		else:
+			effective_drain = DRAIN_RATE * (1.0 + (1.0 - resilience) * 2.0)
+			
 		progress -= effective_drain * delta
 		catch_bar.modulate = Color(1.0, 0.45, 0.35, 0.85)
-		lbl_status.text = "▼ ESC -%d%%" % int(effective_drain)
-		lbl_status.modulate = Color(1.0, 0.45, 0.4)
+		
+		if resilience >= 1.15:
+			lbl_status.text = "▼ ESC -%d%% [🛡️ Resilient]" % int(effective_drain)
+			lbl_status.modulate = Color(1.0, 0.7, 0.4)
+		elif resilience <= 0.85:
+			lbl_status.text = "▼ ESC -%d%% [⚠️ Fragile]" % int(effective_drain)
+			lbl_status.modulate = Color(1.0, 0.25, 0.25)
+		else:
+			lbl_status.text = "▼ ESC -%d%%" % int(effective_drain)
+			lbl_status.modulate = Color(1.0, 0.45, 0.4)
 		
 	progress = clamp(progress, 0.0, 100.0)
 	progress_bar.value = progress

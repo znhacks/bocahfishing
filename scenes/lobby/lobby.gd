@@ -13,6 +13,7 @@ extends Control
 @onready var bait_card: PanelContainer = $HUD/BottomBar/BaitInfoContainer
 
 @onready var btn_skills: Button = $HUD/TopRightBar/BtnSkills
+@onready var btn_stats: Button = $HUD/TopRightBar/BtnStats
 @onready var lbl_cahs: Label = $HUD/TopRightBar/CahsBadge/LblCahs
 @onready var btn_almanac: Button = $HUD/TopRightBar/BtnAlmanac
 @onready var btn_settings: Button = $HUD/TopRightBar/BtnSettings
@@ -20,6 +21,7 @@ extends Control
 @onready var tackle_dialog: Control = $DialogLayer/TackleBoxDialog
 @onready var almanac_dialog: Control = $DialogLayer/AlmanacDialog
 @onready var settings_dialog: Control = $DialogLayer/SettingsDialog
+@onready var stats_dialog: Control = $DialogLayer/StatsDialog
 
 @onready var title_container: Control = $HUD/TitleContainer
 @onready var bg_texture: TextureRect = $BackgroundLayer/BgTexture
@@ -39,6 +41,7 @@ func _ready() -> void:
 	btn_play.pressed.connect(_on_play_pressed)
 	btn_tackle.pressed.connect(_on_tackle_pressed)
 	btn_skills.pressed.connect(_on_skills_pressed)
+	btn_stats.pressed.connect(_on_stats_pressed)
 	btn_almanac.pressed.connect(_on_almanac_pressed)
 	btn_settings.pressed.connect(_on_settings_pressed)
 	if btn_unequip:
@@ -51,6 +54,7 @@ func _ready() -> void:
 	tackle_dialog.visible = false
 	almanac_dialog.visible = false
 	settings_dialog.visible = false
+	stats_dialog.visible = false
 	
 	_update_ui()
 	_start_intro_animation()
@@ -133,3 +137,6 @@ func _on_almanac_pressed() -> void:
 
 func _on_settings_pressed() -> void:
 	settings_dialog.open()
+
+func _on_stats_pressed() -> void:
+	stats_dialog.open()

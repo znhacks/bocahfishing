@@ -133,10 +133,26 @@ func _cast_line(target_pos: Vector2) -> void:
 	_spawn_water_ripple()
 	_set_state(FishingState.WAITING)
 	
-	# Random wait time until bite (accelerated by character lure_speed)
+	# Random wait time until bite (significantly affected by bait tier & lure_speed)
 	var mods = GameManager.get_character_modifiers() if GameManager else {}
-	var lure_speed_mult = mods.get("lure_speed", 1.0)
-	var wait_duration = randf_range(1.8, 3.8) / lure_speed_mult
+	var lure_speed_mult: float = mods.get("lure_speed", 1.0)
+	
+	var has_bait = not GameManager.equipped_bait.is_empty() and GameManager.inventory.get(GameManager.equipped_bait, 0) > 0
+	var base_wait: float
+	if not has_bait:
+		# Bare hook (no bait): Fish take noticeably longer to investigate an empty hook
+		base_wait = randf_range(6.5, 9.5)
+	else:
+		var bait_data = GameManager.get_equipped_bait_data()
+		var bait_tier = bait_data.get("tier", 1)
+		if bait_tier >= 3:
+			base_wait = randf_range(2.0, 3.2)
+		elif bait_tier == 2:
+			base_wait = randf_range(2.8, 4.0)
+		else:
+			base_wait = randf_range(3.6, 5.0)
+			
+	var wait_duration: float = base_wait / lure_speed_mult
 	get_tree().create_timer(wait_duration).timeout.connect(func():
 		if current_state == FishingState.WAITING:
 			_trigger_bite()

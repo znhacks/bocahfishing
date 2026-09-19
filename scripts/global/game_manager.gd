@@ -284,7 +284,7 @@ var character_db: Dictionary = {
 		"name": "None",
 		"cost": 0,
 		"portrait": "",
-		"desc": "Default angler with standard techniques.",
+		"desc": "Standard beginner gear. Balanced stats with no buffs or debuffs.",
 		"buff_summary": "0% All Stats (Standard)",
 		"modifiers": {
 			"bar_scale": 1.0,
@@ -297,12 +297,12 @@ var character_db: Dictionary = {
 		"name": "Jia",
 		"cost": 50,
 		"portrait": "res://assets/player/Jia.png",
-		"desc": "Energetic & sharp. Sweeps a wider catch zone and lures fish fast.",
-		"buff_summary": "+15% Bar Width • +20% Lure Speed • -5% Resilience",
+		"desc": "Energetic & sharp. Huge catch safe zone and swift bites, but fragile line tension.",
+		"buff_summary": "+25% Safe Bar • +25% Lure Speed • -20% Resilience",
 		"modifiers": {
-			"bar_scale": 1.15,
-			"lure_speed": 1.20,
-			"resilience": 0.95
+			"bar_scale": 1.25,
+			"lure_speed": 1.25,
+			"resilience": 0.80
 		}
 	},
 	"joe": {
@@ -310,12 +310,12 @@ var character_db: Dictionary = {
 		"name": "Joe",
 		"cost": 50,
 		"portrait": "res://assets/player/Joe.png",
-		"desc": "Patient & steadfast. Keeps a rock-solid grip against escaping thrashing.",
-		"buff_summary": "+10% Lure Speed • +10% Resilience • -10% Bar Width",
+		"desc": "Patient & steadfast. High line resilience against thrashing, but narrower catch bar.",
+		"buff_summary": "+15% Lure Speed • +35% Resilience • -20% Safe Bar",
 		"modifiers": {
-			"bar_scale": 0.90,
-			"lure_speed": 1.10,
-			"resilience": 1.10
+			"bar_scale": 0.80,
+			"lure_speed": 1.15,
+			"resilience": 1.35
 		}
 	}
 }

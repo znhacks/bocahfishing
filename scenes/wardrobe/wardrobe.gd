@@ -42,11 +42,11 @@ var characters: Array[Dictionary] = [
 		"texture": preload("res://assets/player/Jia.png"),
 		"lore": "Keen reflexes and sharp eyes. With an expanded rod sweet spot, fish bite eagerly before they even know they're hooked.",
 		"buffs": [
-			"+15% Rod Catch Bar (Wider safe zone)",
-			"+20% Lure Speed (Fish bite significantly faster)"
+			"+25% Safe Bar (Massive catch zone)",
+			"+25% Lure Speed (Fish bite significantly faster)"
 		],
 		"debuffs": [
-			"-5% Line Resilience (Escapes slightly faster outside bar)"
+			"-20% Line Resilience (Escapes fast if outside bar)"
 		]
 	},
 	{
@@ -57,11 +57,11 @@ var characters: Array[Dictionary] = [
 		"texture": preload("res://assets/player/Joe.png"),
 		"lore": "Calm, focused, and unyielding. Even the most furious fighters can't shake his steady tension on the line.",
 		"buffs": [
-			"+10% Lure Speed (Faster bites)",
-			"+10% Line Resilience (Fish escape slower outside bar)"
+			"+15% Lure Speed (Faster bites)",
+			"+35% Line Resilience (Tough line, steady control)"
 		],
 		"debuffs": [
-			"-10% Rod Catch Bar (Requires sharper precision)"
+			"-20% Safe Bar (Requires sharper precision)"
 		]
 	}
 ]

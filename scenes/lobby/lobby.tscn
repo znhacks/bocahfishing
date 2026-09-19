@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/tackle_box_dialog.tscn" id="3_tackle"]
 [ext_resource type="PackedScene" path="res://scenes/ui/almanac_dialog.tscn" id="4_almanac"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_dialog.tscn" id="5_settings"]
+[ext_resource type="PackedScene" path="res://scenes/ui/stats_dialog.tscn" id="6_stats"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cahs_badge"]
 bg_color = Color(0.09, 0.14, 0.18, 0.9)
@@ -146,11 +147,20 @@ vertical_alignment = 1
 [node name="BtnSkills" type="Button" parent="HUD/TopRightBar"]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
-tooltip_text = "Skills & Anglers"
+tooltip_text = "Wardrobe & Anglers"
 theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_icon_btn")
 theme_override_styles/hover = SubResource("StyleBoxFlat_icon_btn_hover")
 text = "⚡"
+
+[node name="BtnStats" type="Button" parent="HUD/TopRightBar"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+tooltip_text = "Angler & Gear Stats"
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_icon_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_icon_btn_hover")
+text = "📊"
 
 [node name="BtnAlmanac" type="Button" parent="HUD/TopRightBar"]
 custom_minimum_size = Vector2(52, 52)
@@ -314,5 +324,8 @@ visible = false
 visible = false
 
 [node name="SettingsDialog" parent="DialogLayer" instance=ExtResource("5_settings")]
+visible = false
+
+[node name="StatsDialog" parent="DialogLayer" instance=ExtResource("6_stats")]
 visible = false
 
