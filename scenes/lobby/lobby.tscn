@@ -1,0 +1,271 @@
+[gd_scene format=3 uid="uid://bocahlobby01"]
+
+[ext_resource type="Script" path="res://scenes/lobby/lobby.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/textures/lobby_bg.jpg" id="2_bg"]
+[ext_resource type="PackedScene" path="res://scenes/ui/tackle_box_dialog.tscn" id="3_tackle"]
+[ext_resource type="PackedScene" path="res://scenes/ui/almanac_dialog.tscn" id="4_almanac"]
+[ext_resource type="PackedScene" path="res://scenes/ui/settings_dialog.tscn" id="5_settings"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_play"]
+bg_color = Color(0.18, 0.58, 0.38, 0.95)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.5, 0.95, 0.65, 0.9)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_left = 24
+corner_radius_bottom_right = 24
+shadow_size = 8
+shadow_color = Color(0, 0, 0, 0.4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_play_hover"]
+bg_color = Color(0.24, 0.7, 0.46, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.7, 1, 0.8, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_left = 24
+corner_radius_bottom_right = 24
+shadow_size = 12
+shadow_color = Color(0, 0, 0, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bait_card"]
+bg_color = Color(0.07, 0.12, 0.16, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.65, 0.75, 0.6)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_left = 14
+corner_radius_bottom_right = 14
+content_margin_left = 20
+content_margin_top = 10
+content_margin_right = 20
+content_margin_bottom = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon_btn"]
+bg_color = Color(0.09, 0.14, 0.18, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.65, 0.75, 0.6)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_left = 14
+corner_radius_bottom_right = 14
+shadow_size = 6
+shadow_color = Color(0, 0, 0, 0.35)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon_btn_hover"]
+bg_color = Color(0.18, 0.28, 0.36, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.65, 0.9, 1, 0.95)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_left = 14
+corner_radius_bottom_right = 14
+shadow_size = 8
+shadow_color = Color(0, 0, 0, 0.45)
+
+[node name="Lobby" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="BackgroundLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="BgTexture" type="TextureRect" parent="BackgroundLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="TopRightBar" type="HBoxContainer" parent="HUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -140.0
+offset_top = 20.0
+offset_right = -24.0
+offset_bottom = 72.0
+grow_horizontal = 0
+theme_override_constants/separation = 12
+alignment = 2
+
+[node name="BtnAlmanac" type="Button" parent="HUD/TopRightBar"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+tooltip_text = "Almanac"
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_icon_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_icon_btn_hover")
+text = "📖"
+
+[node name="BtnSettings" type="Button" parent="HUD/TopRightBar"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+tooltip_text = "Settings"
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_icon_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_icon_btn_hover")
+text = "⚙️"
+
+[node name="TitleContainer" type="VBoxContainer" parent="HUD"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -320.0
+offset_top = 100.0
+offset_right = 320.0
+offset_bottom = 210.0
+grow_horizontal = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Title" type="Label" parent="HUD/TitleContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+theme_override_colors/font_color = Color(1, 0.96, 0.88, 1)
+theme_override_colors/font_shadow_color = Color(0.1, 0.15, 0.2, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+text = "BOCAH FISHING"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="HUD/TitleContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.95, 0.85, 0.55, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.6)
+text = "Everything is Bait"
+horizontal_alignment = 1
+
+[node name="CenterButtons" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BtnPlay" type="Button" parent="HUD/CenterButtons"]
+custom_minimum_size = Vector2(240, 64)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = 40.0
+offset_right = 120.0
+offset_bottom = 104.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(120, 32)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_play")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_play_hover")
+text = "🎣 GO FISHING"
+
+[node name="BottomBar" type="HBoxContainer" parent="HUD"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_top = -100.0
+offset_right = -36.0
+offset_bottom = -26.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 16
+
+[node name="BaitInfoContainer" type="PanelContainer" parent="HUD/BottomBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bait_card")
+
+[node name="HBoxBait" type="HBoxContainer" parent="HUD/BottomBar/BaitInfoContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="LblBaitIcon" type="Label" parent="HUD/BottomBar/BaitInfoContainer/HBoxBait"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "🪱"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxBaitInfo" type="VBoxContainer" parent="HUD/BottomBar/BaitInfoContainer/HBoxBait"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+alignment = 1
+
+[node name="LblHeader" type="Label" parent="HUD/BottomBar/BaitInfoContainer/HBoxBait/VBoxBaitInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.7, 0.85, 0.85, 0.8)
+text = "EQUIPPED BAIT:"
+
+[node name="LblBaitName" type="Label" parent="HUD/BottomBar/BaitInfoContainer/HBoxBait/VBoxBaitInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(1, 0.92, 0.7, 1)
+text = "Earthworm (x5)"
+
+[node name="LblBaitTags" type="Label" parent="HUD/BottomBar/BaitInfoContainer/HBoxBait/VBoxBaitInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.5, 0.9, 0.7, 0.9)
+text = "Traits: Organic, Wiggly"
+
+[node name="BtnTackleBox" type="Button" parent="HUD/BottomBar"]
+custom_minimum_size = Vector2(74, 68)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Tackle Box"
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_icon_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_icon_btn_hover")
+text = "🧰"
+
+[node name="DialogLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="TackleBoxDialog" parent="DialogLayer" instance=ExtResource("3_tackle")]
+visible = false
+
+[node name="AlmanacDialog" parent="DialogLayer" instance=ExtResource("4_almanac")]
+visible = false
+
+[node name="SettingsDialog" parent="DialogLayer" instance=ExtResource("5_settings")]
+visible = false

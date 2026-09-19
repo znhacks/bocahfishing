@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "ziva-godot": {
+      "serverUrl": "http://localhost:7012/api/mcp"
+    }
+  }
+}

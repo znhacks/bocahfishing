@@ -1,0 +1,7 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Ziva binary backend (exceeds GitHub 100MB limit)
+addons/ziva_agent/zivacode/
+

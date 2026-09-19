@@ -1,0 +1,253 @@
+[gd_scene format=3 uid="uid://fishingspot01"]
+
+[ext_resource type="Script" path="res://scenes/gameplay/fishing_spot.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/textures/lobby_bg.jpg" id="2_bg"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/reeling_hud.tscn" id="3_reeling"]
+[ext_resource type="PackedScene" path="res://scenes/ui/catch_dialog.tscn" id="4_catch"]
+[ext_resource type="PackedScene" path="res://scenes/ui/tackle_box_dialog.tscn" id="5_tackle"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ripple"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.95, 1, 0.8)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_left = 40
+corner_radius_bottom_right = 40
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_back"]
+bg_color = Color(0.09, 0.14, 0.18, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.6, 0.7, 0.6)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_left = 12
+corner_radius_bottom_right = 12
+content_margin_left = 16
+content_margin_top = 8
+content_margin_right = 16
+content_margin_bottom = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_back_hover"]
+bg_color = Color(0.18, 0.28, 0.36, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.65, 0.9, 1, 0.95)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_left = 12
+corner_radius_bottom_right = 12
+content_margin_left = 16
+content_margin_top = 8
+content_margin_right = 16
+content_margin_bottom = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bait_card"]
+bg_color = Color(0.07, 0.11, 0.15, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.65, 0.75, 0.6)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_left = 12
+corner_radius_bottom_right = 12
+content_margin_left = 16
+content_margin_top = 8
+content_margin_right = 16
+content_margin_bottom = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon_btn"]
+bg_color = Color(0.09, 0.14, 0.18, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.65, 0.75, 0.6)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_left = 12
+corner_radius_bottom_right = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon_btn_hover"]
+bg_color = Color(0.18, 0.28, 0.36, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.65, 0.9, 1, 0.95)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_left = 12
+corner_radius_bottom_right = 12
+
+[node name="FishingSpot" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="BgLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="BgTexture" type="TextureRect" parent="BgLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="WaterArea" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 340.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Bobber" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 640.0
+offset_top = 520.0
+offset_right = 640.0
+offset_bottom = 520.0
+
+[node name="RippleRing" type="Panel" parent="Bobber"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -15.0
+offset_right = 30.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(30, 15)
+theme_override_styles/panel = SubResource("StyleBoxFlat_ripple")
+
+[node name="BobberIcon" type="Label" parent="Bobber"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -24.0
+offset_right = 16.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "🔴"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AlertIcon" type="Label" parent="Bobber"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -65.0
+offset_right = 20.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 25)
+theme_override_font_sizes/font_size = 46
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+text = "!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="TopBar" type="HBoxContainer" parent="HUD"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 20.0
+offset_right = -24.0
+offset_bottom = 68.0
+grow_horizontal = 2
+theme_override_constants/separation = 14
+
+[node name="BtnBack" type="Button" parent="HUD/TopBar"]
+custom_minimum_size = Vector2(110, 46)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_back")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_back_hover")
+text = "← Lobby"
+
+[node name="Spacer" type="Control" parent="HUD/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BaitCard" type="PanelContainer" parent="HUD/TopBar"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bait_card")
+
+[node name="LblBaitInfo" type="Label" parent="HUD/TopBar/BaitCard"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1, 0.9, 0.6, 1)
+text = "🪱 Earthworm (x5)"
+
+[node name="BtnTackle" type="Button" parent="HUD/TopBar"]
+custom_minimum_size = Vector2(46, 46)
+layout_mode = 2
+tooltip_text = "Tackle Box"
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_icon_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_icon_btn_hover")
+text = "🧰"
+
+[node name="LblPrompt" type="Label" parent="HUD"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 90.0
+offset_right = 300.0
+offset_bottom = 130.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+text = "Click the calm water to cast your line!"
+horizontal_alignment = 1
+
+[node name="ReelingHUD" parent="HUD" instance=ExtResource("3_reeling")]
+visible = false
+
+[node name="CatchDialog" parent="HUD" instance=ExtResource("4_catch")]
+visible = false
+
+[node name="TackleBoxDialog" parent="HUD" instance=ExtResource("5_tackle")]
+visible = false
