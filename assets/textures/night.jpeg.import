@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://nc3263v356gp"
-path="res://.godot/imported/siang.jpeg-bfbca26e719fd000ffdf361f95994b2b.ctex"
+uid="uid://b1554fy4lykha"
+path="res://.godot/imported/night.jpeg-64079b471927736bfd841c4559f7e7b3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/siang.jpeg"
-dest_files=["res://.godot/imported/siang.jpeg-bfbca26e719fd000ffdf361f95994b2b.ctex"]
+source_file="res://assets/textures/night.jpeg"
+dest_files=["res://.godot/imported/night.jpeg-64079b471927736bfd841c4559f7e7b3.ctex"]
 
 [params]
 

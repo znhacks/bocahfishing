@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bocahlobby01"]
 
 [ext_resource type="Script" path="res://scenes/lobby/lobby.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/textures/pagi.jpeg" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/textures/day.jpeg" id="2_bg"]
 [ext_resource type="PackedScene" path="res://scenes/ui/tackle_box_dialog.tscn" id="3_tackle"]
 [ext_resource type="PackedScene" path="res://scenes/ui/almanac_dialog.tscn" id="4_almanac"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_dialog.tscn" id="5_settings"]
@@ -164,7 +164,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_clock_badge")
 layout_mode = 2
 theme_override_colors/font_color = Color(0.88, 0.95, 1, 1)
 theme_override_font_sizes/font_size = 15
-text = "🌅 06:00 • Pagi"
+text = "☀️ 06:00 • Day"
 vertical_alignment = 1
 
 [node name="TopRightBar" type="HBoxContainer" parent="HUD"]

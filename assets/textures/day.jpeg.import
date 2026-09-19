@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://da06uyayhwhx8"
-path="res://.godot/imported/sore.jpeg-cac65a5f560764146cf8ba2905493f33.ctex"
+uid="uid://dmr2c67a2ymfi"
+path="res://.godot/imported/day.jpeg-134a2a8ab7bf94b5ab8c2b9ece6ef005.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/sore.jpeg"
-dest_files=["res://.godot/imported/sore.jpeg-cac65a5f560764146cf8ba2905493f33.ctex"]
+source_file="res://assets/textures/day.jpeg"
+dest_files=["res://.godot/imported/day.jpeg-134a2a8ab7bf94b5ab8c2b9ece6ef005.ctex"]
 
 [params]
 

@@ -19,38 +19,24 @@ const SECONDS_PER_DAY: float = 86400.0
 const TIME_MULTIPLIER: float = SECONDS_PER_DAY / CYCLE_DURATION_REAL_SECONDS # 240.0x
 
 const PERIOD_CONFIG: Dictionary = {
-	"pagi": {
-		"name": "Pagi",
-		"icon": "🌅",
-		"start_hour": 5.0,
-		"end_hour": 11.0,
-		"texture_path": "res://assets/textures/pagi.jpeg"
-	},
-	"siang": {
-		"name": "Siang",
+	"day": {
+		"name": "Day",
 		"icon": "☀️",
-		"start_hour": 11.0,
-		"end_hour": 17.0,
-		"texture_path": "res://assets/textures/siang.jpeg"
+		"start_hour": 6.0,
+		"end_hour": 18.0,
+		"texture_path": "res://assets/textures/day.jpeg"
 	},
-	"sore": {
-		"name": "Sore",
-		"icon": "🌇",
-		"start_hour": 17.0,
-		"end_hour": 20.0,
-		"texture_path": "res://assets/textures/sore.jpeg"
-	},
-	"malam": {
-		"name": "Malam",
+	"night": {
+		"name": "Night",
 		"icon": "🌙",
-		"start_hour": 20.0,
-		"end_hour": 5.0,
-		"texture_path": "res://assets/textures/malam.jpeg"
+		"start_hour": 18.0,
+		"end_hour": 6.0,
+		"texture_path": "res://assets/textures/night.jpeg"
 	}
 }
 
-var in_game_time: float = 21600.0 # 06:00 (Pagi) default
-var current_period: String = "pagi"
+var in_game_time: float = 21600.0 # 06:00 (Day) default
+var current_period: String = "day"
 var _cached_period_textures: Dictionary = {}
 
 # Tier Metadata & Colors
@@ -404,7 +390,7 @@ func _load_period_textures() -> void:
 func get_current_period_texture() -> Texture2D:
 	if _cached_period_textures.has(current_period):
 		return _cached_period_textures[current_period]
-	var path = PERIOD_CONFIG.get(current_period, {}).get("texture_path", "res://assets/textures/pagi.jpeg")
+	var path = PERIOD_CONFIG.get(current_period, {}).get("texture_path", "res://assets/textures/day.jpeg")
 	if ResourceLoader.exists(path):
 		_cached_period_textures[current_period] = load(path)
 		return _cached_period_textures[current_period]
@@ -412,20 +398,16 @@ func get_current_period_texture() -> Texture2D:
 
 func calculate_period(time_secs: float) -> String:
 	var hour = fmod(time_secs / 3600.0, 24.0)
-	if hour >= 5.0 and hour < 11.0:
-		return "pagi"
-	elif hour >= 11.0 and hour < 17.0:
-		return "siang"
-	elif hour >= 17.0 and hour < 20.0:
-		return "sore"
+	if hour >= 6.0 and hour < 18.0:
+		return "day"
 	else:
-		return "malam"
+		return "night"
 
 func get_time_formatted() -> String:
 	var total_minutes = int(in_game_time / 60.0) % 1440
 	var hour = int(float(total_minutes) / 60.0)
 	var minute = total_minutes % 60
-	var config = PERIOD_CONFIG.get(current_period, {"icon": "🌅", "name": "Pagi"})
+	var config = PERIOD_CONFIG.get(current_period, {"icon": "☀️", "name": "Day"})
 	return "%s %02d:%02d • %s" % [config["icon"], hour, minute, config["name"]]
 
 func get_time_clock_only() -> String:

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cu0hc77jsivfw"
-path="res://.godot/imported/malam.jpeg-806c4aaec6bdf26c4cfb98ceb269ee03.ctex"
+uid="uid://bynlll5lh4rda"
+path="res://.godot/imported/bg_lobby.jpeg-223930b7198eba631405e10ae05467d7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/malam.jpeg"
-dest_files=["res://.godot/imported/malam.jpeg-806c4aaec6bdf26c4cfb98ceb269ee03.ctex"]
+source_file="res://assets/textures/bg_lobby.jpeg"
+dest_files=["res://.godot/imported/bg_lobby.jpeg-223930b7198eba631405e10ae05467d7.ctex"]
 
 [params]
 

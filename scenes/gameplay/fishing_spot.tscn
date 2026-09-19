@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://fishingspot01"]
 
 [ext_resource type="Script" path="res://scenes/gameplay/fishing_spot.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/textures/pagi.jpeg" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/textures/day.jpeg" id="2_bg"]
 [ext_resource type="PackedScene" path="res://scenes/gameplay/reeling_hud.tscn" id="3_reeling"]
 [ext_resource type="PackedScene" path="res://scenes/ui/catch_dialog.tscn" id="4_catch"]
 [ext_resource type="PackedScene" path="res://scenes/ui/tackle_box_dialog.tscn" id="5_tackle"]
@@ -222,7 +222,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_bait_card")
 layout_mode = 2
 theme_override_colors/font_color = Color(0.88, 0.95, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "🌅 06:00 • Pagi"
+text = "☀️ 06:00 • Day"
 
 [node name="Spacer" type="Control" parent="HUD/TopBar"]
 layout_mode = 2
