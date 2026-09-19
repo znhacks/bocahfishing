@@ -30,7 +30,8 @@ func show_catch(fish_data: Dictionary) -> void:
 		lbl_header.text = "✨ FISH CAUGHT! ✨"
 		var size_range = fish_data.get("size_range", [10.0, 20.0])
 		var weight = randf_range(size_range[0], size_range[1])
-		lbl_weight.text = "Weight: %.1f kg" % weight
+		var price = fish_data.get("price_cahs", 0)
+		lbl_weight.text = "Weight: %.1f kg • Value: 🪙 %d Cahs" % [weight, price]
 	else:
 		lbl_header.text = "📦 LAKE DEBRIS HOOKED! 📦"
 		lbl_weight.text = "Lake Junk • Can be used as Bait!"

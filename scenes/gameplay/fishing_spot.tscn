@@ -208,6 +208,16 @@ text = "← Lobby"
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="CahsCard" type="PanelContainer" parent="HUD/TopBar"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bait_card")
+
+[node name="LblCahs" type="Label" parent="HUD/TopBar/CahsCard"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.35, 1)
+theme_override_font_sizes/font_size = 14
+text = "🪙 0 Cahs"
+
 [node name="BaitCard" type="PanelContainer" parent="HUD/TopBar"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bait_card")

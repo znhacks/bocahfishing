@@ -11,12 +11,15 @@ extends Control
 @onready var btn_tackle: Button = $HUD/BottomBar/BtnTackleBox
 @onready var bait_card: PanelContainer = $HUD/BottomBar/BaitInfoContainer
 
+@onready var btn_skills: Button = $HUD/TopRightBar/BtnSkills
+@onready var lbl_cahs: Label = $HUD/TopRightBar/CahsBadge/LblCahs
 @onready var btn_almanac: Button = $HUD/TopRightBar/BtnAlmanac
 @onready var btn_settings: Button = $HUD/TopRightBar/BtnSettings
 
 @onready var tackle_dialog: Control = $DialogLayer/TackleBoxDialog
 @onready var almanac_dialog: Control = $DialogLayer/AlmanacDialog
 @onready var settings_dialog: Control = $DialogLayer/SettingsDialog
+@onready var skills_dialog: Control = $DialogLayer/SkillsDialog
 
 @onready var title_container: Control = $HUD/TitleContainer
 @onready var bg_texture: TextureRect = $BackgroundLayer/BgTexture
@@ -29,10 +32,13 @@ func _ready() -> void:
 		GameManager.bait_changed.connect(_on_bait_changed)
 		GameManager.inventory_updated.connect(_update_ui)
 		GameManager.fish_unlocked.connect(func(_f): _update_ui())
+		GameManager.cahs_changed.connect(func(_c): _update_ui())
+		GameManager.character_changed.connect(func(_id): _update_ui())
 		
 	# Button signals
 	btn_play.pressed.connect(_on_play_pressed)
 	btn_tackle.pressed.connect(_on_tackle_pressed)
+	btn_skills.pressed.connect(_on_skills_pressed)
 	btn_almanac.pressed.connect(_on_almanac_pressed)
 	btn_settings.pressed.connect(_on_settings_pressed)
 	
@@ -43,6 +49,7 @@ func _ready() -> void:
 	tackle_dialog.visible = false
 	almanac_dialog.visible = false
 	settings_dialog.visible = false
+	skills_dialog.visible = false
 	
 	_update_ui()
 	_start_intro_animation()
@@ -66,12 +73,17 @@ func _update_ui() -> void:
 	if not GameManager:
 		return
 		
+	if lbl_cahs:
+		lbl_cahs.text = "🪙 %d Cahs" % GameManager.cahs
+		
 	var bait_data = GameManager.get_equipped_bait_data()
 	var qty = GameManager.inventory.get(GameManager.equipped_bait, 0)
+	var char_name = GameManager.character_db.get(GameManager.selected_character, {}).get("name", "None")
+	
 	if bait_data.is_empty() or qty <= 0:
 		lbl_equipped_icon.text = "🪝"
 		lbl_equipped_name.text = "Bare Hook (No Bait)"
-		lbl_equipped_tags.text = "Can still fish! (Higher chance of snagging junk)"
+		lbl_equipped_tags.text = "Angler: %s • Higher chance of snagging junk" % char_name
 	else:
 		lbl_equipped_icon.text = bait_data.get("icon_symbol", "🎣")
 		lbl_equipped_name.text = "%s (x%d)" % [bait_data.get("name", "Bait"), qty]
@@ -79,7 +91,7 @@ func _update_ui() -> void:
 		var tags = bait_data.get("tags", [])
 		if tags.is_empty() and bait_data.has("preferred_tags"):
 			tags = bait_data.get("preferred_tags")
-		lbl_equipped_tags.text = "Traits: " + ", ".join(tags).capitalize()
+		lbl_equipped_tags.text = "Angler: %s • Traits: %s" % [char_name, ", ".join(tags).capitalize()]
 
 func _on_bait_changed(_new_id: String) -> void:
 	_update_ui()
@@ -97,6 +109,9 @@ func _on_play_pressed() -> void:
 
 func _on_tackle_pressed() -> void:
 	tackle_dialog.open()
+
+func _on_skills_pressed() -> void:
+	skills_dialog.open()
 
 func _on_bait_card_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:

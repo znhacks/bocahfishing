@@ -5,6 +5,25 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/tackle_box_dialog.tscn" id="3_tackle"]
 [ext_resource type="PackedScene" path="res://scenes/ui/almanac_dialog.tscn" id="4_almanac"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_dialog.tscn" id="5_settings"]
+[ext_resource type="PackedScene" path="res://scenes/ui/skills_dialog.tscn" id="6_skills"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cahs_badge"]
+bg_color = Color(0.09, 0.14, 0.18, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.8, 0.3, 0.7)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_left = 14
+corner_radius_bottom_right = 14
+content_margin_left = 14
+content_margin_top = 8
+content_margin_right = 14
+content_margin_bottom = 8
+shadow_size = 6
+shadow_color = Color(0, 0, 0, 0.35)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_play"]
 bg_color = Color(0.18, 0.58, 0.38, 0.95)
@@ -106,13 +125,33 @@ stretch_mode = 6
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -140.0
+offset_left = -400.0
 offset_top = 20.0
 offset_right = -24.0
 offset_bottom = 72.0
 grow_horizontal = 0
 theme_override_constants/separation = 12
 alignment = 2
+
+[node name="CahsBadge" type="PanelContainer" parent="HUD/TopRightBar"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cahs_badge")
+
+[node name="LblCahs" type="Label" parent="HUD/TopRightBar/CahsBadge"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.35, 1)
+theme_override_font_sizes/font_size = 15
+text = "🪙 0 Cahs"
+vertical_alignment = 1
+
+[node name="BtnSkills" type="Button" parent="HUD/TopRightBar"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+tooltip_text = "Skills & Anglers"
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_icon_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_icon_btn_hover")
+text = "⚡"
 
 [node name="BtnAlmanac" type="Button" parent="HUD/TopRightBar"]
 custom_minimum_size = Vector2(52, 52)
@@ -269,3 +308,7 @@ visible = false
 
 [node name="SettingsDialog" parent="DialogLayer" instance=ExtResource("5_settings")]
 visible = false
+
+[node name="SkillsDialog" parent="DialogLayer" instance=ExtResource("6_skills")]
+visible = false
+

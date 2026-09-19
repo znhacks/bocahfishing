@@ -8,6 +8,8 @@ signal closed()
 @onready var item_container: VBoxContainer = $PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ItemContainer
 @onready var lbl_current_bait: Label = $PanelContainer/MarginContainer/VBoxContainer/HeaderBox/LblCurrentBait
 @onready var btn_close: Button = $PanelContainer/MarginContainer/VBoxContainer/HeaderBox/BtnClose
+@onready var lbl_cahs: Label = $PanelContainer/MarginContainer/VBoxContainer/HeaderBox/LblCahs
+@onready var btn_sell_all: Button = $PanelContainer/MarginContainer/VBoxContainer/HeaderBox/BtnSellAll
 
 # Release Modal nodes
 @onready var release_modal: Control = $ReleaseModal
@@ -22,6 +24,7 @@ var _release_max_qty: int = 1
 
 func _ready() -> void:
 	btn_close.pressed.connect(_on_close_pressed)
+	btn_sell_all.pressed.connect(_on_sell_all_pressed)
 	btn_cancel_release.pressed.connect(_close_release_modal)
 	btn_confirm_release.pressed.connect(_confirm_release)
 	slider_amount.value_changed.connect(_on_slider_amount_changed)
@@ -31,6 +34,7 @@ func _ready() -> void:
 	if GameManager:
 		GameManager.inventory_updated.connect(refresh_items)
 		GameManager.bait_changed.connect(func(_b): refresh_items())
+		GameManager.cahs_changed.connect(func(_c): refresh_items())
 	refresh_items()
 
 func open() -> void:
@@ -54,6 +58,9 @@ func _on_close_pressed() -> void:
 func refresh_items() -> void:
 	if not is_inside_tree() or not item_container:
 		return
+		
+	if lbl_cahs:
+		lbl_cahs.text = "🪙 %d Cahs" % GameManager.cahs
 		
 	var current_data = GameManager.get_equipped_bait_data()
 	if current_data.is_empty():
@@ -160,6 +167,14 @@ func _create_item_card(item_id: String, data: Dictionary, amount: int) -> PanelC
 		fish_tag.add_theme_font_size_override("font_size", 12)
 		title_box.add_child(fish_tag)
 		
+		var price = data.get("price_cahs", 0)
+		if price > 0:
+			var price_tag = Label.new()
+			price_tag.text = "• 🪙 %d Cahs each" % price
+			price_tag.modulate = Color(1.0, 0.88, 0.35, 0.95)
+			price_tag.add_theme_font_size_override("font_size", 12)
+			title_box.add_child(price_tag)
+		
 	vbox.add_child(title_box)
 	
 	var desc_lbl = Label.new()
@@ -180,13 +195,35 @@ func _create_item_card(item_id: String, data: Dictionary, amount: int) -> PanelC
 		tag_lbl.add_theme_font_size_override("font_size", 12)
 		vbox.add_child(tag_lbl)
 		
-	# Action buttons container (Use + Release)
+	# Action buttons container (Sell + Use + Release)
 	var btn_box = HBoxContainer.new()
 	btn_box.add_theme_constant_override("separation", 10)
 	btn_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	hbox.add_child(btn_box)
 	
-	# 1. Use Button
+	# 1. Sell Button (Only for fish with price > 0, junk cannot be sold)
+	if data.get("category") == "fish" and data.get("price_cahs", 0) > 0:
+		var btn_sell = Button.new()
+		btn_sell.custom_minimum_size = Vector2(85, 40)
+		btn_sell.text = "Sell 🪙"
+		var sell_style = StyleBoxFlat.new()
+		sell_style.bg_color = Color(0.16, 0.38, 0.24, 0.88)
+		sell_style.border_width_left = 1
+		sell_style.border_width_top = 1
+		sell_style.border_width_right = 1
+		sell_style.border_width_bottom = 1
+		sell_style.border_color = Color(0.35, 0.85, 0.5, 0.6)
+		sell_style.corner_radius_top_left = 8
+		sell_style.corner_radius_top_right = 8
+		sell_style.corner_radius_bottom_left = 8
+		sell_style.corner_radius_bottom_right = 8
+		btn_sell.add_theme_stylebox_override("normal", sell_style)
+		btn_sell.pressed.connect(func():
+			GameManager.sell_fish(item_id, 1)
+		)
+		btn_box.add_child(btn_sell)
+	
+	# 2. Use Button
 	var btn_use = Button.new()
 	btn_use.custom_minimum_size = Vector2(85, 40)
 	if is_equipped:
@@ -254,3 +291,11 @@ func _confirm_release() -> void:
 		var count = int(slider_amount.value)
 		GameManager.remove_from_inventory(_release_item_id, count)
 	_close_release_modal()
+
+func _on_sell_all_pressed() -> void:
+	var earned = GameManager.sell_all_fish()
+	if earned > 0 and btn_sell_all:
+		btn_sell_all.text = "Sold! +%d 🪙" % earned
+		await get_tree().create_timer(1.2).timeout
+		if is_inside_tree() and btn_sell_all:
+			btn_sell_all.text = "Sell All Fish 🪙"

@@ -31,6 +31,7 @@ var pending_fish: Dictionary = {}
 @onready var btn_back: Button = $HUD/TopBar/BtnBack
 @onready var btn_tackle: Button = $HUD/TopBar/BtnTackle
 @onready var lbl_bait_info: Label = $HUD/TopBar/BaitCard/LblBaitInfo
+@onready var lbl_cahs: Label = $HUD/TopBar/CahsCard/LblCahs
 
 var _bobber_origin_y: float = 0.0
 var _anim_time: float = 0.0
@@ -46,6 +47,7 @@ func _ready() -> void:
 	if GameManager:
 		GameManager.bait_changed.connect(func(_b): _update_bait_display())
 		GameManager.inventory_updated.connect(_update_bait_display)
+		GameManager.cahs_changed.connect(func(_c): _update_bait_display())
 		
 	alert_icon.visible = false
 	ripple_ring.visible = false
@@ -131,8 +133,10 @@ func _cast_line(target_pos: Vector2) -> void:
 	_spawn_water_ripple()
 	_set_state(FishingState.WAITING)
 	
-	# Random wait time until bite
-	var wait_duration = randf_range(1.8, 3.8)
+	# Random wait time until bite (accelerated by character lure_speed)
+	var mods = GameManager.get_character_modifiers() if GameManager else {}
+	var lure_speed_mult = mods.get("lure_speed", 1.0)
+	var wait_duration = randf_range(1.8, 3.8) / lure_speed_mult
 	get_tree().create_timer(wait_duration).timeout.connect(func():
 		if current_state == FishingState.WAITING:
 			_trigger_bite()
@@ -211,7 +215,11 @@ func _on_catch_dialog_closed(_action: String, _fish_data: Dictionary) -> void:
 	_set_state(FishingState.IDLE)
 
 func _update_bait_display() -> void:
-	if not GameManager or not lbl_bait_info:
+	if not GameManager:
+		return
+	if lbl_cahs:
+		lbl_cahs.text = "🪙 %d Cahs" % GameManager.cahs
+	if not lbl_bait_info:
 		return
 	var bait_data = GameManager.get_equipped_bait_data()
 	var qty = GameManager.inventory.get(GameManager.equipped_bait, 0)

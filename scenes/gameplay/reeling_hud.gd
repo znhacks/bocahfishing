@@ -63,6 +63,10 @@ func start_reeling(fish_data: Dictionary) -> void:
 			fish_speed = 320.0
 			fish_change_interval = 0.65
 			
+	# Apply character bar_scale modifier
+	var mods = GameManager.get_character_modifiers() if GameManager else {}
+	catch_bar_width *= mods.get("bar_scale", 1.0)
+	
 	catch_bar.size.x = catch_bar_width
 	catch_bar_x = (TRACK_WIDTH - catch_bar_width) * 0.5
 	catch_velocity = 0.0
@@ -149,9 +153,12 @@ func _process(delta: float) -> void:
 		lbl_status.text = "▲ REEL +%d%%" % int(FILL_RATE)
 		lbl_status.modulate = Color(0.35, 1.0, 0.65)
 	else:
-		progress -= DRAIN_RATE * delta
+		var mods = GameManager.get_character_modifiers() if GameManager else {}
+		var resilience = mods.get("resilience", 1.0)
+		var effective_drain = DRAIN_RATE / resilience
+		progress -= effective_drain * delta
 		catch_bar.modulate = Color(1.0, 0.45, 0.35, 0.85)
-		lbl_status.text = "▼ ESC -%d%%" % int(DRAIN_RATE)
+		lbl_status.text = "▼ ESC -%d%%" % int(effective_drain)
 		lbl_status.modulate = Color(1.0, 0.45, 0.4)
 		
 	progress = clamp(progress, 0.0, 100.0)

@@ -6,6 +6,8 @@ extends Node
 signal bait_changed(new_bait_id: String)
 signal inventory_updated()
 signal fish_unlocked(fish_id: String)
+signal cahs_changed(new_cahs: int)
+signal character_changed(new_char_id: String)
 
 # Tier Metadata & Colors
 const TIER_COLORS = {
@@ -118,12 +120,13 @@ var item_db: Dictionary = {
 		"icon_symbol": "🌿"
 	},
 
-	# --- Tier 1 Fish (Common - White) ---
+	# --- Tier 1 Fish (Common - White: 1-2 Cahs) ---
 	"fish_pebble_guppy": {
 		"id": "fish_pebble_guppy",
 		"name": "Pebble Guppy",
 		"category": "fish",
 		"tier": 1,
+		"price_cahs": 1,
 		"preferred_tags": ["organic", "wiggly"],
 		"desc": "A tiny, cheerful swimmer found near sunlit pebbles.",
 		"color": Color(0.7, 0.8, 0.85),
@@ -135,6 +138,7 @@ var item_db: Dictionary = {
 		"name": "Lake Minnow",
 		"category": "fish",
 		"tier": 1,
+		"price_cahs": 1,
 		"preferred_tags": ["organic", "carbs"],
 		"desc": "An energetic little swimmer. Makes prime live bait for bigger fish!",
 		"color": Color(0.6, 0.8, 0.7),
@@ -146,6 +150,7 @@ var item_db: Dictionary = {
 		"name": "Sleepy Carp",
 		"category": "fish",
 		"tier": 1,
+		"price_cahs": 2,
 		"preferred_tags": ["sweet", "carbs"],
 		"desc": "Calm and slow-moving, it loves lazy morning nibbles.",
 		"color": Color(0.8, 0.7, 0.5),
@@ -153,12 +158,13 @@ var item_db: Dictionary = {
 		"size_range": [18.0, 32.0]
 	},
 
-	# --- Tier 2 Fish (Uncommon - Green) ---
+	# --- Tier 2 Fish (Uncommon - Green: 3-4 Cahs) ---
 	"fish_mossy_perch": {
 		"id": "fish_mossy_perch",
 		"name": "Mossy Perch",
 		"category": "fish",
 		"tier": 2,
+		"price_cahs": 3,
 		"preferred_tags": ["organic", "fruit"],
 		"desc": "Camouflaged among lilypads. Bites quickly with playful agility.",
 		"color": Color(0.35, 0.75, 0.4),
@@ -170,6 +176,7 @@ var item_db: Dictionary = {
 		"name": "Whiskered Mud Catfish",
 		"category": "fish",
 		"tier": 2,
+		"price_cahs": 3,
 		"preferred_tags": ["stinky", "junk"],
 		"desc": "Lurks along the muddy lake bed. Drawn to pungent, stinky junk.",
 		"color": Color(0.4, 0.38, 0.3),
@@ -181,6 +188,7 @@ var item_db: Dictionary = {
 		"name": "Golden Carp",
 		"category": "fish",
 		"tier": 2,
+		"price_cahs": 4,
 		"preferred_tags": ["sweet", "fruit", "shiny"],
 		"desc": "Its scales shimmer with golden warmth. Considered good luck by anglers.",
 		"color": Color(1.0, 0.65, 0.1),
@@ -188,12 +196,13 @@ var item_db: Dictionary = {
 		"size_range": [25.0, 50.0]
 	},
 
-	# --- Tier 3 Fish (Rare - Blue) ---
+	# --- Tier 3 Fish (Rare - Blue: 5-6 Cahs) ---
 	"fish_glimmer_trout": {
 		"id": "fish_glimmer_trout",
 		"name": "Glimmer Trout",
 		"category": "fish",
 		"tier": 3,
+		"price_cahs": 5,
 		"preferred_tags": ["shiny", "metal", "organic"],
 		"desc": "A swift, reflective fish that darts like quicksilver.",
 		"color": Color(0.3, 0.7, 0.95),
@@ -205,6 +214,7 @@ var item_db: Dictionary = {
 		"name": "Hunter Pike",
 		"category": "fish",
 		"tier": 3,
+		"price_cahs": 6,
 		"preferred_tags": ["organic", "shiny"],
 		"desc": "Fierce freshwater hunter. Highly attracted to live bait like minnows.",
 		"color": Color(0.3, 0.55, 0.4),
@@ -212,12 +222,13 @@ var item_db: Dictionary = {
 		"size_range": [45.0, 85.0]
 	},
 
-	# --- Tier 4 Fish (Epic - Purple) ---
+	# --- Tier 4 Fish (Epic - Purple: 7-8 Cahs) ---
 	"fish_belut_listrik": {
 		"id": "fish_belut_listrik",
 		"name": "Neon Storm Eel",
 		"category": "fish",
 		"tier": 4,
+		"price_cahs": 7,
 		"preferred_tags": ["electric", "bizarre"],
 		"desc": "Glows with bioluminescent current. Attracted to rusty batteries!",
 		"color": Color(0.7, 0.3, 0.95),
@@ -229,6 +240,7 @@ var item_db: Dictionary = {
 		"name": "Abyssal Snapper",
 		"category": "fish",
 		"tier": 4,
+		"price_cahs": 8,
 		"preferred_tags": ["junk", "stinky", "shiny"],
 		"desc": "A prehistoric scavenger from the deepest trenches of the lake.",
 		"color": Color(0.55, 0.2, 0.7),
@@ -236,12 +248,13 @@ var item_db: Dictionary = {
 		"size_range": [80.0, 160.0]
 	},
 
-	# --- Tier 5 Fish (Legendary - Gold) ---
+	# --- Tier 5 Fish (Legendary - Gold: 10 Cahs) ---
 	"fish_raksasa_kuno": {
 		"id": "fish_raksasa_kuno",
 		"name": "Silent Lake Leviathan",
 		"category": "fish",
 		"tier": 5,
+		"price_cahs": 10,
 		"preferred_tags": ["shiny", "electric"],
 		"desc": "Ancient mythical titan of the lake. Only bites when apex bait is hooked!",
 		"color": Color(1.0, 0.85, 0.2),
@@ -253,6 +266,7 @@ var item_db: Dictionary = {
 		"name": "Ancient Void Guardian",
 		"category": "fish",
 		"tier": 5,
+		"price_cahs": 10,
 		"preferred_tags": ["bizarre", "junk"],
 		"desc": "A legendary celestial being resting under the dark lake mirror.",
 		"color": Color(1.0, 0.75, 0.3),
@@ -263,8 +277,54 @@ var item_db: Dictionary = {
 
 const SAVE_PATH: String = "user://bocah_save.json"
 
+# Character Database (Skills / Passives)
+var character_db: Dictionary = {
+	"none": {
+		"id": "none",
+		"name": "None",
+		"cost": 0,
+		"portrait": "",
+		"desc": "Default angler with standard techniques.",
+		"buff_summary": "0% All Stats (Standard)",
+		"modifiers": {
+			"bar_scale": 1.0,
+			"lure_speed": 1.0,
+			"resilience": 1.0
+		}
+	},
+	"jia": {
+		"id": "jia",
+		"name": "Jia",
+		"cost": 50,
+		"portrait": "res://assets/player/Jia.png",
+		"desc": "Energetic & sharp. Sweeps a wider catch zone and lures fish fast.",
+		"buff_summary": "+15% Bar Width • +20% Lure Speed • -5% Resilience",
+		"modifiers": {
+			"bar_scale": 1.15,
+			"lure_speed": 1.20,
+			"resilience": 0.95
+		}
+	},
+	"joe": {
+		"id": "joe",
+		"name": "Joe",
+		"cost": 50,
+		"portrait": "res://assets/player/Joe.png",
+		"desc": "Patient & steadfast. Keeps a rock-solid grip against escaping thrashing.",
+		"buff_summary": "+10% Lure Speed • +10% Resilience • -10% Bar Width",
+		"modifiers": {
+			"bar_scale": 0.90,
+			"lure_speed": 1.10,
+			"resilience": 1.10
+		}
+	}
+}
+
 # Player State
-var coins: int = 50
+var cahs: int = 0
+var selected_character: String = "none"
+var unlocked_characters: Array[String] = ["none"]
+
 var equipped_bait: String = "bait_worm"
 var inventory: Dictionary = {
 	"bait_worm": 1
@@ -277,9 +337,82 @@ func _ready() -> void:
 	load_game()
 	_validate_equipped_bait()
 
+func get_character_modifiers() -> Dictionary:
+	var data = character_db.get(selected_character, character_db["none"])
+	return data.get("modifiers", {"bar_scale": 1.0, "lure_speed": 1.0, "resilience": 1.0})
+
+func buy_character(char_id: String) -> bool:
+	if not character_db.has(char_id):
+		return false
+	if unlocked_characters.has(char_id):
+		return select_character(char_id)
+		
+	var cost = character_db[char_id].get("cost", 50)
+	if cahs >= cost:
+		cahs -= cost
+		unlocked_characters.append(char_id)
+		selected_character = char_id
+		cahs_changed.emit(cahs)
+		character_changed.emit(selected_character)
+		save_game()
+		return true
+	return false
+
+func select_character(char_id: String) -> bool:
+	if character_db.has(char_id) and unlocked_characters.has(char_id):
+		selected_character = char_id
+		character_changed.emit(selected_character)
+		save_game()
+		return true
+	return false
+
+func sell_fish(item_id: String, amount: int = 1) -> int:
+	var data = get_item_data(item_id)
+	if data.is_empty() or data.get("category") != "fish":
+		return 0
+	var unit_price = data.get("price_cahs", 0)
+	if unit_price <= 0:
+		return 0
+		
+	var current_qty = inventory.get(item_id, 0)
+	if current_qty <= 0:
+		return 0
+		
+	var to_sell = mini(amount, current_qty)
+	var total_earned = to_sell * unit_price
+	remove_from_inventory(item_id, to_sell)
+	cahs += total_earned
+	cahs_changed.emit(cahs)
+	save_game()
+	return total_earned
+
+func sell_all_fish() -> int:
+	var total_earned = 0
+	var fish_to_sell: Dictionary = {}
+	for item_id in inventory.keys():
+		var data = get_item_data(item_id)
+		if data.get("category") == "fish":
+			var price = data.get("price_cahs", 0)
+			if price > 0:
+				fish_to_sell[item_id] = inventory[item_id]
+				
+	for item_id in fish_to_sell.keys():
+		var count = fish_to_sell[item_id]
+		var price = get_item_data(item_id).get("price_cahs", 0)
+		total_earned += count * price
+		remove_from_inventory(item_id, count)
+		
+	if total_earned > 0:
+		cahs += total_earned
+		cahs_changed.emit(cahs)
+		save_game()
+	return total_earned
+
 func save_game() -> void:
 	var save_data = {
-		"coins": coins,
+		"cahs": cahs,
+		"selected_character": selected_character,
+		"unlocked_characters": unlocked_characters,
 		"equipped_bait": equipped_bait,
 		"inventory": inventory,
 		"unlocked_catches": unlocked_catches
@@ -310,7 +443,16 @@ func load_game() -> bool:
 	if typeof(data) != TYPE_DICTIONARY:
 		return false
 		
-	coins = data.get("coins", 50)
+	cahs = data.get("cahs", data.get("coins", 0))
+	selected_character = data.get("selected_character", "none")
+	
+	var raw_chars = data.get("unlocked_characters", ["none"])
+	unlocked_characters.clear()
+	for c in raw_chars:
+		unlocked_characters.append(str(c))
+	if not unlocked_characters.has("none"):
+		unlocked_characters.append("none")
+		
 	inventory = data.get("inventory", {"bait_worm": 1})
 	equipped_bait = data.get("equipped_bait", "bait_worm")
 	
@@ -324,12 +466,16 @@ func load_game() -> bool:
 func reset_game_data() -> void:
 	if FileAccess.file_exists(SAVE_PATH):
 		DirAccess.remove_absolute(SAVE_PATH)
-	coins = 50
+	cahs = 0
+	selected_character = "none"
+	unlocked_characters = ["none"]
 	inventory = {"bait_worm": 1}
 	equipped_bait = "bait_worm"
 	unlocked_catches.clear()
 	inventory_updated.emit()
 	bait_changed.emit(equipped_bait)
+	cahs_changed.emit(cahs)
+	character_changed.emit(selected_character)
 
 func _validate_equipped_bait() -> void:
 	if not inventory.has(equipped_bait) or inventory[equipped_bait] <= 0:
