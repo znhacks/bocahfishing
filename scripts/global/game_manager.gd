@@ -408,7 +408,7 @@ func get_time_formatted() -> String:
 	var hour = int(float(total_minutes) / 60.0)
 	var minute = total_minutes % 60
 	var config = PERIOD_CONFIG.get(current_period, {"icon": "☀️", "name": "Day"})
-	return "%s %02d:%02d • %s" % [config["icon"], hour, minute, config["name"]]
+	return "%s %02d:%02d" % [config["icon"], hour, minute]
 
 func get_time_clock_only() -> String:
 	var total_minutes = int(in_game_time / 60.0) % 1440
