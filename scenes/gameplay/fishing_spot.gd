@@ -291,4 +291,3 @@ func _on_period_changed(_new_period: String) -> void:
 		)
 	else:
 		bg_texture.texture = new_tex
-
