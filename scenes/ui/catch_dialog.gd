@@ -6,6 +6,7 @@ signal dialog_closed(action: String, fish_data: Dictionary)
 
 @onready var lbl_header: Label = $PanelContainer/Margin/VBox/LblHeader
 @onready var lbl_icon: Label = $PanelContainer/Margin/VBox/CenterIcon/LblIcon
+@onready var texture_icon: TextureRect = $PanelContainer/Margin/VBox/CenterIcon/TextureIcon
 @onready var lbl_name: Label = $PanelContainer/Margin/VBox/LblName
 @onready var lbl_rarity: Label = $PanelContainer/Margin/VBox/LblRarity
 @onready var lbl_weight: Label = $PanelContainer/Margin/VBox/LblWeight
@@ -36,7 +37,16 @@ func show_catch(fish_data: Dictionary) -> void:
 		lbl_header.text = "📦 LAKE DEBRIS HOOKED! 📦"
 		lbl_weight.text = "Lake Junk • Can be used as Bait!"
 	
-	lbl_icon.text = fish_data.get("icon_symbol", "🐟")
+	var icon_tex_path = fish_data.get("icon_texture", "")
+	if icon_tex_path != "" and ResourceLoader.exists(icon_tex_path):
+		texture_icon.texture = load(icon_tex_path)
+		texture_icon.visible = true
+		lbl_icon.visible = false
+	else:
+		texture_icon.visible = false
+		lbl_icon.visible = true
+		lbl_icon.text = fish_data.get("icon_symbol", "🐟")
+
 	lbl_name.text = fish_data.get("name", "Fish")
 	lbl_name.modulate = tier_color
 	
@@ -53,9 +63,10 @@ func show_catch(fish_data: Dictionary) -> void:
 	tween.tween_property(self, "scale", Vector2.ONE, 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	
 	# Icon bounce
+	var active_icon: Control = texture_icon if texture_icon.visible else lbl_icon
 	var icon_tween = create_tween()
-	lbl_icon.scale = Vector2(1.4, 1.4)
-	icon_tween.tween_property(lbl_icon, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	active_icon.scale = Vector2(1.35, 1.35)
+	icon_tween.tween_property(active_icon, "scale", Vector2.ONE, 0.35).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 
 func _close(action: String) -> void:
 	var tween = create_tween()

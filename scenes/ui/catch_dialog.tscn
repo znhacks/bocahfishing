@@ -103,7 +103,7 @@ text = "✨ FISH CAUGHT! ✨"
 horizontal_alignment = 1
 
 [node name="CenterIcon" type="CenterContainer" parent="PanelContainer/Margin/VBox"]
-custom_minimum_size = Vector2(0, 70)
+custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
 
 [node name="LblIcon" type="Label" parent="PanelContainer/Margin/VBox/CenterIcon"]
@@ -113,6 +113,14 @@ theme_override_font_sizes/font_size = 52
 text = "🐟"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="TextureIcon" type="TextureRect" parent="PanelContainer/Margin/VBox/CenterIcon"]
+visible = false
+custom_minimum_size = Vector2(130, 100)
+layout_mode = 2
+pivot_offset = Vector2(65, 50)
+expand_mode = 1
+stretch_mode = 5
 
 [node name="LblName" type="Label" parent="PanelContainer/Margin/VBox"]
 layout_mode = 2

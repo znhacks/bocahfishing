@@ -31,7 +31,8 @@ var pending_fish: Dictionary = {}
 
 @onready var btn_back: Button = $HUD/TopBar/BtnBack
 @onready var btn_tackle: Button = $HUD/TopBar/BtnTackle
-@onready var lbl_bait_info: Label = $HUD/TopBar/BaitCard/LblBaitInfo
+@onready var lbl_bait_info: Label = $HUD/TopBar/BaitCard/HBoxBait/LblBaitInfo
+@onready var tex_bait: TextureRect = $HUD/TopBar/BaitCard/HBoxBait/TexBait
 @onready var lbl_cahs: Label = $HUD/TopBar/CahsCard/LblCahs
 @onready var lbl_clock: Label = $HUD/TopBar/ClockCard/LblClock
 @onready var bg_texture: TextureRect = $BgLayer/BgTexture
@@ -347,9 +348,20 @@ func _update_bait_display() -> void:
 	var qty = GameManager.inventory.get(GameManager.equipped_bait, 0)
 	var has_bait = not bait_data.is_empty() and qty > 0
 	if not has_bait:
+		if tex_bait:
+			tex_bait.visible = false
 		lbl_bait_info.text = "🪝 Bare Hook (No Bait)"
 	else:
-		lbl_bait_info.text = "%s %s (x%d)" % [bait_data.get("icon_symbol", "🎣"), bait_data.get("name", ""), qty]
+		var tex_path: String = bait_data.get("icon_texture", "")
+		if tex_path != "" and ResourceLoader.exists(tex_path):
+			if tex_bait:
+				tex_bait.texture = load(tex_path)
+				tex_bait.visible = true
+			lbl_bait_info.text = "%s (x%d)" % [bait_data.get("name", ""), qty]
+		else:
+			if tex_bait:
+				tex_bait.visible = false
+			lbl_bait_info.text = "%s %s (x%d)" % [bait_data.get("icon_symbol", "🎣"), bait_data.get("name", ""), qty]
 		
 	if current_state == FishingState.IDLE:
 		if not has_bait:

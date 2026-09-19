@@ -118,13 +118,22 @@ func _create_item_card(item_id: String, data: Dictionary, amount: int) -> PanelC
 	hbox.add_theme_constant_override("separation", 16)
 	card.add_child(hbox)
 	
-	var icon_lbl = Label.new()
-	icon_lbl.text = data.get("icon_symbol", "📦")
-	icon_lbl.add_theme_font_size_override("font_size", 32)
-	icon_lbl.custom_minimum_size = Vector2(48, 48)
-	icon_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	icon_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hbox.add_child(icon_lbl)
+	var icon_tex_path = data.get("icon_texture", "")
+	if icon_tex_path != "" and ResourceLoader.exists(icon_tex_path):
+		var tex_rect = TextureRect.new()
+		tex_rect.custom_minimum_size = Vector2(48, 48)
+		tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tex_rect.texture = load(icon_tex_path)
+		hbox.add_child(tex_rect)
+	else:
+		var icon_lbl = Label.new()
+		icon_lbl.text = data.get("icon_symbol", "📦")
+		icon_lbl.add_theme_font_size_override("font_size", 32)
+		icon_lbl.custom_minimum_size = Vector2(48, 48)
+		icon_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		icon_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		hbox.add_child(icon_lbl)
 	
 	var vbox = VBoxContainer.new()
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL

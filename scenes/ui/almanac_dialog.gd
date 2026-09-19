@@ -104,17 +104,36 @@ func _create_fish_card(data: Dictionary, is_caught: bool) -> PanelContainer:
 	name_lbl.add_theme_font_override("font", FONT_OUTFIT)
 	name_lbl.add_theme_font_size_override("font_size", 16)
 	
+	var icon_tex_path = data.get("icon_texture", "")
 	if is_caught:
-		icon_lbl.text = data.get("icon_symbol", "🐟")
 		name_lbl.text = data.get("name", "Fish")
 		name_lbl.modulate = Color(0.95, 0.9, 0.7)
+		if icon_tex_path != "" and ResourceLoader.exists(icon_tex_path):
+			var tex_rect = TextureRect.new()
+			tex_rect.custom_minimum_size = Vector2(48, 44)
+			tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			tex_rect.texture = load(icon_tex_path)
+			top_box.add_child(tex_rect)
+		else:
+			icon_lbl.text = data.get("icon_symbol", "🐟")
+			top_box.add_child(icon_lbl)
 	else:
-		icon_lbl.text = "❓"
-		icon_lbl.modulate = Color(0.4, 0.45, 0.5)
 		name_lbl.text = "??? (Undiscovered)"
 		name_lbl.modulate = Color(0.5, 0.55, 0.6)
+		if icon_tex_path != "" and ResourceLoader.exists(icon_tex_path):
+			var tex_rect = TextureRect.new()
+			tex_rect.custom_minimum_size = Vector2(48, 44)
+			tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			tex_rect.texture = load(icon_tex_path)
+			tex_rect.modulate = Color(0.08, 0.12, 0.16, 0.85) # Mysterious silhouette!
+			top_box.add_child(tex_rect)
+		else:
+			icon_lbl.text = "❓"
+			icon_lbl.modulate = Color(0.4, 0.45, 0.5)
+			top_box.add_child(icon_lbl)
 		
-	top_box.add_child(icon_lbl)
 	top_box.add_child(name_lbl)
 	
 	var time_avail = data.get("time_available", "all")

@@ -7,6 +7,7 @@ signal reeling_tick(progress_ratio: float, is_inside: bool, is_active: bool)
 @onready var track: Control = $Panel/Margin/VBox/Track
 @onready var catch_bar: Panel = $Panel/Margin/VBox/Track/CatchBar
 @onready var fish_icon: Label = $Panel/Margin/VBox/Track/FishIcon
+@onready var fish_texture: TextureRect = $Panel/Margin/VBox/Track/FishTexture
 @onready var progress_bar: ProgressBar = $Panel/Margin/VBox/TopRow/ProgressBar
 @onready var lbl_tier: Label = $Panel/Margin/VBox/TopRow/LblTier
 @onready var status_badge: PanelContainer = $Panel/Margin/VBox/TopRow/StatusBadge
@@ -85,8 +86,16 @@ func start_reeling(fish_data: Dictionary) -> void:
 	lbl_tier.text = "[ %s ]" % tier_name.to_upper()
 	lbl_tier.modulate = tier_color
 	
-	fish_icon.text = "🐟"
-	fish_icon.modulate = Color.WHITE
+	var icon_tex_path = fish_data.get("icon_texture", "")
+	if icon_tex_path != "" and ResourceLoader.exists(icon_tex_path):
+		fish_texture.texture = load(icon_tex_path)
+		fish_texture.visible = true
+		fish_icon.visible = false
+	else:
+		fish_texture.visible = false
+		fish_icon.visible = true
+		fish_icon.text = fish_data.get("icon_symbol", "🐟")
+		fish_icon.modulate = Color.WHITE
 	
 	visible = true
 	is_active = true
@@ -144,13 +153,15 @@ func _process(delta: float) -> void:
 		
 	var prev_x = fish_x
 	fish_x = move_toward(fish_x, fish_target_x, fish_speed * speed_mult * delta)
-	fish_icon.position.x = fish_x
+	
+	var active_fish: Control = fish_texture if fish_texture.visible else fish_icon
+	active_fish.position.x = fish_x
 	
 	# Flip fish sprite based on swim direction
 	if fish_x > prev_x:
-		fish_icon.scale.x = -1.0  # Face right
+		active_fish.scale.x = -1.0  # Face right
 	elif fish_x < prev_x:
-		fish_icon.scale.x = 1.0   # Face left
+		active_fish.scale.x = 1.0   # Face left
 	
 	# 3. Collision check: Is fish inside Catch Bar?
 	var fish_center = fish_x + 12.0

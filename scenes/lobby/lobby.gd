@@ -4,6 +4,7 @@ extends Control
 # Bocah Fishing - Everything is Bait!
 
 @onready var lbl_equipped_icon: Label = $HUD/BottomBar/BaitInfoContainer/HBoxBait/LblBaitIcon
+@onready var tex_equipped_icon: TextureRect = $HUD/BottomBar/BaitInfoContainer/HBoxBait/TexBaitIcon
 @onready var lbl_equipped_name: Label = $HUD/BottomBar/BaitInfoContainer/HBoxBait/VBoxBaitInfo/LblBaitName
 @onready var lbl_equipped_tags: Label = $HUD/BottomBar/BaitInfoContainer/HBoxBait/VBoxBaitInfo/LblBaitTags
 @onready var btn_unequip: Button = $HUD/BottomBar/BaitInfoContainer/HBoxBait/BtnUnequip
@@ -96,13 +97,26 @@ func _update_ui() -> void:
 	var char_name = GameManager.character_db.get(GameManager.selected_character, {}).get("name", "None")
 	
 	if bait_data.is_empty() or qty <= 0:
+		if tex_equipped_icon:
+			tex_equipped_icon.visible = false
+		lbl_equipped_icon.visible = true
 		lbl_equipped_icon.text = "🪝"
 		lbl_equipped_name.text = "Bare Hook (No Bait)"
 		lbl_equipped_tags.text = "Angler: %s • Higher chance of snagging junk" % char_name
 		if btn_unequip:
 			btn_unequip.visible = false
 	else:
-		lbl_equipped_icon.text = bait_data.get("icon_symbol", "🎣")
+		var icon_tex_path = bait_data.get("icon_texture", "")
+		if icon_tex_path != "" and ResourceLoader.exists(icon_tex_path) and tex_equipped_icon:
+			tex_equipped_icon.texture = load(icon_tex_path)
+			tex_equipped_icon.visible = true
+			lbl_equipped_icon.visible = false
+		else:
+			if tex_equipped_icon:
+				tex_equipped_icon.visible = false
+			lbl_equipped_icon.visible = true
+			lbl_equipped_icon.text = bait_data.get("icon_symbol", "🎣")
+
 		lbl_equipped_name.text = "%s (x%d)" % [bait_data.get("name", "Bait"), qty]
 		
 		var tags = bait_data.get("tags", [])

@@ -278,7 +278,19 @@ text = "🪙 0 Cahs"
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bait_card")
 
-[node name="LblBaitInfo" type="Label" parent="HUD/TopBar/BaitCard"]
+[node name="HBoxBait" type="HBoxContainer" parent="HUD/TopBar/BaitCard"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TexBait" type="TextureRect" parent="HUD/TopBar/BaitCard/HBoxBait"]
+visible = false
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+size_flags_vertical = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LblBaitInfo" type="Label" parent="HUD/TopBar/BaitCard/HBoxBait"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("6_font_outfit")
 theme_override_font_sizes/font_size = 14

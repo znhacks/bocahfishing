@@ -332,6 +332,13 @@ text = "🪱"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="TexBaitIcon" type="TextureRect" parent="HUD/BottomBar/BaitInfoContainer/HBoxBait"]
+visible = false
+custom_minimum_size = Vector2(52, 48)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
 [node name="VBoxBaitInfo" type="VBoxContainer" parent="HUD/BottomBar/BaitInfoContainer/HBoxBait"]
 layout_mode = 2
 size_flags_horizontal = 3

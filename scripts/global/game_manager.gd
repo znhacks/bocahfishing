@@ -162,6 +162,7 @@ var item_db: Dictionary = {
 		"desc": "A nimble, colorful tropical freshwater swimmer found flitting around lake shallows.",
 		"color": Color(0.7, 0.8, 0.85),
 		"icon_symbol": "🐟",
+		"icon_texture": "res://assets/textures/fish/fish_pebble_guppy.png",
 		"size_range": [5.0, 12.0]
 	},
 	"fish_wader": {
@@ -175,6 +176,7 @@ var item_db: Dictionary = {
 		"desc": "An energetic, schooling daytime fish. Makes prime live bait for bigger lake predators!",
 		"color": Color(0.6, 0.8, 0.7),
 		"icon_symbol": "🐟",
+		"icon_texture": "res://assets/textures/fish/fish_wader.png",
 		"size_range": [8.0, 16.0]
 	},
 	"fish_sleepy_carp": {
@@ -188,6 +190,7 @@ var item_db: Dictionary = {
 		"desc": "A hardy, golden-bronze freshwater carp that peacefully grazes on lake weeds day and night.",
 		"color": Color(0.8, 0.7, 0.5),
 		"icon_symbol": "🐠",
+		"icon_texture": "res://assets/textures/fish/fish_sleepy_carp.png",
 		"size_range": [18.0, 32.0]
 	},
 
@@ -203,6 +206,7 @@ var item_db: Dictionary = {
 		"desc": "A vibrant golden-yellow game fish with dark vertical bars. Keen visual hunter active in daylight.",
 		"color": Color(0.85, 0.8, 0.25),
 		"icon_symbol": "🐟",
+		"icon_texture": "res://assets/textures/fish/fish_mossy_perch.png",
 		"size_range": [22.0, 42.0]
 	},
 	"fish_lele": {
@@ -216,6 +220,7 @@ var item_db: Dictionary = {
 		"desc": "A nocturnal bottom-dweller with sensory whiskers. Scours the muddy lake bed only under darkness.",
 		"color": Color(0.4, 0.38, 0.3),
 		"icon_symbol": "🐡",
+		"icon_texture": "res://assets/textures/fish/fish_lele.png",
 		"size_range": [30.0, 65.0]
 	},
 	"fish_mas": {
@@ -229,6 +234,7 @@ var item_db: Dictionary = {
 		"desc": "A magnificent orange-gold carp that basks in the warm afternoon sunlight.",
 		"color": Color(1.0, 0.65, 0.1),
 		"icon_symbol": "🐠",
+		"icon_texture": "res://assets/textures/fish/fish_mas.png",
 		"size_range": [25.0, 50.0]
 	},
 
@@ -244,6 +250,7 @@ var item_db: Dictionary = {
 		"desc": "A swift, prized coldwater predator displaying a radiant pink lateral stripe in clear sunny waters.",
 		"color": Color(0.3, 0.7, 0.95),
 		"icon_symbol": "🐟",
+		"icon_texture": "res://assets/textures/fish/fish_glimmer_trout.png",
 		"size_range": [38.0, 72.0]
 	},
 	"fish_gabus": {
@@ -257,6 +264,7 @@ var item_db: Dictionary = {
 		"desc": "A fierce nocturnal ambush predator with specialized air-breathing lungs, stalking the shallows at night.",
 		"color": Color(0.3, 0.55, 0.4),
 		"icon_symbol": "🦈",
+		"icon_texture": "res://assets/textures/fish/fish_gabus.png",
 		"size_range": [45.0, 85.0]
 	},
 
@@ -272,6 +280,7 @@ var item_db: Dictionary = {
 		"desc": "A legendary nocturnal knifefish that navigates and stuns prey in pitch-black waters with 860V electric shocks.",
 		"color": Color(0.7, 0.3, 0.95),
 		"icon_symbol": "⚡",
+		"icon_texture": "res://assets/textures/fish/fish_belut_listrik.png",
 		"size_range": [70.0, 130.0]
 	},
 	"fish_abyssal_snapper": {
@@ -285,6 +294,7 @@ var item_db: Dictionary = {
 		"desc": "A living fossil from the dinosaur era. Armored with diamond-hard ganoid scales and heavy crocodile-like jaws.",
 		"color": Color(0.45, 0.5, 0.35),
 		"icon_symbol": "🐊",
+		"icon_texture": "res://assets/textures/fish/fish_abyssal_snapper.png",
 		"size_range": [80.0, 180.0]
 	},
 
@@ -300,6 +310,7 @@ var item_db: Dictionary = {
 		"desc": "The undisputed titan of freshwater fish. An ancient armored behemoth that can live over a century.",
 		"color": Color(1.0, 0.85, 0.2),
 		"icon_symbol": "🐋",
+		"icon_texture": "res://assets/textures/fish/fish_raksasa_kuno.png",
 		"size_range": [180.0, 380.0]
 	},
 	"fish_void_guardian": {
@@ -313,6 +324,7 @@ var item_db: Dictionary = {
 		"desc": "Europe's colossal nocturnal river monster. An apex predator that lurks in deep dark trenches after sundown.",
 		"color": Color(0.9, 0.75, 0.3),
 		"icon_symbol": "🐟",
+		"icon_texture": "res://assets/textures/fish/fish_void_guardian.png",
 		"size_range": [200.0, 420.0]
 	}
 }
