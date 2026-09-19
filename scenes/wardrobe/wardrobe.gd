@@ -262,18 +262,31 @@ func _display_character(idx: int, _with_anim: bool = false) -> void:
 		btn_action.disabled = false
 		_set_btn_style(btn_action, Color(0.18, 0.55, 0.35, 0.95), Color(0.5, 0.95, 0.65, 0.9))
 	else:
-		var cost: int = char_data.get("cost", 50)
-		lbl_cost_status.text = "Price: 🪙 %d Cahs" % cost
-		lbl_cost_status.modulate = Color(1.0, 0.88, 0.35)
-		btn_action.text = "UNLOCK (50 CAHS 🪙)"
-		if GameManager.cahs >= cost:
-			btn_action.disabled = false
-			_set_btn_style(btn_action, Color(0.5, 0.38, 0.12, 0.95), Color(1.0, 0.85, 0.3, 0.95))
-		else:
+		var prereq_id: String = GameManager.get_character_prerequisite(char_id)
+		var is_prereq_unlocked: bool = prereq_id.is_empty() or GameManager.is_character_unlocked(prereq_id)
+		
+		if not is_prereq_unlocked:
+			var prereq_name: String = GameManager.character_db.get(prereq_id, {}).get("name", "Previous Angler")
+			lbl_cost_status.text = "🔒 Requires %s First" % prereq_name
+			lbl_cost_status.modulate = Color(1.0, 0.45, 0.45)
+			btn_action.text = "🔒 LOCKED (UNLOCK %s FIRST)" % prereq_name.to_upper()
 			btn_action.disabled = true
 			lbl_insufficient.visible = true
-			lbl_insufficient.text = "Need %d more Cahs" % (cost - GameManager.cahs)
-			_set_btn_style(btn_action, Color(0.22, 0.22, 0.25, 0.7), Color(0.4, 0.4, 0.45, 0.5))
+			lbl_insufficient.text = "You must unlock %s before unlocking %s!" % [prereq_name, char_data["name"]]
+			_set_btn_style(btn_action, Color(0.2, 0.2, 0.24, 0.7), Color(0.35, 0.35, 0.4, 0.5))
+		else:
+			var cost: int = char_data.get("cost", 50)
+			lbl_cost_status.text = "Price: 🪙 %d Cahs" % cost
+			lbl_cost_status.modulate = Color(1.0, 0.88, 0.35)
+			btn_action.text = "UNLOCK (50 CAHS 🪙)"
+			if GameManager.cahs >= cost:
+				btn_action.disabled = false
+				_set_btn_style(btn_action, Color(0.5, 0.38, 0.12, 0.95), Color(1.0, 0.85, 0.3, 0.95))
+			else:
+				btn_action.disabled = true
+				lbl_insufficient.visible = true
+				lbl_insufficient.text = "Need %d more Cahs" % (cost - GameManager.cahs)
+				_set_btn_style(btn_action, Color(0.22, 0.22, 0.25, 0.7), Color(0.4, 0.4, 0.45, 0.5))
 			
 	_update_dots()
 
@@ -302,13 +315,14 @@ func _on_action_pressed() -> void:
 		GameManager.select_character(char_id)
 		_display_character(current_index, true)
 	else:
-		if GameManager.buy_character(char_id):
-			_update_cahs()
-			_display_character(current_index, true)
-			# Celebration pulse
-			var tween = create_tween()
-			btn_action.scale = Vector2(1.15, 1.15)
-			tween.tween_property(btn_action, "scale", Vector2.ONE, 0.2).set_trans(Tween.TRANS_BACK)
+		if GameManager.can_unlock_character(char_id):
+			if GameManager.buy_character(char_id):
+				_update_cahs()
+				_display_character(current_index, true)
+				# Celebration pulse
+				var tween = create_tween()
+				btn_action.scale = Vector2(1.15, 1.15)
+				tween.tween_property(btn_action, "scale", Vector2.ONE, 0.2).set_trans(Tween.TRANS_BACK)
 
 func _on_back_pressed() -> void:
 	var tween = create_tween()

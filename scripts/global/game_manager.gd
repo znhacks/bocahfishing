@@ -341,11 +341,32 @@ func get_character_modifiers() -> Dictionary:
 	var data = character_db.get(selected_character, character_db["none"])
 	return data.get("modifiers", {"bar_scale": 1.0, "lure_speed": 1.0, "resilience": 1.0})
 
+func get_character_prerequisite(char_id: String) -> String:
+	match char_id:
+		"jia":
+			return "none"
+		"joe":
+			return "jia"
+		_:
+			return ""
+
+func can_unlock_character(char_id: String) -> bool:
+	if not character_db.has(char_id):
+		return false
+	if unlocked_characters.has(char_id):
+		return false
+	var prereq = get_character_prerequisite(char_id)
+	if not prereq.is_empty() and not unlocked_characters.has(prereq):
+		return false
+	return true
+
 func buy_character(char_id: String) -> bool:
 	if not character_db.has(char_id):
 		return false
 	if unlocked_characters.has(char_id):
 		return select_character(char_id)
+	if not can_unlock_character(char_id):
+		return false
 		
 	var cost = character_db[char_id].get("cost", 50)
 	if cahs >= cost:
