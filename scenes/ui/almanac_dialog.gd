@@ -111,8 +111,15 @@ func _create_fish_card(data: Dictionary, is_caught: bool) -> PanelContainer:
 	top_box.add_child(icon_lbl)
 	top_box.add_child(name_lbl)
 	
+	var time_avail = data.get("time_available", "all")
+	var time_tag = "☀️/🌙 Anytime"
+	if time_avail == "night":
+		time_tag = "🌙 Night Only"
+	elif time_avail == "day":
+		time_tag = "☀️ Day Only"
+
 	var tier_lbl = Label.new()
-	tier_lbl.text = "Lake Depth: Tier %d" % data.get("tier", 1)
+	tier_lbl.text = "Tier %d • %s" % [data.get("tier", 1), time_tag]
 	tier_lbl.modulate = Color(0.6, 0.75, 0.85, 0.8)
 	tier_lbl.add_theme_font_size_override("font_size", 11)
 	vbox.add_child(tier_lbl)
@@ -127,10 +134,11 @@ func _create_fish_card(data: Dictionary, is_caught: bool) -> PanelContainer:
 		desc_lbl.modulate = Color(0.85, 0.85, 0.85, 0.85)
 	else:
 		var pref = data.get("preferred_tags", [])
+		var time_hint = " (Prowls at night)" if time_avail == "night" else (" (Active in daylight)" if time_avail == "day" else "")
 		if not pref.is_empty():
-			desc_lbl.text = "Hint: Tempted by bait with [%s] attributes." % ", ".join(pref).capitalize()
+			desc_lbl.text = "Hint: Tempted by [%s] bait%s." % [", ".join(pref).capitalize(), time_hint]
 		else:
-			desc_lbl.text = "Hint: Resting quietly in the deep calm waters."
+			desc_lbl.text = "Hint: Resting quietly in deep waters%s." % time_hint
 		desc_lbl.modulate = Color(0.45, 0.6, 0.65, 0.7)
 		
 	vbox.add_child(desc_lbl)

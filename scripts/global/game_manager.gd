@@ -153,36 +153,39 @@ var item_db: Dictionary = {
 	# --- Tier 1 Fish (Common - White: 1-2 Cahs) ---
 	"fish_pebble_guppy": {
 		"id": "fish_pebble_guppy",
-		"name": "Pebble Guppy",
+		"name": "Wild Guppy",
 		"category": "fish",
 		"tier": 1,
 		"price_cahs": 1,
+		"time_available": "all",
 		"preferred_tags": ["organic", "wiggly"],
-		"desc": "A tiny, cheerful swimmer found near sunlit pebbles.",
+		"desc": "A nimble, colorful tropical freshwater swimmer found flitting around lake shallows.",
 		"color": Color(0.7, 0.8, 0.85),
 		"icon_symbol": "🐟",
 		"size_range": [5.0, 12.0]
 	},
 	"fish_wader": {
 		"id": "fish_wader",
-		"name": "Lake Minnow",
+		"name": "Common Minnow",
 		"category": "fish",
 		"tier": 1,
 		"price_cahs": 1,
+		"time_available": "day",
 		"preferred_tags": ["organic", "carbs"],
-		"desc": "An energetic little swimmer. Makes prime live bait for bigger fish!",
+		"desc": "An energetic, schooling daytime fish. Makes prime live bait for bigger lake predators!",
 		"color": Color(0.6, 0.8, 0.7),
 		"icon_symbol": "🐟",
 		"size_range": [8.0, 16.0]
 	},
 	"fish_sleepy_carp": {
 		"id": "fish_sleepy_carp",
-		"name": "Sleepy Carp",
+		"name": "Crucian Carp",
 		"category": "fish",
 		"tier": 1,
 		"price_cahs": 2,
+		"time_available": "all",
 		"preferred_tags": ["sweet", "carbs"],
-		"desc": "Calm and slow-moving, it loves lazy morning nibbles.",
+		"desc": "A hardy, golden-bronze freshwater carp that peacefully grazes on lake weeds day and night.",
 		"color": Color(0.8, 0.7, 0.5),
 		"icon_symbol": "🐠",
 		"size_range": [18.0, 32.0]
@@ -191,24 +194,26 @@ var item_db: Dictionary = {
 	# --- Tier 2 Fish (Uncommon - Green: 3-4 Cahs) ---
 	"fish_mossy_perch": {
 		"id": "fish_mossy_perch",
-		"name": "Mossy Perch",
+		"name": "Yellow Perch",
 		"category": "fish",
 		"tier": 2,
 		"price_cahs": 3,
+		"time_available": "day",
 		"preferred_tags": ["organic", "fruit"],
-		"desc": "Camouflaged among lilypads. Bites quickly with playful agility.",
-		"color": Color(0.35, 0.75, 0.4),
+		"desc": "A vibrant golden-yellow game fish with dark vertical bars. Keen visual hunter active in daylight.",
+		"color": Color(0.85, 0.8, 0.25),
 		"icon_symbol": "🐟",
 		"size_range": [22.0, 42.0]
 	},
 	"fish_lele": {
 		"id": "fish_lele",
-		"name": "Whiskered Mud Catfish",
+		"name": "Walking Catfish",
 		"category": "fish",
 		"tier": 2,
 		"price_cahs": 3,
+		"time_available": "night",
 		"preferred_tags": ["stinky", "junk"],
-		"desc": "Lurks along the muddy lake bed. Drawn to pungent, stinky junk.",
+		"desc": "A nocturnal bottom-dweller with sensory whiskers. Scours the muddy lake bed only under darkness.",
 		"color": Color(0.4, 0.38, 0.3),
 		"icon_symbol": "🐡",
 		"size_range": [30.0, 65.0]
@@ -219,8 +224,9 @@ var item_db: Dictionary = {
 		"category": "fish",
 		"tier": 2,
 		"price_cahs": 4,
+		"time_available": "day",
 		"preferred_tags": ["sweet", "fruit", "shiny"],
-		"desc": "Its scales shimmer with golden warmth. Considered good luck by anglers.",
+		"desc": "A magnificent orange-gold carp that basks in the warm afternoon sunlight.",
 		"color": Color(1.0, 0.65, 0.1),
 		"icon_symbol": "🐠",
 		"size_range": [25.0, 50.0]
@@ -229,24 +235,26 @@ var item_db: Dictionary = {
 	# --- Tier 3 Fish (Rare - Blue: 5-6 Cahs) ---
 	"fish_glimmer_trout": {
 		"id": "fish_glimmer_trout",
-		"name": "Glimmer Trout",
+		"name": "Rainbow Trout",
 		"category": "fish",
 		"tier": 3,
 		"price_cahs": 5,
+		"time_available": "day",
 		"preferred_tags": ["shiny", "metal", "organic"],
-		"desc": "A swift, reflective fish that darts like quicksilver.",
+		"desc": "A swift, prized coldwater predator displaying a radiant pink lateral stripe in clear sunny waters.",
 		"color": Color(0.3, 0.7, 0.95),
 		"icon_symbol": "🐟",
 		"size_range": [38.0, 72.0]
 	},
 	"fish_gabus": {
 		"id": "fish_gabus",
-		"name": "Hunter Pike",
+		"name": "Striped Snakehead",
 		"category": "fish",
 		"tier": 3,
 		"price_cahs": 6,
+		"time_available": "night",
 		"preferred_tags": ["organic", "shiny"],
-		"desc": "Fierce freshwater hunter. Highly attracted to live bait like minnows.",
+		"desc": "A fierce nocturnal ambush predator with specialized air-breathing lungs, stalking the shallows at night.",
 		"color": Color(0.3, 0.55, 0.4),
 		"icon_symbol": "🦈",
 		"size_range": [45.0, 85.0]
@@ -255,53 +263,57 @@ var item_db: Dictionary = {
 	# --- Tier 4 Fish (Epic - Purple: 7-8 Cahs) ---
 	"fish_belut_listrik": {
 		"id": "fish_belut_listrik",
-		"name": "Neon Storm Eel",
+		"name": "Electric Eel",
 		"category": "fish",
 		"tier": 4,
 		"price_cahs": 7,
+		"time_available": "night",
 		"preferred_tags": ["electric", "bizarre"],
-		"desc": "Glows with bioluminescent current. Attracted to rusty batteries!",
+		"desc": "A legendary nocturnal knifefish that navigates and stuns prey in pitch-black waters with 860V electric shocks.",
 		"color": Color(0.7, 0.3, 0.95),
 		"icon_symbol": "⚡",
 		"size_range": [70.0, 130.0]
 	},
 	"fish_abyssal_snapper": {
 		"id": "fish_abyssal_snapper",
-		"name": "Abyssal Snapper",
+		"name": "Alligator Gar",
 		"category": "fish",
 		"tier": 4,
 		"price_cahs": 8,
+		"time_available": "all",
 		"preferred_tags": ["junk", "stinky", "shiny"],
-		"desc": "A prehistoric scavenger from the deepest trenches of the lake.",
-		"color": Color(0.55, 0.2, 0.7),
+		"desc": "A living fossil from the dinosaur era. Armored with diamond-hard ganoid scales and heavy crocodile-like jaws.",
+		"color": Color(0.45, 0.5, 0.35),
 		"icon_symbol": "🐊",
-		"size_range": [80.0, 160.0]
+		"size_range": [80.0, 180.0]
 	},
 
 	# --- Tier 5 Fish (Legendary - Gold: 10 Cahs) ---
 	"fish_raksasa_kuno": {
 		"id": "fish_raksasa_kuno",
-		"name": "Silent Lake Leviathan",
+		"name": "Beluga Sturgeon",
 		"category": "fish",
 		"tier": 5,
 		"price_cahs": 10,
+		"time_available": "day",
 		"preferred_tags": ["shiny", "electric"],
-		"desc": "Ancient mythical titan of the lake. Only bites when apex bait is hooked!",
+		"desc": "The undisputed titan of freshwater fish. An ancient armored behemoth that can live over a century.",
 		"color": Color(1.0, 0.85, 0.2),
-		"icon_symbol": "🐉",
-		"size_range": [180.0, 350.0]
+		"icon_symbol": "🐋",
+		"size_range": [180.0, 380.0]
 	},
 	"fish_void_guardian": {
 		"id": "fish_void_guardian",
-		"name": "Ancient Void Guardian",
+		"name": "Giant Wels Catfish",
 		"category": "fish",
 		"tier": 5,
 		"price_cahs": 10,
+		"time_available": "night",
 		"preferred_tags": ["bizarre", "junk"],
-		"desc": "A legendary celestial being resting under the dark lake mirror.",
-		"color": Color(1.0, 0.75, 0.3),
-		"icon_symbol": "✨",
-		"size_range": [220.0, 420.0]
+		"desc": "Europe's colossal nocturnal river monster. An apex predator that lurks in deep dark trenches after sundown.",
+		"color": Color(0.9, 0.75, 0.3),
+		"icon_symbol": "🐟",
+		"size_range": [200.0, 420.0]
 	}
 }
 
@@ -685,6 +697,12 @@ func get_almanac_progress() -> Dictionary:
 				caught_fishes += 1
 	return {"caught": caught_fishes, "total": total_fishes}
 
+func is_fish_available_now(fish: Dictionary) -> bool:
+	var avail = fish.get("time_available", "all")
+	if avail == "all" or avail.is_empty():
+		return true
+	return avail == current_period
+
 # Roll fish bite based on the equipped bait traits and tier
 func roll_fish_bite(bait_id: String) -> Dictionary:
 	# Bare hook (no bait equipped):
@@ -702,6 +720,15 @@ func roll_fish_bite(bait_id: String) -> Dictionary:
 				return valid_junks[0]
 				
 		var common_fish: Array[Dictionary] = []
+		for key in item_db:
+			var item = item_db[key]
+			if item.get("category") == "fish" and item.get("tier") == 1:
+				if is_fish_available_now(item):
+					common_fish.append(item)
+		if not common_fish.is_empty():
+			common_fish.shuffle()
+			return common_fish[0]
+		# Fallback if none found for current period
 		for key in item_db:
 			if item_db[key].get("category") == "fish" and item_db[key].get("tier") == 1:
 				common_fish.append(item_db[key])
@@ -762,13 +789,21 @@ func roll_fish_bite(bait_id: String) -> Dictionary:
 			else:
 				target_tier = 1
 				
-	# Pick a fish of target_tier
+	# Pick a fish of target_tier matching current period (day/night)
 	var candidates: Array[Dictionary] = []
 	for key in item_db:
 		var item = item_db[key]
 		if item.get("category") == "fish" and item.get("tier") == target_tier:
-			candidates.append(item)
+			if is_fish_available_now(item):
+				candidates.append(item)
 			
+	if candidates.is_empty():
+		# Fallback to any fish matching current period
+		for key in item_db:
+			var item = item_db[key]
+			if item.get("category") == "fish" and is_fish_available_now(item):
+				candidates.append(item)
+				
 	if candidates.is_empty():
 		# Fallback to any fish
 		for key in item_db:
