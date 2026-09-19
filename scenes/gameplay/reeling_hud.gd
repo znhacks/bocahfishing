@@ -21,21 +21,21 @@ var catch_bar_width: float = 125.0
 var catch_bar_x: float = 160.0
 var catch_velocity: float = 0.0
 
-const GRAVITY: float = 1500.0  # Leftward return force
-const THRUST: float = 2600.0   # Rightward push force
-const MAX_VELOCITY: float = 620.0
+const GRAVITY: float = 1100.0  # Leftward return force
+const THRUST: float = 1900.0   # Rightward push force
+const MAX_VELOCITY: float = 450.0
 
 # Fish AI
 var fish_x: float = 230.0
 var fish_target_x: float = 230.0
-var fish_speed: float = 150.0
+var fish_speed: float = 110.0
 var fish_timer: float = 0.0
-var fish_change_interval: float = 1.2
+var fish_change_interval: float = 1.4
 
 # Progress
 var progress: float = 35.0
-const FILL_RATE: float = 28.0
-const DRAIN_RATE: float = 13.0
+const FILL_RATE: float = 16.0
+const DRAIN_RATE: float = 9.0
 
 func start_reeling(fish_data: Dictionary) -> void:
 	current_fish = fish_data
@@ -45,24 +45,24 @@ func start_reeling(fish_data: Dictionary) -> void:
 	match tier:
 		1:
 			catch_bar_width = 160.0
-			fish_speed = 95.0
-			fish_change_interval = 2.0
+			fish_speed = 70.0
+			fish_change_interval = 2.2
 		2:
 			catch_bar_width = 135.0
-			fish_speed = 140.0
-			fish_change_interval = 1.6
+			fish_speed = 100.0
+			fish_change_interval = 1.8
 		3:
 			catch_bar_width = 115.0
-			fish_speed = 190.0
-			fish_change_interval = 1.2
+			fish_speed = 135.0
+			fish_change_interval = 1.4
 		4:
 			catch_bar_width = 100.0
-			fish_speed = 250.0
-			fish_change_interval = 0.9
+			fish_speed = 175.0
+			fish_change_interval = 1.1
 		5:
 			catch_bar_width = 85.0
-			fish_speed = 320.0
-			fish_change_interval = 0.65
+			fish_speed = 220.0
+			fish_change_interval = 0.85
 			
 	# Apply character bar_scale modifier
 	var mods = GameManager.get_character_modifiers() if GameManager else {}

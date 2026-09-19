@@ -105,40 +105,40 @@ func _process(delta: float) -> void:
 		# 3. Water splashes reflect current action
 		
 		if _is_reeling_inside:
-			# Player successfully reels! Bobber pulled towards player (bottom center)
+			# Player successfully reels! Bobber smoothly glides towards player (bottom center)
 			var target_base = _cast_pos.lerp(_player_pos, _reeling_progress)
 			
-			# Bobber wobbles as it cuts through water under tension
-			var wobble_x = sin(_anim_time * 26.0) * 7.5
-			var wobble_y = cos(_anim_time * 24.0) * 3.0
-			var wobble_rot = sin(_anim_time * 24.0) * 0.2
+			# Gentle rhythmic wobble as line is reeled in
+			var wobble_x = sin(_anim_time * 8.0) * 3.5
+			var wobble_y = cos(_anim_time * 7.0) * 1.5
+			var wobble_rot = sin(_anim_time * 7.0) * 0.08
 			
-			bobber.position = bobber.position.lerp(target_base + Vector2(wobble_x, wobble_y), delta * 5.5)
-			bobber.rotation = lerp_angle(bobber.rotation, wobble_rot, delta * 8.0)
+			bobber.position = bobber.position.lerp(target_base + Vector2(wobble_x, wobble_y), delta * 1.8)
+			bobber.rotation = lerp_angle(bobber.rotation, wobble_rot, delta * 4.0)
 			
 			if splash_particles:
 				splash_particles.emitting = true
-				splash_particles.amount = 12
-				splash_particles.initial_velocity_min = 60.0
-				splash_particles.initial_velocity_max = 130.0
+				splash_particles.amount = 8
+				splash_particles.initial_velocity_min = 35.0
+				splash_particles.initial_velocity_max = 75.0
 		else:
-			# Player misses / fish fights back! Bobber moves away into deeper water
-			var miss_factor = clamp((1.0 - _reeling_progress) * 1.25, 0.0, 1.0)
+			# Player misses / fish pulls back! Bobber smoothly drifts away into deeper water
+			var miss_factor = clamp(1.0 - _reeling_progress, 0.0, 1.0)
 			var target_base = _cast_pos.lerp(_far_pos, miss_factor)
 			
-			# Erratic thrashing of fish pulling against line
-			var thrash_x = sin(_anim_time * 36.0) * 13.0 + sin(_anim_time * 14.0) * 6.0
-			var thrash_y = cos(_anim_time * 30.0) * 5.5
-			var thrash_rot = sin(_anim_time * 30.0) * 0.35
+			# Gentle struggle motion as fish pulls away
+			var thrash_x = sin(_anim_time * 11.0) * 5.0 + sin(_anim_time * 5.0) * 2.5
+			var thrash_y = cos(_anim_time * 9.0) * 2.5
+			var thrash_rot = sin(_anim_time * 9.0) * 0.12
 			
-			bobber.position = bobber.position.lerp(target_base + Vector2(thrash_x, thrash_y), delta * 4.2)
-			bobber.rotation = lerp_angle(bobber.rotation, thrash_rot, delta * 10.0)
+			bobber.position = bobber.position.lerp(target_base + Vector2(thrash_x, thrash_y), delta * 1.4)
+			bobber.rotation = lerp_angle(bobber.rotation, thrash_rot, delta * 4.0)
 			
 			if splash_particles:
 				splash_particles.emitting = true
-				splash_particles.amount = 18
-				splash_particles.initial_velocity_min = 90.0
-				splash_particles.initial_velocity_max = 180.0
+				splash_particles.amount = 10
+				splash_particles.initial_velocity_min = 45.0
+				splash_particles.initial_velocity_max = 95.0
 
 func _set_state(new_state: FishingState) -> void:
 	current_state = new_state
