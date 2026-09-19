@@ -16,44 +16,6 @@ corner_radius_bottom_right = 16
 shadow_size = 12
 shadow_color = Color(0, 0, 0, 0.5)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal"]
-bg_color = Color(0.09, 0.13, 0.18, 0.98)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.5, 0.75, 0.85, 0.7)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_left = 14
-corner_radius_bottom_right = 14
-shadow_size = 16
-shadow_color = Color(0, 0, 0, 0.6)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_cancel"]
-bg_color = Color(0.18, 0.22, 0.28, 0.9)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.4, 0.5, 0.6, 0.5)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_left = 8
-corner_radius_bottom_right = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_confirm"]
-bg_color = Color(0.55, 0.2, 0.2, 0.95)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.85, 0.35, 0.35, 0.8)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_left = 8
-corner_radius_bottom_right = 8
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_sell"]
 bg_color = Color(0.18, 0.45, 0.28, 0.9)
 border_width_left = 1
@@ -68,6 +30,22 @@ corner_radius_bottom_right = 8
 content_margin_left = 12
 content_margin_top = 6
 content_margin_right = 12
+content_margin_bottom = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_unequip"]
+bg_color = Color(0.22, 0.26, 0.32, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.62, 0.75, 0.7)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+content_margin_left = 10
+content_margin_top = 6
+content_margin_right = 10
 content_margin_bottom = 6
 
 [node name="TackleBoxDialog" type="Control"]
@@ -116,6 +94,7 @@ theme_override_constants/separation = 14
 
 [node name="HeaderBox" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 12
 
 [node name="TitleBox" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/HeaderBox"]
 layout_mode = 2
@@ -151,6 +130,13 @@ theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.4, 0.95, 0.6, 1)
 text = "Equipped: 🪱 Earthworm (x5)"
 
+[node name="BtnUnequipHeader" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HeaderBox"]
+visible = false
+custom_minimum_size = Vector2(74, 32)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_unequip")
+text = "Unequip"
+
 [node name="BtnClose" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HeaderBox"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
@@ -169,85 +155,3 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 10
-
-[node name="ReleaseModal" type="Control" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Dim" type="ColorRect" parent="ReleaseModal"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.6)
-
-[node name="Panel" type="PanelContainer" parent="ReleaseModal"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -175.0
-offset_top = -105.0
-offset_right = 175.0
-offset_bottom = 105.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
-
-[node name="Margin" type="MarginContainer" parent="ReleaseModal/Panel"]
-layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 18
-
-[node name="VBox" type="VBoxContainer" parent="ReleaseModal/Panel/Margin"]
-layout_mode = 2
-theme_override_constants/separation = 14
-alignment = 1
-
-[node name="LblModalTitle" type="Label" parent="ReleaseModal/Panel/Margin/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.95, 0.85, 0.65, 1)
-text = "Release Items"
-horizontal_alignment = 1
-
-[node name="LblModalCount" type="Label" parent="ReleaseModal/Panel/Margin/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-text = "Amount to release: 1 / 5"
-horizontal_alignment = 1
-
-[node name="SliderAmount" type="HSlider" parent="ReleaseModal/Panel/Margin/VBox"]
-layout_mode = 2
-min_value = 1.0
-max_value = 5.0
-step = 1.0
-value = 1.0
-
-[node name="BtnRow" type="HBoxContainer" parent="ReleaseModal/Panel/Margin/VBox"]
-layout_mode = 2
-theme_override_constants/separation = 14
-alignment = 1
-
-[node name="BtnCancelRelease" type="Button" parent="ReleaseModal/Panel/Margin/VBox/BtnRow"]
-custom_minimum_size = Vector2(100, 36)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_cancel")
-text = "Cancel"
-
-[node name="BtnConfirmRelease" type="Button" parent="ReleaseModal/Panel/Margin/VBox/BtnRow"]
-custom_minimum_size = Vector2(120, 36)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_confirm")
-text = "Release"

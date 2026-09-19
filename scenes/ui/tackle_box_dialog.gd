@@ -1,35 +1,22 @@
 extends Control
 
 # Tackle Box Dialog
-# Supports "Everything is bait!" with Use and Release features
+# Supports "Everything is bait!" with Use, Unequip, and Sell Fish features
 
 signal closed()
 
 @onready var item_container: VBoxContainer = $PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ItemContainer
 @onready var lbl_current_bait: Label = $PanelContainer/MarginContainer/VBoxContainer/HeaderBox/LblCurrentBait
+@onready var btn_unequip_header: Button = $PanelContainer/MarginContainer/VBoxContainer/HeaderBox/BtnUnequipHeader
 @onready var btn_close: Button = $PanelContainer/MarginContainer/VBoxContainer/HeaderBox/BtnClose
 @onready var lbl_cahs: Label = $PanelContainer/MarginContainer/VBoxContainer/HeaderBox/LblCahs
 @onready var btn_sell_all: Button = $PanelContainer/MarginContainer/VBoxContainer/HeaderBox/BtnSellAll
 
-# Release Modal nodes
-@onready var release_modal: Control = $ReleaseModal
-@onready var lbl_modal_title: Label = $ReleaseModal/Panel/Margin/VBox/LblModalTitle
-@onready var lbl_modal_count: Label = $ReleaseModal/Panel/Margin/VBox/LblModalCount
-@onready var slider_amount: HSlider = $ReleaseModal/Panel/Margin/VBox/SliderAmount
-@onready var btn_cancel_release: Button = $ReleaseModal/Panel/Margin/VBox/BtnRow/BtnCancelRelease
-@onready var btn_confirm_release: Button = $ReleaseModal/Panel/Margin/VBox/BtnRow/BtnConfirmRelease
-
-var _release_item_id: String = ""
-var _release_max_qty: int = 1
-
 func _ready() -> void:
 	btn_close.pressed.connect(_on_close_pressed)
 	btn_sell_all.pressed.connect(_on_sell_all_pressed)
-	btn_cancel_release.pressed.connect(_close_release_modal)
-	btn_confirm_release.pressed.connect(_confirm_release)
-	slider_amount.value_changed.connect(_on_slider_amount_changed)
-	
-	release_modal.visible = false
+	if btn_unequip_header:
+		btn_unequip_header.pressed.connect(_on_unequip_pressed)
 	
 	if GameManager:
 		GameManager.inventory_updated.connect(refresh_items)
@@ -39,7 +26,6 @@ func _ready() -> void:
 
 func open() -> void:
 	visible = true
-	release_modal.visible = false
 	refresh_items()
 	modulate.a = 0.0
 	var tween = create_tween()
@@ -55,6 +41,9 @@ func close() -> void:
 func _on_close_pressed() -> void:
 	close()
 
+func _on_unequip_pressed() -> void:
+	GameManager.unequip_bait()
+
 func refresh_items() -> void:
 	if not is_inside_tree() or not item_container:
 		return
@@ -63,8 +52,12 @@ func refresh_items() -> void:
 		lbl_cahs.text = "🪙 %d Cahs" % GameManager.cahs
 		
 	var current_data = GameManager.get_equipped_bait_data()
-	if current_data.is_empty():
+	var has_bait = not GameManager.equipped_bait.is_empty() and not current_data.is_empty()
+	
+	if not has_bait:
 		lbl_current_bait.text = "Equipped Bait: None"
+		if btn_unequip_header:
+			btn_unequip_header.visible = false
 	else:
 		var qty = GameManager.inventory.get(GameManager.equipped_bait, 0)
 		lbl_current_bait.text = "Equipped: %s %s (x%d)" % [
@@ -72,6 +65,8 @@ func refresh_items() -> void:
 			current_data.get("name", ""),
 			qty
 		]
+		if btn_unequip_header:
+			btn_unequip_header.visible = true
 	
 	for child in item_container.get_children():
 		child.queue_free()
@@ -195,7 +190,7 @@ func _create_item_card(item_id: String, data: Dictionary, amount: int) -> PanelC
 		tag_lbl.add_theme_font_size_override("font_size", 12)
 		vbox.add_child(tag_lbl)
 		
-	# Action buttons container (Sell + Use + Release)
+	# Action buttons container (Sell + Use / Unequip)
 	var btn_box = HBoxContainer.new()
 	btn_box.add_theme_constant_override("separation", 10)
 	btn_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -223,12 +218,26 @@ func _create_item_card(item_id: String, data: Dictionary, amount: int) -> PanelC
 		)
 		btn_box.add_child(btn_sell)
 	
-	# 2. Use Button
+	# 2. Use / Unequip Button
 	var btn_use = Button.new()
-	btn_use.custom_minimum_size = Vector2(85, 40)
+	btn_use.custom_minimum_size = Vector2(95, 40)
 	if is_equipped:
-		btn_use.text = "✓ Equipped"
-		btn_use.disabled = true
+		btn_use.text = "Unequip"
+		var unequip_style = StyleBoxFlat.new()
+		unequip_style.bg_color = Color(0.28, 0.32, 0.4, 0.9)
+		unequip_style.border_width_left = 1
+		unequip_style.border_width_top = 1
+		unequip_style.border_width_right = 1
+		unequip_style.border_width_bottom = 1
+		unequip_style.border_color = Color(0.6, 0.75, 0.9, 0.8)
+		unequip_style.corner_radius_top_left = 8
+		unequip_style.corner_radius_top_right = 8
+		unequip_style.corner_radius_bottom_left = 8
+		unequip_style.corner_radius_bottom_right = 8
+		btn_use.add_theme_stylebox_override("normal", unequip_style)
+		btn_use.pressed.connect(func():
+			GameManager.unequip_bait()
+		)
 	else:
 		btn_use.text = "Use"
 		btn_use.pressed.connect(func():
@@ -236,61 +245,7 @@ func _create_item_card(item_id: String, data: Dictionary, amount: int) -> PanelC
 		)
 	btn_box.add_child(btn_use)
 	
-	# 2. Release Button
-	var btn_release = Button.new()
-	btn_release.custom_minimum_size = Vector2(85, 40)
-	btn_release.text = "Release"
-	
-	var release_style = StyleBoxFlat.new()
-	release_style.bg_color = Color(0.32, 0.16, 0.16, 0.85)
-	release_style.border_width_left = 1
-	release_style.border_width_top = 1
-	release_style.border_width_right = 1
-	release_style.border_width_bottom = 1
-	release_style.border_color = Color(0.75, 0.35, 0.35, 0.6)
-	release_style.corner_radius_top_left = 8
-	release_style.corner_radius_top_right = 8
-	release_style.corner_radius_bottom_left = 8
-	release_style.corner_radius_bottom_right = 8
-	btn_release.add_theme_stylebox_override("normal", release_style)
-	
-	btn_release.pressed.connect(func():
-		_on_release_clicked(item_id, data, amount)
-	)
-	btn_box.add_child(btn_release)
-	
 	return card
-
-func _on_release_clicked(item_id: String, data: Dictionary, amount: int) -> void:
-	if amount <= 1:
-		# Directly release 1
-		GameManager.remove_from_inventory(item_id, 1)
-	else:
-		# Trigger draggable slider modal
-		_release_item_id = item_id
-		_release_max_qty = amount
-		lbl_modal_title.text = "Release %s" % data.get("name", "Item")
-		slider_amount.min_value = 1.0
-		slider_amount.max_value = float(amount)
-		slider_amount.value = 1.0
-		lbl_modal_count.text = "Amount to release: 1 / %d" % amount
-		release_modal.visible = true
-		release_modal.modulate.a = 0.0
-		var tween = create_tween()
-		tween.tween_property(release_modal, "modulate:a", 1.0, 0.15)
-
-func _on_slider_amount_changed(val: float) -> void:
-	lbl_modal_count.text = "Amount to release: %d / %d" % [int(val), _release_max_qty]
-
-func _close_release_modal() -> void:
-	release_modal.visible = false
-	_release_item_id = ""
-
-func _confirm_release() -> void:
-	if not _release_item_id.is_empty():
-		var count = int(slider_amount.value)
-		GameManager.remove_from_inventory(_release_item_id, count)
-	_close_release_modal()
 
 func _on_sell_all_pressed() -> void:
 	var earned = GameManager.sell_all_fish()

@@ -6,6 +6,7 @@ extends Control
 @onready var lbl_equipped_icon: Label = $HUD/BottomBar/BaitInfoContainer/HBoxBait/LblBaitIcon
 @onready var lbl_equipped_name: Label = $HUD/BottomBar/BaitInfoContainer/HBoxBait/VBoxBaitInfo/LblBaitName
 @onready var lbl_equipped_tags: Label = $HUD/BottomBar/BaitInfoContainer/HBoxBait/VBoxBaitInfo/LblBaitTags
+@onready var btn_unequip: Button = $HUD/BottomBar/BaitInfoContainer/HBoxBait/BtnUnequip
 
 @onready var btn_play: Button = $HUD/CenterButtons/BtnPlay
 @onready var btn_tackle: Button = $HUD/BottomBar/BtnTackleBox
@@ -19,7 +20,6 @@ extends Control
 @onready var tackle_dialog: Control = $DialogLayer/TackleBoxDialog
 @onready var almanac_dialog: Control = $DialogLayer/AlmanacDialog
 @onready var settings_dialog: Control = $DialogLayer/SettingsDialog
-@onready var skills_dialog: Control = $DialogLayer/SkillsDialog
 
 @onready var title_container: Control = $HUD/TitleContainer
 @onready var bg_texture: TextureRect = $BackgroundLayer/BgTexture
@@ -41,15 +41,16 @@ func _ready() -> void:
 	btn_skills.pressed.connect(_on_skills_pressed)
 	btn_almanac.pressed.connect(_on_almanac_pressed)
 	btn_settings.pressed.connect(_on_settings_pressed)
+	if btn_unequip:
+		btn_unequip.pressed.connect(_on_unequip_pressed)
 	
 	# Clicking the bait card directly also opens the tackle box
 	bait_card.gui_input.connect(_on_bait_card_gui_input)
 	
-	# Hide all dialogs initially
+	# Hide dialogs initially
 	tackle_dialog.visible = false
 	almanac_dialog.visible = false
 	settings_dialog.visible = false
-	skills_dialog.visible = false
 	
 	_update_ui()
 	_start_intro_animation()
@@ -84,6 +85,8 @@ func _update_ui() -> void:
 		lbl_equipped_icon.text = "🪝"
 		lbl_equipped_name.text = "Bare Hook (No Bait)"
 		lbl_equipped_tags.text = "Angler: %s • Higher chance of snagging junk" % char_name
+		if btn_unequip:
+			btn_unequip.visible = false
 	else:
 		lbl_equipped_icon.text = bait_data.get("icon_symbol", "🎣")
 		lbl_equipped_name.text = "%s (x%d)" % [bait_data.get("name", "Bait"), qty]
@@ -92,6 +95,11 @@ func _update_ui() -> void:
 		if tags.is_empty() and bait_data.has("preferred_tags"):
 			tags = bait_data.get("preferred_tags")
 		lbl_equipped_tags.text = "Angler: %s • Traits: %s" % [char_name, ", ".join(tags).capitalize()]
+		if btn_unequip:
+			btn_unequip.visible = true
+
+func _on_unequip_pressed() -> void:
+	GameManager.unequip_bait()
 
 func _on_bait_changed(_new_id: String) -> void:
 	_update_ui()
@@ -111,7 +119,10 @@ func _on_tackle_pressed() -> void:
 	tackle_dialog.open()
 
 func _on_skills_pressed() -> void:
-	skills_dialog.open()
+	var tween = create_tween()
+	tween.tween_property(self, "modulate:a", 0.0, 0.15)
+	await tween.finished
+	get_tree().change_scene_to_file("res://scenes/wardrobe/wardrobe.tscn")
 
 func _on_bait_card_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:

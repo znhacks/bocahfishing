@@ -366,6 +366,9 @@ func select_character(char_id: String) -> bool:
 		return true
 	return false
 
+func is_character_unlocked(char_id: String) -> bool:
+	return unlocked_characters.has(char_id)
+
 func sell_fish(item_id: String, amount: int = 1) -> int:
 	var data = get_item_data(item_id)
 	if data.is_empty() or data.get("category") != "fish":
@@ -478,11 +481,11 @@ func reset_game_data() -> void:
 	character_changed.emit(selected_character)
 
 func _validate_equipped_bait() -> void:
+	if equipped_bait.is_empty():
+		return
 	if not inventory.has(equipped_bait) or inventory[equipped_bait] <= 0:
-		for item_id in inventory.keys():
-			if inventory[item_id] > 0:
-				equipped_bait = item_id
-				break
+		equipped_bait = ""
+		bait_changed.emit(equipped_bait)
 
 func get_item_data(item_id: String) -> Dictionary:
 	return item_db.get(item_id, {})
@@ -491,12 +494,21 @@ func get_equipped_bait_data() -> Dictionary:
 	return get_item_data(equipped_bait)
 
 func set_equipped_bait(item_id: String) -> bool:
+	if item_id.is_empty():
+		unequip_bait()
+		return true
 	if inventory.has(item_id) and inventory[item_id] > 0:
 		equipped_bait = item_id
 		bait_changed.emit(equipped_bait)
 		save_game()
 		return true
 	return false
+
+func unequip_bait() -> void:
+	if not equipped_bait.is_empty():
+		equipped_bait = ""
+		bait_changed.emit(equipped_bait)
+		save_game()
 
 func add_to_inventory(item_id: String, amount: int = 1) -> void:
 	if inventory.has(item_id):
