@@ -1,11 +1,29 @@
 [gd_scene format=3 uid="uid://bocahlobby01"]
 
 [ext_resource type="Script" path="res://scenes/lobby/lobby.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/textures/lobby_bg.jpg" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/textures/pagi.jpeg" id="2_bg"]
 [ext_resource type="PackedScene" path="res://scenes/ui/tackle_box_dialog.tscn" id="3_tackle"]
 [ext_resource type="PackedScene" path="res://scenes/ui/almanac_dialog.tscn" id="4_almanac"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_dialog.tscn" id="5_settings"]
 [ext_resource type="PackedScene" path="res://scenes/ui/stats_dialog.tscn" id="6_stats"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_clock_badge"]
+bg_color = Color(0.08, 0.12, 0.16, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.7, 0.95, 0.75)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_left = 14
+corner_radius_bottom_right = 14
+content_margin_left = 14
+content_margin_top = 8
+content_margin_right = 14
+content_margin_bottom = 8
+shadow_size = 6
+shadow_color = Color(0, 0, 0, 0.35)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cahs_badge"]
 bg_color = Color(0.09, 0.14, 0.18, 0.9)
@@ -119,7 +137,35 @@ texture = ExtResource("2_bg")
 expand_mode = 1
 stretch_mode = 6
 
+[node name="BgTextureFade" type="TextureRect" parent="BackgroundLayer"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
+
 [node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="TopLeftBar" type="HBoxContainer" parent="HUD"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 260.0
+offset_bottom = 72.0
+theme_override_constants/separation = 12
+
+[node name="ClockBadge" type="PanelContainer" parent="HUD/TopLeftBar"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_clock_badge")
+
+[node name="LblClock" type="Label" parent="HUD/TopLeftBar/ClockBadge"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.95, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "🌅 06:00 • Pagi"
+vertical_alignment = 1
 
 [node name="TopRightBar" type="HBoxContainer" parent="HUD"]
 anchors_preset = 1

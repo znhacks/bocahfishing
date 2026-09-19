@@ -25,6 +25,8 @@ extends Control
 
 @onready var title_container: Control = $HUD/TitleContainer
 @onready var bg_texture: TextureRect = $BackgroundLayer/BgTexture
+@onready var bg_texture_fade: TextureRect = $BackgroundLayer/BgTextureFade
+@onready var lbl_clock: Label = $HUD/TopLeftBar/ClockBadge/LblClock
 
 var _time_passed: float = 0.0
 
@@ -36,6 +38,14 @@ func _ready() -> void:
 		GameManager.fish_unlocked.connect(func(_f): _update_ui())
 		GameManager.cahs_changed.connect(func(_c): _update_ui())
 		GameManager.character_changed.connect(func(_id): _update_ui())
+		GameManager.time_updated.connect(_on_time_updated)
+		GameManager.period_changed.connect(_on_period_changed)
+		
+		# Set initial background
+		if bg_texture:
+			bg_texture.texture = GameManager.get_current_period_texture()
+		if lbl_clock:
+			lbl_clock.text = GameManager.get_time_formatted()
 		
 	# Button signals
 	btn_play.pressed.connect(_on_play_pressed)
@@ -140,3 +150,27 @@ func _on_settings_pressed() -> void:
 
 func _on_stats_pressed() -> void:
 	stats_dialog.open()
+
+func _on_time_updated(_time: float) -> void:
+	if lbl_clock:
+		lbl_clock.text = GameManager.get_time_formatted()
+
+func _on_period_changed(_new_period: String) -> void:
+	if not bg_texture:
+		return
+	var new_tex = GameManager.get_current_period_texture()
+	if not new_tex:
+		return
+		
+	if bg_texture_fade:
+		bg_texture_fade.texture = new_tex
+		bg_texture_fade.modulate.a = 0.0
+		var tween = create_tween()
+		tween.tween_property(bg_texture_fade, "modulate:a", 1.0, 1.2)
+		tween.tween_callback(func():
+			bg_texture.texture = new_tex
+			bg_texture_fade.modulate.a = 0.0
+		)
+	else:
+		bg_texture.texture = new_tex
+

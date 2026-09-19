@@ -8,6 +8,50 @@ signal inventory_updated()
 signal fish_unlocked(fish_id: String)
 signal cahs_changed(new_cahs: int)
 signal character_changed(new_char_id: String)
+signal time_updated(in_game_time: float)
+signal period_changed(new_period: String)
+
+# Day / Night Cycle
+# 1 full in-game day (24 hours) = 6 minutes (360 real seconds).
+# 1 in-game hour = 15 real seconds.
+const CYCLE_DURATION_REAL_SECONDS: float = 360.0
+const SECONDS_PER_DAY: float = 86400.0
+const TIME_MULTIPLIER: float = SECONDS_PER_DAY / CYCLE_DURATION_REAL_SECONDS # 240.0x
+
+const PERIOD_CONFIG: Dictionary = {
+	"pagi": {
+		"name": "Pagi",
+		"icon": "🌅",
+		"start_hour": 5.0,
+		"end_hour": 11.0,
+		"texture_path": "res://assets/textures/pagi.jpeg"
+	},
+	"siang": {
+		"name": "Siang",
+		"icon": "☀️",
+		"start_hour": 11.0,
+		"end_hour": 17.0,
+		"texture_path": "res://assets/textures/siang.jpeg"
+	},
+	"sore": {
+		"name": "Sore",
+		"icon": "🌇",
+		"start_hour": 17.0,
+		"end_hour": 20.0,
+		"texture_path": "res://assets/textures/sore.jpeg"
+	},
+	"malam": {
+		"name": "Malam",
+		"icon": "🌙",
+		"start_hour": 20.0,
+		"end_hour": 5.0,
+		"texture_path": "res://assets/textures/malam.jpeg"
+	}
+}
+
+var in_game_time: float = 21600.0 # 06:00 (Pagi) default
+var current_period: String = "pagi"
+var _cached_period_textures: Dictionary = {}
 
 # Tier Metadata & Colors
 const TIER_COLORS = {
@@ -334,8 +378,61 @@ var inventory: Dictionary = {
 var unlocked_catches: Array[String] = []
 
 func _ready() -> void:
+	_load_period_textures()
 	load_game()
+	current_period = calculate_period(in_game_time)
 	_validate_equipped_bait()
+
+func _process(delta: float) -> void:
+	in_game_time += delta * TIME_MULTIPLIER
+	if in_game_time >= SECONDS_PER_DAY:
+		in_game_time = fmod(in_game_time, SECONDS_PER_DAY)
+	
+	var new_period = calculate_period(in_game_time)
+	if new_period != current_period:
+		current_period = new_period
+		period_changed.emit(current_period)
+	
+	time_updated.emit(in_game_time)
+
+func _load_period_textures() -> void:
+	for p in PERIOD_CONFIG.keys():
+		var path = PERIOD_CONFIG[p].get("texture_path", "")
+		if ResourceLoader.exists(path):
+			_cached_period_textures[p] = load(path)
+
+func get_current_period_texture() -> Texture2D:
+	if _cached_period_textures.has(current_period):
+		return _cached_period_textures[current_period]
+	var path = PERIOD_CONFIG.get(current_period, {}).get("texture_path", "res://assets/textures/pagi.jpeg")
+	if ResourceLoader.exists(path):
+		_cached_period_textures[current_period] = load(path)
+		return _cached_period_textures[current_period]
+	return null
+
+func calculate_period(time_secs: float) -> String:
+	var hour = fmod(time_secs / 3600.0, 24.0)
+	if hour >= 5.0 and hour < 11.0:
+		return "pagi"
+	elif hour >= 11.0 and hour < 17.0:
+		return "siang"
+	elif hour >= 17.0 and hour < 20.0:
+		return "sore"
+	else:
+		return "malam"
+
+func get_time_formatted() -> String:
+	var total_minutes = int(in_game_time / 60.0) % 1440
+	var hour = int(float(total_minutes) / 60.0)
+	var minute = total_minutes % 60
+	var config = PERIOD_CONFIG.get(current_period, {"icon": "🌅", "name": "Pagi"})
+	return "%s %02d:%02d • %s" % [config["icon"], hour, minute, config["name"]]
+
+func get_time_clock_only() -> String:
+	var total_minutes = int(in_game_time / 60.0) % 1440
+	var hour = int(float(total_minutes) / 60.0)
+	var minute = total_minutes % 60
+	return "%02d:%02d" % [hour, minute]
 
 func get_character_modifiers() -> Dictionary:
 	var data = character_db.get(selected_character, character_db["none"])
@@ -439,7 +536,8 @@ func save_game() -> void:
 		"unlocked_characters": unlocked_characters,
 		"equipped_bait": equipped_bait,
 		"inventory": inventory,
-		"unlocked_catches": unlocked_catches
+		"unlocked_catches": unlocked_catches,
+		"in_game_time": in_game_time
 	}
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file:
@@ -485,6 +583,8 @@ func load_game() -> bool:
 	for id in raw_unlocked:
 		unlocked_catches.append(str(id))
 		
+	in_game_time = float(data.get("in_game_time", 21600.0))
+	current_period = calculate_period(in_game_time)
 	return true
 
 func reset_game_data() -> void:
@@ -496,10 +596,14 @@ func reset_game_data() -> void:
 	inventory = {"bait_worm": 1}
 	equipped_bait = "bait_worm"
 	unlocked_catches.clear()
+	in_game_time = 21600.0
+	current_period = calculate_period(in_game_time)
 	inventory_updated.emit()
 	bait_changed.emit(equipped_bait)
 	cahs_changed.emit(cahs)
 	character_changed.emit(selected_character)
+	period_changed.emit(current_period)
+	time_updated.emit(in_game_time)
 
 func _validate_equipped_bait() -> void:
 	if equipped_bait.is_empty():

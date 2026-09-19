@@ -3,6 +3,7 @@ extends Control
 # Angler Wardrobe & Skills Scene
 # Allows browsing full-body character portraits with < and > carousel navigation
 
+@onready var background: TextureRect = $Background
 @onready var btn_back: Button = $TopBar/Margin/HBox/BtnBack
 @onready var lbl_cahs: Label = $TopBar/Margin/HBox/CahsBadge/LblCahs
 
@@ -76,6 +77,8 @@ func _ready() -> void:
 	btn_action.pressed.connect(_on_action_pressed)
 	
 	if GameManager:
+		if background:
+			background.texture = GameManager.get_current_period_texture()
 		GameManager.cahs_changed.connect(func(_c): _update_cahs())
 		GameManager.character_changed.connect(func(_id): _display_character(current_index, false))
 		

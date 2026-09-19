@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c3jvq7rorycu8"
-path="res://.godot/imported/lobby_bg.jpg-899451dae42a662758f6e5edb293a1cf.ctex"
+uid="uid://nc3263v356gp"
+path="res://.godot/imported/siang.jpeg-bfbca26e719fd000ffdf361f95994b2b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/lobby_bg.jpg"
-dest_files=["res://.godot/imported/lobby_bg.jpg-899451dae42a662758f6e5edb293a1cf.ctex"]
+source_file="res://assets/textures/siang.jpeg"
+dest_files=["res://.godot/imported/siang.jpeg-bfbca26e719fd000ffdf361f95994b2b.ctex"]
 
 [params]
 

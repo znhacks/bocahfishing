@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://fishingspot01"]
 
 [ext_resource type="Script" path="res://scenes/gameplay/fishing_spot.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/textures/lobby_bg.jpg" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/textures/pagi.jpeg" id="2_bg"]
 [ext_resource type="PackedScene" path="res://scenes/gameplay/reeling_hud.tscn" id="3_reeling"]
 [ext_resource type="PackedScene" path="res://scenes/ui/catch_dialog.tscn" id="4_catch"]
 [ext_resource type="PackedScene" path="res://scenes/ui/tackle_box_dialog.tscn" id="5_tackle"]
@@ -112,6 +112,16 @@ texture = ExtResource("2_bg")
 expand_mode = 1
 stretch_mode = 6
 
+[node name="BgTextureFade" type="TextureRect" parent="BgLayer"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
+
 [node name="WaterArea" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -203,6 +213,16 @@ layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_back")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_back_hover")
 text = "← Lobby"
+
+[node name="ClockCard" type="PanelContainer" parent="HUD/TopBar"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bait_card")
+
+[node name="LblClock" type="Label" parent="HUD/TopBar/ClockCard"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.95, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "🌅 06:00 • Pagi"
 
 [node name="Spacer" type="Control" parent="HUD/TopBar"]
 layout_mode = 2

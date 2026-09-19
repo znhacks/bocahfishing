@@ -32,6 +32,9 @@ var pending_fish: Dictionary = {}
 @onready var btn_tackle: Button = $HUD/TopBar/BtnTackle
 @onready var lbl_bait_info: Label = $HUD/TopBar/BaitCard/LblBaitInfo
 @onready var lbl_cahs: Label = $HUD/TopBar/CahsCard/LblCahs
+@onready var lbl_clock: Label = $HUD/TopBar/ClockCard/LblClock
+@onready var bg_texture: TextureRect = $BgLayer/BgTexture
+@onready var bg_texture_fade: TextureRect = $BgLayer/BgTextureFade
 
 var _bobber_origin_y: float = 0.0
 var _anim_time: float = 0.0
@@ -48,6 +51,13 @@ func _ready() -> void:
 		GameManager.bait_changed.connect(func(_b): _update_bait_display())
 		GameManager.inventory_updated.connect(_update_bait_display)
 		GameManager.cahs_changed.connect(func(_c): _update_bait_display())
+		GameManager.time_updated.connect(_on_time_updated)
+		GameManager.period_changed.connect(_on_period_changed)
+		
+		if bg_texture:
+			bg_texture.texture = GameManager.get_current_period_texture()
+		if lbl_clock:
+			lbl_clock.text = GameManager.get_time_formatted()
 		
 	alert_icon.visible = false
 	ripple_ring.visible = false
@@ -258,3 +268,27 @@ func _on_tackle_pressed() -> void:
 
 func _on_back_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/lobby/lobby.tscn")
+
+func _on_time_updated(_time: float) -> void:
+	if lbl_clock:
+		lbl_clock.text = GameManager.get_time_formatted()
+
+func _on_period_changed(_new_period: String) -> void:
+	if not bg_texture:
+		return
+	var new_tex = GameManager.get_current_period_texture()
+	if not new_tex:
+		return
+		
+	if bg_texture_fade:
+		bg_texture_fade.texture = new_tex
+		bg_texture_fade.modulate.a = 0.0
+		var tween = create_tween()
+		tween.tween_property(bg_texture_fade, "modulate:a", 1.0, 1.2)
+		tween.tween_callback(func():
+			bg_texture.texture = new_tex
+			bg_texture_fade.modulate.a = 0.0
+		)
+	else:
+		bg_texture.texture = new_tex
+
