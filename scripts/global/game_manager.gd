@@ -383,6 +383,32 @@ var character_db: Dictionary = {
 			"resilience": 1.0
 		}
 	},
+	"jia": {
+		"id": "jia",
+		"name": "Jia",
+		"cost": 50,
+		"portrait": "res://assets/player/Jia.png",
+		"desc": "Keen reflexes and sharp eyes. With an expanded rod sweet spot, fish bite eagerly before they even know they're hooked.",
+		"buff_summary": "+25% Safe Bar, +25% Lure Speed",
+		"modifiers": {
+			"bar_scale": 1.25,
+			"lure_speed": 1.25,
+			"resilience": 0.80
+		}
+	},
+	"joe": {
+		"id": "joe",
+		"name": "Joe",
+		"cost": 50,
+		"portrait": "res://assets/player/Joe.png",
+		"desc": "Calm, focused, and unyielding. Even the most furious fighters can't shake his steady tension on the line.",
+		"buff_summary": "+15% Lure Speed, +35% Line Resilience",
+		"modifiers": {
+			"bar_scale": 0.80,
+			"lure_speed": 1.15,
+			"resilience": 1.35
+		}
+	},
 	"pak_kumis": {
 		"id": "pak_kumis",
 		"name": "Pak Kumis",
