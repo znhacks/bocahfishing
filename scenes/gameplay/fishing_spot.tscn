@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://fishingspot01"]
 
 [ext_resource type="Script" path="res://scenes/gameplay/fishing_spot.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/textures/day.jpeg" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/textures/day_bg.png" id="2_bg"]
 [ext_resource type="PackedScene" path="res://scenes/gameplay/reeling_hud.tscn" id="3_reeling"]
 [ext_resource type="PackedScene" path="res://scenes/ui/catch_dialog.tscn" id="4_catch"]
 [ext_resource type="PackedScene" path="res://scenes/ui/tackle_box_dialog.tscn" id="5_tackle"]
 [ext_resource type="FontFile" path="res://assets/fonts/Outfit-Bold.ttf" id="6_font_outfit"]
+[ext_resource type="Texture2D" path="res://assets/textures/day_water.png" id="7_water"]
+[ext_resource type="Shader" path="res://shaders/water_waving.gdshader" id="8_shader_water"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ripple"]
 bg_color = Color(1, 1, 1, 0)
@@ -106,6 +108,18 @@ shadow_size = 8
 shadow_offset = Vector2(0, 4)
 shadow_color = Color(0, 0, 0, 0.45)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_water"]
+shader = ExtResource("8_shader_water")
+shader_parameter/wave_speed = 1.0
+shader_parameter/wave_freq = 11.0
+shader_parameter/wave_amp = 0.0035
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_water_fade"]
+shader = ExtResource("8_shader_water")
+shader_parameter/wave_speed = 1.0
+shader_parameter/wave_freq = 11.0
+shader_parameter/wave_amp = 0.0035
+
 [node name="FishingSpot" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -117,6 +131,28 @@ script = ExtResource("1_script")
 
 [node name="BgLayer" type="CanvasLayer" parent="."]
 layer = -1
+
+[node name="WaterTexture" type="TextureRect" parent="BgLayer"]
+material = SubResource("ShaderMaterial_water")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_water")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="WaterTextureFade" type="TextureRect" parent="BgLayer"]
+material = SubResource("ShaderMaterial_water_fade")
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
 
 [node name="BgTexture" type="TextureRect" parent="BgLayer"]
 anchors_preset = 15

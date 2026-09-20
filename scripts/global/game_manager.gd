@@ -24,20 +24,25 @@ const PERIOD_CONFIG: Dictionary = {
 		"icon": "☀️",
 		"start_hour": 6.0,
 		"end_hour": 18.0,
-		"texture_path": "res://assets/textures/day.jpeg"
+		"bg_path": "res://assets/textures/day_bg.png",
+		"water_path": "res://assets/textures/day_water.png",
+		"texture_path": "res://assets/textures/day_bg.png"
 	},
 	"night": {
 		"name": "Night",
 		"icon": "🌙",
 		"start_hour": 18.0,
 		"end_hour": 6.0,
-		"texture_path": "res://assets/textures/night.jpeg"
+		"bg_path": "res://assets/textures/night_bg.png",
+		"water_path": "res://assets/textures/night_water.png",
+		"texture_path": "res://assets/textures/night_bg.png"
 	}
 }
 
 var in_game_time: float = 21600.0 # 06:00 (Day) default
 var current_period: String = "day"
-var _cached_period_textures: Dictionary = {}
+var _cached_bg_textures: Dictionary = {}
+var _cached_water_textures: Dictionary = {}
 
 # Tier Metadata & Colors
 const TIER_COLORS = {
@@ -478,18 +483,33 @@ func _setup_web_lifecycle() -> void:
 
 func _load_period_textures() -> void:
 	for p in PERIOD_CONFIG.keys():
-		var path = PERIOD_CONFIG[p].get("texture_path", "")
-		if ResourceLoader.exists(path):
-			_cached_period_textures[p] = load(path)
+		var bg_p = PERIOD_CONFIG[p].get("bg_path", "")
+		if ResourceLoader.exists(bg_p):
+			_cached_bg_textures[p] = load(bg_p)
+		var water_p = PERIOD_CONFIG[p].get("water_path", "")
+		if ResourceLoader.exists(water_p):
+			_cached_water_textures[p] = load(water_p)
+
+func get_current_period_bg_texture() -> Texture2D:
+	if _cached_bg_textures.has(current_period):
+		return _cached_bg_textures[current_period]
+	var path = PERIOD_CONFIG.get(current_period, {}).get("bg_path", "res://assets/textures/day_bg.png")
+	if ResourceLoader.exists(path):
+		_cached_bg_textures[current_period] = load(path)
+		return _cached_bg_textures[current_period]
+	return null
+
+func get_current_period_water_texture() -> Texture2D:
+	if _cached_water_textures.has(current_period):
+		return _cached_water_textures[current_period]
+	var path = PERIOD_CONFIG.get(current_period, {}).get("water_path", "res://assets/textures/day_water.png")
+	if ResourceLoader.exists(path):
+		_cached_water_textures[current_period] = load(path)
+		return _cached_water_textures[current_period]
+	return null
 
 func get_current_period_texture() -> Texture2D:
-	if _cached_period_textures.has(current_period):
-		return _cached_period_textures[current_period]
-	var path = PERIOD_CONFIG.get(current_period, {}).get("texture_path", "res://assets/textures/day.jpeg")
-	if ResourceLoader.exists(path):
-		_cached_period_textures[current_period] = load(path)
-		return _cached_period_textures[current_period]
-	return null
+	return get_current_period_bg_texture()
 
 func calculate_period(time_secs: float) -> String:
 	var hour = fmod(time_secs / 3600.0, 24.0)

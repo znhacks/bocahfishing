@@ -150,7 +150,9 @@ func _process(delta: float) -> void:
 	var prev_x = fish_x
 	fish_x = move_toward(fish_x, fish_target_x, fish_speed * speed_mult * delta)
 	
-	var active_fish: Control = fish_texture if fish_texture.visible else fish_icon
+	var active_fish: Control = fish_icon
+	if fish_texture.visible:
+		active_fish = fish_texture
 	active_fish.position.x = fish_x
 	
 	# Flip fish sprite based on swim direction

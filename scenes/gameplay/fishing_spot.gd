@@ -35,6 +35,8 @@ var pending_fish: Dictionary = {}
 @onready var tex_bait: TextureRect = $HUD/TopBar/BaitCard/HBoxBait/TexBait
 @onready var lbl_cahs: Label = $HUD/TopBar/CahsCard/LblCahs
 @onready var lbl_clock: Label = $HUD/TopBar/ClockCard/LblClock
+@onready var water_texture: TextureRect = $BgLayer/WaterTexture
+@onready var water_texture_fade: TextureRect = $BgLayer/WaterTextureFade
 @onready var bg_texture: TextureRect = $BgLayer/BgTexture
 @onready var bg_texture_fade: TextureRect = $BgLayer/BgTextureFade
 
@@ -64,7 +66,9 @@ func _ready() -> void:
 		GameManager.period_changed.connect(_on_period_changed)
 		
 		if bg_texture:
-			bg_texture.texture = GameManager.get_current_period_texture()
+			bg_texture.texture = GameManager.get_current_period_bg_texture()
+		if water_texture:
+			water_texture.texture = GameManager.get_current_period_water_texture()
 		if lbl_clock:
 			lbl_clock.text = GameManager.get_time_formatted()
 		
@@ -382,20 +386,33 @@ func _on_time_updated(_time: float) -> void:
 		lbl_clock.text = GameManager.get_time_formatted()
 
 func _on_period_changed(_new_period: String) -> void:
-	if not bg_texture:
-		return
-	var new_tex = GameManager.get_current_period_texture()
-	if not new_tex:
-		return
-		
-	if bg_texture_fade:
-		bg_texture_fade.texture = new_tex
+	var new_bg = GameManager.get_current_period_bg_texture()
+	var new_water = GameManager.get_current_period_water_texture()
+	
+	var tween = create_tween().set_parallel()
+	
+	if bg_texture_fade and new_bg:
+		bg_texture_fade.texture = new_bg
 		bg_texture_fade.modulate.a = 0.0
-		var tween = create_tween()
 		tween.tween_property(bg_texture_fade, "modulate:a", 1.0, 1.2)
-		tween.tween_callback(func():
-			bg_texture.texture = new_tex
-			bg_texture_fade.modulate.a = 0.0
-		)
-	else:
-		bg_texture.texture = new_tex
+	elif bg_texture and new_bg:
+		bg_texture.texture = new_bg
+		
+	if water_texture_fade and new_water:
+		water_texture_fade.texture = new_water
+		water_texture_fade.modulate.a = 0.0
+		tween.tween_property(water_texture_fade, "modulate:a", 1.0, 1.2)
+	elif water_texture and new_water:
+		water_texture.texture = new_water
+		
+	await tween.finished
+	
+	if bg_texture and new_bg:
+		bg_texture.texture = new_bg
+	if bg_texture_fade:
+		bg_texture_fade.modulate.a = 0.0
+		
+	if water_texture and new_water:
+		water_texture.texture = new_water
+	if water_texture_fade:
+		water_texture_fade.modulate.a = 0.0

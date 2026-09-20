@@ -63,7 +63,9 @@ func show_catch(fish_data: Dictionary) -> void:
 	tween.tween_property(self, "scale", Vector2.ONE, 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	
 	# Icon bounce
-	var active_icon: Control = texture_icon if texture_icon.visible else lbl_icon
+	var active_icon: Control = lbl_icon
+	if texture_icon.visible:
+		active_icon = texture_icon
 	var icon_tween = create_tween()
 	active_icon.scale = Vector2(1.35, 1.35)
 	icon_tween.tween_property(active_icon, "scale", Vector2.ONE, 0.35).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
