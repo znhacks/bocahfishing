@@ -18,6 +18,7 @@ var pending_fish: Dictionary = {}
 
 # Node references
 @onready var water_surface: Control = $WaterArea
+@onready var fishing_line: Line2D = $FishingLine
 @onready var bobber: Control = $Bobber
 @onready var bobber_icon: Label = $Bobber/BobberIcon
 @onready var alert_icon: Label = $Bobber/AlertIcon
@@ -75,6 +76,8 @@ func _ready() -> void:
 	alert_icon.visible = false
 	ripple_ring.visible = false
 	bobber.visible = false
+	if fishing_line:
+		fishing_line.visible = false
 	reeling_hud.visible = false
 	catch_dialog.visible = false
 	tackle_dialog.visible = false
@@ -144,6 +147,8 @@ func _process(delta: float) -> void:
 				splash_particles.amount = 10
 				splash_particles.initial_velocity_min = 45.0
 				splash_particles.initial_velocity_max = 95.0
+				
+	_update_fishing_line()
 
 func _set_state(new_state: FishingState) -> void:
 	current_state = new_state
@@ -161,29 +166,44 @@ func _set_state(new_state: FishingState) -> void:
 			ripple_ring.visible = false
 			bobber.visible = false
 			bobber.rotation = 0.0
+			if fishing_line:
+				fishing_line.visible = false
 			if splash_particles:
 				splash_particles.emitting = false
 		FishingState.CASTING:
 			lbl_prompt.text = ""
 			alert_icon.visible = false
+			if fishing_line:
+				fishing_line.visible = true
 		FishingState.WAITING:
 			lbl_prompt.text = ""
 			ripple_ring.visible = true
 			alert_icon.visible = false
+			if fishing_line:
+				fishing_line.visible = true
 			if splash_particles:
 				splash_particles.emitting = false
 		FishingState.BITING:
 			lbl_prompt.text = ""
+			if fishing_line:
+				fishing_line.visible = true
 		FishingState.REELING:
 			lbl_prompt.text = ""
 			alert_icon.visible = false
 			bobber.visible = true
+			if fishing_line:
+				fishing_line.visible = true
 			_is_reeling_active = true
 		FishingState.ESCAPED:
 			alert_icon.visible = false
+			if fishing_line:
+				fishing_line.visible = false
 			if splash_particles:
 				splash_particles.emitting = false
 			bobber.rotation = 0.0
+		FishingState.RESULT:
+			if fishing_line:
+				fishing_line.visible = false
 
 func _on_water_clicked(event: InputEvent) -> void:
 	if not (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed):
@@ -191,23 +211,40 @@ func _on_water_clicked(event: InputEvent) -> void:
 		
 	match current_state:
 		FishingState.IDLE:
-			_cast_line(event.position)
+			var click_pos = water_surface.get_global_mouse_position()
+			if click_pos.y < 365.0:
+				return
+			_cast_line(click_pos)
 		FishingState.BITING:
 			_hook_fish()
+
+func _clamp_to_water(raw_pos: Vector2) -> Vector2:
+	var y = clamp(raw_pos.y, 375.0, 675.0)
+	var min_x = 70.0
+	var max_x = 1210.0
+	
+	# Upper water (near distant mountains/shores) is narrower between left bank & right island
+	if y < 450.0:
+		var t = clamp((y - 375.0) / 75.0, 0.0, 1.0)
+		min_x = lerp(260.0, 100.0, t)
+		max_x = lerp(740.0, 1180.0, t)
+	else:
+		min_x = 70.0
+		max_x = 1210.0
+		
+	var x = clamp(raw_pos.x, min_x, max_x)
+	return Vector2(x, y)
 
 func _cast_line(target_pos: Vector2) -> void:
 	_set_state(FishingState.CASTING)
 	
-	# Clamp click within water bounds
-	var clamped_x = clamp(target_pos.x, 320.0, 1100.0)
-	var clamped_y = clamp(target_pos.y, 420.0, 640.0)
-	_cast_pos = Vector2(clamped_x, clamped_y)
+	_cast_pos = _clamp_to_water(target_pos)
+	_player_pos = Vector2(640.0, 715.0) # Bottom center where player holds rod
+	_far_pos = Vector2(_cast_pos.x + randf_range(-40.0, 40.0), clamp(_cast_pos.y - 110.0, 375.0, 540.0))
 	
-	# Player stands at bottom center; far escape point is deeper in the water
-	_player_pos = Vector2(clamp(_cast_pos.x * 0.25 + 640.0 * 0.75, 520.0, 760.0), 660.0)
-	_far_pos = Vector2(_cast_pos.x + randf_range(-30.0, 30.0), clamp(_cast_pos.y - 120.0, 360.0, 520.0))
-	
-	bobber.position = Vector2(_cast_pos.x, _cast_pos.y - 120.0)
+	# Start bobber launching in arc from bottom-center towards target water position
+	var launch_start = Vector2(lerp(640.0, _cast_pos.x, 0.45), _cast_pos.y - 150.0)
+	bobber.position = launch_start
 	bobber.rotation = 0.0
 	_bobber_origin_y = _cast_pos.y
 	bobber.visible = true
@@ -219,10 +256,10 @@ func _cast_line(target_pos: Vector2) -> void:
 	if splash_particles:
 		splash_particles.emitting = false
 	
-	# Splash arc tween
+	# Splash arc tween: bobber flies smoothly and lands right on the clicked water spot
 	var tween = create_tween().set_parallel()
-	tween.tween_property(bobber, "position:y", _cast_pos.y, 0.35).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.tween_property(bobber, "modulate:a", 1.0, 0.2)
+	tween.tween_property(bobber, "position", _cast_pos, 0.38).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_property(bobber, "modulate:a", 1.0, 0.18)
 	
 	await tween.finished
 	_spawn_water_ripple()
@@ -264,6 +301,46 @@ func _spawn_water_ripple() -> void:
 	var r_tween = create_tween().set_parallel()
 	r_tween.tween_property(ripple_ring, "scale", Vector2(1.6, 0.8), 0.6)
 	r_tween.tween_property(ripple_ring, "modulate:a", 0.0, 0.6)
+
+func _update_fishing_line() -> void:
+	if not fishing_line:
+		return
+	if not bobber.visible or current_state == FishingState.IDLE or current_state == FishingState.RESULT or current_state == FishingState.ESCAPED:
+		fishing_line.visible = false
+		return
+		
+	fishing_line.visible = true
+	var start_pos = Vector2(640.0, 720.0) # Screen bottom-center where player holds rod
+	var bobber_tip_offset = Vector2(0.0, -14.0).rotated(bobber.rotation)
+	var end_pos = bobber.position + bobber_tip_offset
+	
+	var points: PackedVector2Array = PackedVector2Array()
+	var num_segments: int = 14
+	
+	# Determine line sag or tension based on state
+	var sag_amount: float = 0.0
+	if current_state == FishingState.WAITING:
+		# Natural resting catenary curve that sways gently with water waves
+		sag_amount = 20.0 + sin(_anim_time * 2.4) * 3.5
+	elif current_state == FishingState.BITING:
+		# Sudden twitching / tension snap
+		sag_amount = 4.0 + sin(_anim_time * 22.0) * 4.0
+	elif current_state == FishingState.REELING:
+		# Taut line under strain with fight jitter
+		var jitter = sin(_anim_time * 30.0) * (2.2 if not _is_reeling_inside else 1.0)
+		sag_amount = -3.0 + jitter
+	elif current_state == FishingState.CASTING:
+		sag_amount = 12.0
+	
+	# Quadratic Bezier midpoint
+	var mid_pos = (start_pos + end_pos) * 0.5 + Vector2(0.0, sag_amount)
+	
+	for i in range(num_segments + 1):
+		var t = float(i) / float(num_segments)
+		var p = (1.0 - t) * (1.0 - t) * start_pos + 2.0 * (1.0 - t) * t * mid_pos + t * t * end_pos
+		points.append(p)
+		
+	fishing_line.points = points
 
 func _trigger_bite() -> void:
 	# Roll fish based on equipped bait (or bare hook if none)

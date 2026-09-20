@@ -187,6 +187,16 @@ offset_top = 340.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="FishingLine" type="Line2D" parent="."]
+visible = false
+points = PackedVector2Array(640, 720, 640, 520)
+width = 2.0
+default_color = Color(0.1, 0.1, 0.12, 0.9)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+
 [node name="Bobber" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
