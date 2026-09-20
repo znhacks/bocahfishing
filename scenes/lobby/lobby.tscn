@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" path="res://assets/textures/icon.png" id="10_title_icon"]
 [ext_resource type="Texture2D" path="res://assets/player/joe_ico.png" id="11_joe"]
 [ext_resource type="Texture2D" path="res://assets/player/jia_ico.png" id="12_jia"]
+[ext_resource type="Shader" path="res://shaders/soft_blur.gdshader" id="13_shader_blur"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_clock_badge"]
 bg_color = Color(0.08, 0.12, 0.16, 0.9)
@@ -139,6 +140,11 @@ shader_parameter/wave_height = 0.022
 shader_parameter/wave_freq = 8.5
 shader_parameter/trail_strength = 0.45
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
+shader = ExtResource("13_shader_blur")
+shader_parameter/blur_amount = 2.4
+shader_parameter/dim_amount = 0.05
+
 [node name="Lobby" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -192,6 +198,15 @@ grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 1
 stretch_mode = 6
+
+[node name="BlurOverlay" type="ColorRect" parent="BackgroundLayer"]
+material = SubResource("ShaderMaterial_blur")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

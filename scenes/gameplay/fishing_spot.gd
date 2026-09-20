@@ -464,7 +464,7 @@ func _on_tackle_pressed() -> void:
 	tackle_dialog.open()
 
 func _on_back_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/lobby/lobby.tscn")
+	GameManager.change_scene("res://scenes/lobby/lobby.tscn")
 
 func _on_time_updated(_time: float) -> void:
 	if lbl_clock:

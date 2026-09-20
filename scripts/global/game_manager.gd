@@ -53,6 +53,9 @@ var period_durations: Dictionary = {
 
 var _period_elapsed_real_seconds: float = 0.0
 var _is_transitioning: bool = false
+var _is_scene_changing: bool = false
+var _transition_layer: CanvasLayer
+var _transition_rect: ColorRect
 var _bgm_streams: Dictionary = {}
 var _bgm_player_a: AudioStreamPlayer
 var _bgm_player_b: AudioStreamPlayer
@@ -464,6 +467,7 @@ func _ready() -> void:
 	_setup_bgm_system()
 	_validate_equipped_bait()
 	_setup_web_lifecycle()
+	_setup_transition_system()
 
 func _process(delta: float) -> void:
 	var current_dur: float = period_durations.get(current_period, 186.84)
@@ -529,6 +533,48 @@ func _setup_web_lifecycle() -> void:
 	})();
 	"""
 	js.eval(script)
+
+func _setup_transition_system() -> void:
+	if _transition_layer:
+		return
+	_transition_layer = CanvasLayer.new()
+	_transition_layer.layer = 125
+	add_child(_transition_layer)
+	
+	_transition_rect = ColorRect.new()
+	_transition_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_transition_rect.color = Color(0.04, 0.06, 0.09, 1.0)
+	_transition_rect.modulate.a = 0.0
+	_transition_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_transition_layer.add_child(_transition_rect)
+
+func change_scene(target_path: String, duration: float = 0.25) -> void:
+	if _is_scene_changing:
+		return
+	_is_scene_changing = true
+	
+	if not _transition_rect:
+		_setup_transition_system()
+		
+	_transition_rect.mouse_filter = Control.MOUSE_FILTER_STOP
+	
+	# Smooth fade out current scene
+	var tween_out = create_tween()
+	tween_out.tween_property(_transition_rect, "modulate:a", 1.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	await tween_out.finished
+	
+	# Switch to target scene
+	get_tree().change_scene_to_file(target_path)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	
+	# Smooth fade into new scene
+	var tween_in = create_tween()
+	tween_in.tween_property(_transition_rect, "modulate:a", 0.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	await tween_in.finished
+	
+	_transition_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_is_scene_changing = false
 
 func _load_period_textures() -> void:
 	for p in PERIOD_CONFIG.keys():

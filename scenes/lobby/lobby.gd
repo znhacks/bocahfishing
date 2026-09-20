@@ -159,18 +159,14 @@ func _on_play_pressed() -> void:
 	var tween = create_tween()
 	tween.tween_property(btn_play, "scale", Vector2(0.92, 0.92), 0.08)
 	tween.tween_property(btn_play, "scale", Vector2(1.0, 1.0), 0.08)
-	tween.tween_property(self, "modulate:a", 0.0, 0.2)
 	await tween.finished
-	get_tree().change_scene_to_file("res://scenes/gameplay/fishing_spot.tscn")
+	GameManager.change_scene("res://scenes/gameplay/fishing_spot.tscn")
 
 func _on_tackle_pressed() -> void:
 	tackle_dialog.open()
 
 func _on_skills_pressed() -> void:
-	var tween = create_tween()
-	tween.tween_property(self, "modulate:a", 0.0, 0.15)
-	await tween.finished
-	get_tree().change_scene_to_file("res://scenes/wardrobe/wardrobe.tscn")
+	GameManager.change_scene("res://scenes/wardrobe/wardrobe.tscn")
 
 func _on_bait_card_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:

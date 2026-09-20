@@ -328,7 +328,4 @@ func _on_action_pressed() -> void:
 				tween.tween_property(btn_action, "scale", Vector2.ONE, 0.2).set_trans(Tween.TRANS_BACK)
 
 func _on_back_pressed() -> void:
-	var tween = create_tween()
-	tween.tween_property(self, "modulate:a", 0.0, 0.15)
-	await tween.finished
-	get_tree().change_scene_to_file("res://scenes/lobby/lobby.tscn")
+	GameManager.change_scene("res://scenes/lobby/lobby.tscn")
