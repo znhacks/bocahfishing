@@ -52,6 +52,7 @@ var period_durations: Dictionary = {
 }
 
 var _period_elapsed_real_seconds: float = 0.0
+var _is_transitioning: bool = false
 var _bgm_streams: Dictionary = {}
 var _bgm_player_a: AudioStreamPlayer
 var _bgm_player_b: AudioStreamPlayer
@@ -457,38 +458,44 @@ func _ready() -> void:
 		_apply_audio_volume("Master", master_volume)
 		_apply_audio_volume("Music", music_volume)
 		_apply_audio_volume("SFX", sfx_volume)
-	current_period = calculate_period(in_game_time)
+		current_period = "day"
+		_period_elapsed_real_seconds = 0.0
+		in_game_time = 21600.0
 	_setup_bgm_system()
 	_validate_equipped_bait()
 	_setup_web_lifecycle()
 
 func _process(delta: float) -> void:
-	var current_dur: float = period_durations.get(current_period, 190.0)
+	var current_dur: float = period_durations.get(current_period, 186.84)
 	
-	# Track actual music playback position
-	if _active_bgm_player and _active_bgm_player.playing:
-		var pos = _active_bgm_player.get_playback_position()
-		if pos > 0.0 or _period_elapsed_real_seconds < 1.0:
-			_period_elapsed_real_seconds = pos
+	if not _is_transitioning:
+		# Track music playback position or advance elapsed time
+		if _active_bgm_player and _active_bgm_player.playing:
+			var pos: float = _active_bgm_player.get_playback_position()
+			if pos > _period_elapsed_real_seconds:
+				_period_elapsed_real_seconds = pos
+			else:
+				_period_elapsed_real_seconds += delta
 		else:
 			_period_elapsed_real_seconds += delta
-	else:
-		_period_elapsed_real_seconds += delta
-		# Attempt autoplay if player is stopped
-		if _active_bgm_player and not _active_bgm_player.playing:
-			_play_period_bgm(current_period, _period_elapsed_real_seconds)
+			# Initial play attempt if stopped at very beginning
+			if _active_bgm_player and not _active_bgm_player.playing and _period_elapsed_real_seconds < 2.0:
+				_play_period_bgm(current_period, _period_elapsed_real_seconds)
 
-	# Transition period once the music duration is reached
-	if _period_elapsed_real_seconds >= current_dur:
-		var next_p = "night" if current_period == "day" else "day"
-		_switch_period(next_p)
-		return
+		# If player stopped playing near the end or elapsed time exceeds duration, switch to next period immediately
+		var has_reached_end: bool = _period_elapsed_real_seconds >= (current_dur - 0.4)
+		var stopped_near_end: bool = (_active_bgm_player and not _active_bgm_player.playing and _period_elapsed_real_seconds >= (current_dur * 0.85))
+		if has_reached_end or stopped_near_end:
+			switch_to_next_period()
+			return
 
 	# Calculate in_game_time directly from song progress
 	var progress: float = clamp(_period_elapsed_real_seconds / current_dur, 0.0, 1.0)
 	if current_period == "day":
+		# Day: 06:00 AM (21600s) -> 06:00 PM (64800s)
 		in_game_time = 21600.0 + progress * SECONDS_PER_HALF_DAY
 	else:
+		# Night: 06:00 PM (64800s) -> 12:00 AM (midnight) -> 06:00 AM (21600s)
 		in_game_time = fmod(64800.0 + progress * SECONDS_PER_HALF_DAY, SECONDS_PER_DAY)
 
 	time_updated.emit(in_game_time)
@@ -561,17 +568,27 @@ func calculate_period(time_secs: float) -> String:
 		return "night"
 
 func get_time_formatted() -> String:
-	var total_minutes = int(in_game_time / 60.0) % 1440
-	var hour = int(float(total_minutes) / 60.0)
-	var minute = total_minutes % 60
-	var config = PERIOD_CONFIG.get(current_period, {"icon": "☀️", "name": "Day"})
-	return "%s %02d:%02d" % [config["icon"], hour, minute]
+	var total_minutes: int = int(in_game_time / 60.0) % 1440
+	var hour_24: int = int(float(total_minutes) / 60.0)
+	var minute: int = total_minutes % 60
+	var is_pm: bool = (hour_24 >= 12)
+	var period_str: String = "PM" if is_pm else "AM"
+	var hour_12: int = hour_24 % 12
+	if hour_12 == 0:
+		hour_12 = 12
+	var icon: String = "☀️" if current_period == "day" else "🌙"
+	return "%s %02d:%02d %s" % [icon, hour_12, minute, period_str]
 
 func get_time_clock_only() -> String:
-	var total_minutes = int(in_game_time / 60.0) % 1440
-	var hour = int(float(total_minutes) / 60.0)
-	var minute = total_minutes % 60
-	return "%02d:%02d" % [hour, minute]
+	var total_minutes: int = int(in_game_time / 60.0) % 1440
+	var hour_24: int = int(float(total_minutes) / 60.0)
+	var minute: int = total_minutes % 60
+	var is_pm: bool = (hour_24 >= 12)
+	var period_str: String = "PM" if is_pm else "AM"
+	var hour_12: int = hour_24 % 12
+	if hour_12 == 0:
+		hour_12 = 12
+	return "%02d:%02d %s" % [hour_12, minute, period_str]
 
 func get_character_modifiers() -> Dictionary:
 	var data = character_db.get(selected_character, character_db["none"])
@@ -813,9 +830,11 @@ func _apply_save_data(data: Dictionary) -> void:
 		unlocked_catches.append(str(id))
 		
 	current_period = data.get("current_period", "day")
+	if current_period != "day" and current_period != "night":
+		current_period = "day"
 	_period_elapsed_real_seconds = float(data.get("period_elapsed_seconds", 0.0))
-	var cur_dur = period_durations.get(current_period, 190.0)
-	if _period_elapsed_real_seconds < 0.0 or _period_elapsed_real_seconds >= cur_dur:
+	var cur_dur = period_durations.get(current_period, 186.84)
+	if _period_elapsed_real_seconds < 0.0 or _period_elapsed_real_seconds >= (cur_dur - 2.0):
 		_period_elapsed_real_seconds = 0.0
 		
 	var progress = clamp(_period_elapsed_real_seconds / cur_dur, 0.0, 1.0)
@@ -866,12 +885,12 @@ func play_catch_splash(is_heavy: bool = false) -> void:
 func _setup_bgm_system() -> void:
 	_bgm_player_a = AudioStreamPlayer.new()
 	_bgm_player_a.bus = "Music" if AudioServer.get_bus_index("Music") >= 0 else "Master"
-	_bgm_player_a.finished.connect(_on_bgm_track_finished)
+	_bgm_player_a.finished.connect(func(): _on_bgm_player_finished(_bgm_player_a))
 	add_child(_bgm_player_a)
 	
 	_bgm_player_b = AudioStreamPlayer.new()
 	_bgm_player_b.bus = "Music" if AudioServer.get_bus_index("Music") >= 0 else "Master"
-	_bgm_player_b.finished.connect(_on_bgm_track_finished)
+	_bgm_player_b.finished.connect(func(): _on_bgm_player_finished(_bgm_player_b))
 	add_child(_bgm_player_b)
 	
 	for p in PERIOD_CONFIG.keys():
@@ -881,7 +900,7 @@ func _setup_bgm_system() -> void:
 			if stream:
 				_bgm_streams[p] = stream
 				var len_sec = stream.get_length()
-				if len_sec > 0.0:
+				if len_sec > 10.0:
 					period_durations[p] = len_sec
 	
 	_play_period_bgm(current_period, _period_elapsed_real_seconds)
@@ -894,18 +913,27 @@ func _play_period_bgm(period_key: String, seek_pos: float = 0.0) -> void:
 	_active_bgm_player = _bgm_player_a
 	_active_bgm_player.stream = stream
 	_active_bgm_player.volume_db = 0.0
-	var dur: float = period_durations.get(period_key, 190.0)
-	var clamped_seek: float = clamp(seek_pos, 0.0, maxf(0.0, dur - 0.5))
+	var dur: float = period_durations.get(period_key, 186.84)
+	var clamped_seek: float = clamp(seek_pos, 0.0, maxf(0.0, dur - 1.0))
 	_active_bgm_player.play(clamped_seek)
 
+func switch_to_next_period() -> void:
+	if _is_transitioning:
+		return
+	var next_p = "night" if current_period == "day" else "day"
+	_switch_period(next_p)
+
 func _switch_period(new_period: String) -> void:
+	if _is_transitioning:
+		return
+	_is_transitioning = true
 	current_period = new_period
 	_period_elapsed_real_seconds = 0.0
 	
 	if current_period == "day":
-		in_game_time = 21600.0
+		in_game_time = 21600.0 # 06:00 AM
 	else:
-		in_game_time = 64800.0
+		in_game_time = 64800.0 # 06:00 PM
 		
 	period_changed.emit(current_period)
 	time_updated.emit(in_game_time)
@@ -914,10 +942,11 @@ func _switch_period(new_period: String) -> void:
 func _crossfade_to_period_bgm(new_period: String) -> void:
 	var new_stream = _bgm_streams.get(new_period)
 	if not new_stream:
+		_is_transitioning = false
 		return
 		
-	var outgoing_player = _active_bgm_player
-	var incoming_player = _bgm_player_b if outgoing_player == _bgm_player_a else _bgm_player_a
+	var outgoing_player: AudioStreamPlayer = _active_bgm_player
+	var incoming_player: AudioStreamPlayer = _bgm_player_b if outgoing_player == _bgm_player_a else _bgm_player_a
 	_active_bgm_player = incoming_player
 	
 	incoming_player.stream = new_stream
@@ -925,18 +954,20 @@ func _crossfade_to_period_bgm(new_period: String) -> void:
 	incoming_player.play(0.0)
 	
 	var tween = create_tween().set_parallel()
-	tween.tween_property(incoming_player, "volume_db", 0.0, 2.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(incoming_player, "volume_db", 0.0, 1.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	
 	if outgoing_player and outgoing_player.playing:
-		tween.tween_property(outgoing_player, "volume_db", -60.0, 2.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-		tween.chain().tween_callback(func():
-			if outgoing_player != _active_bgm_player:
-				outgoing_player.stop()
-		)
+		tween.tween_property(outgoing_player, "volume_db", -60.0, 1.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	
+	tween.chain().tween_callback(func():
+		if outgoing_player and outgoing_player != _active_bgm_player:
+			outgoing_player.stop()
+		_is_transitioning = false
+	)
 
-func _on_bgm_track_finished() -> void:
-	var next_period = "night" if current_period == "day" else "day"
-	_switch_period(next_period)
+func _on_bgm_player_finished(player: AudioStreamPlayer) -> void:
+	if player == _active_bgm_player and not _is_transitioning:
+		switch_to_next_period()
 
 func reset_game_data() -> void:
 	if FileAccess.file_exists(SAVE_PATH):
@@ -954,6 +985,7 @@ func reset_game_data() -> void:
 	in_game_time = 21600.0
 	current_period = "day"
 	_period_elapsed_real_seconds = 0.0
+	_is_transitioning = false
 	_play_period_bgm("day", 0.0)
 	inventory_updated.emit()
 	bait_changed.emit(equipped_bait)
