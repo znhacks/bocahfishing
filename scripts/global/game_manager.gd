@@ -51,6 +51,7 @@ var period_durations: Dictionary = {
 	"night": 203.11
 }
 
+var _period_elapsed_real_seconds: float = 0.0
 var _bgm_streams: Dictionary = {}
 var _bgm_player_a: AudioStreamPlayer
 var _bgm_player_b: AudioStreamPlayer
@@ -462,20 +463,36 @@ func _ready() -> void:
 	_setup_web_lifecycle()
 
 func _process(delta: float) -> void:
-	var current_duration: float = period_durations.get(current_period, 190.0)
-	var time_speed: float = SECONDS_PER_HALF_DAY / current_duration
-	in_game_time += delta * time_speed
-	if in_game_time >= SECONDS_PER_DAY:
-		in_game_time = fmod(in_game_time, SECONDS_PER_DAY)
+	var current_dur: float = period_durations.get(current_period, 190.0)
 	
-	var new_period = calculate_period(in_game_time)
-	if new_period != current_period:
-		current_period = new_period
-		period_changed.emit(current_period)
-		_crossfade_to_period_bgm(current_period)
-	
+	# Track actual music playback position
+	if _active_bgm_player and _active_bgm_player.playing:
+		var pos = _active_bgm_player.get_playback_position()
+		if pos > 0.0 or _period_elapsed_real_seconds < 1.0:
+			_period_elapsed_real_seconds = pos
+		else:
+			_period_elapsed_real_seconds += delta
+	else:
+		_period_elapsed_real_seconds += delta
+		# Attempt autoplay if player is stopped
+		if _active_bgm_player and not _active_bgm_player.playing:
+			_play_period_bgm(current_period, _period_elapsed_real_seconds)
+
+	# Transition period once the music duration is reached
+	if _period_elapsed_real_seconds >= current_dur:
+		var next_p = "night" if current_period == "day" else "day"
+		_switch_period(next_p)
+		return
+
+	# Calculate in_game_time directly from song progress
+	var progress: float = clamp(_period_elapsed_real_seconds / current_dur, 0.0, 1.0)
+	if current_period == "day":
+		in_game_time = 21600.0 + progress * SECONDS_PER_HALF_DAY
+	else:
+		in_game_time = fmod(64800.0 + progress * SECONDS_PER_HALF_DAY, SECONDS_PER_DAY)
+
 	time_updated.emit(in_game_time)
-	
+
 	# Periodic auto-save every 30 seconds
 	_autosave_timer += delta
 	if _autosave_timer >= AUTOSAVE_INTERVAL:
@@ -662,6 +679,8 @@ func save_game() -> void:
 		"inventory": inventory,
 		"unlocked_catches": unlocked_catches,
 		"in_game_time": in_game_time,
+		"current_period": current_period,
+		"period_elapsed_seconds": _period_elapsed_real_seconds,
 		"settings": {
 			"master_volume": master_volume,
 			"music_volume": music_volume,
@@ -793,8 +812,17 @@ func _apply_save_data(data: Dictionary) -> void:
 	for id in raw_unlocked:
 		unlocked_catches.append(str(id))
 		
-	in_game_time = float(data.get("in_game_time", 21600.0))
-	current_period = calculate_period(in_game_time)
+	current_period = data.get("current_period", "day")
+	_period_elapsed_real_seconds = float(data.get("period_elapsed_seconds", 0.0))
+	var cur_dur = period_durations.get(current_period, 190.0)
+	if _period_elapsed_real_seconds < 0.0 or _period_elapsed_real_seconds >= cur_dur:
+		_period_elapsed_real_seconds = 0.0
+		
+	var progress = clamp(_period_elapsed_real_seconds / cur_dur, 0.0, 1.0)
+	if current_period == "day":
+		in_game_time = 21600.0 + progress * SECONDS_PER_HALF_DAY
+	else:
+		in_game_time = fmod(64800.0 + progress * SECONDS_PER_HALF_DAY, SECONDS_PER_DAY)
 	
 	var settings = data.get("settings", {})
 	if typeof(settings) == TYPE_DICTIONARY and not settings.is_empty():
@@ -856,29 +884,32 @@ func _setup_bgm_system() -> void:
 				if len_sec > 0.0:
 					period_durations[p] = len_sec
 	
-	_play_initial_bgm()
+	_play_period_bgm(current_period, _period_elapsed_real_seconds)
 
-func _play_initial_bgm() -> void:
-	var stream = _bgm_streams.get(current_period)
+func _play_period_bgm(period_key: String, seek_pos: float = 0.0) -> void:
+	var stream = _bgm_streams.get(period_key)
 	if not stream:
 		return
 		
 	_active_bgm_player = _bgm_player_a
 	_active_bgm_player.stream = stream
 	_active_bgm_player.volume_db = 0.0
+	var dur: float = period_durations.get(period_key, 190.0)
+	var clamped_seek: float = clamp(seek_pos, 0.0, maxf(0.0, dur - 0.5))
+	_active_bgm_player.play(clamped_seek)
+
+func _switch_period(new_period: String) -> void:
+	current_period = new_period
+	_period_elapsed_real_seconds = 0.0
 	
-	# Calculate start offset proportional to elapsed time in current period
-	var progress: float = 0.0
 	if current_period == "day":
-		progress = clamp((in_game_time - 21600.0) / SECONDS_PER_HALF_DAY, 0.0, 1.0)
+		in_game_time = 21600.0
 	else:
-		var night_time = in_game_time - 64800.0 if in_game_time >= 64800.0 else in_game_time + 21600.0
-		progress = clamp(night_time / SECONDS_PER_HALF_DAY, 0.0, 1.0)
+		in_game_time = 64800.0
 		
-	var dur: float = period_durations.get(current_period, 190.0)
-	var track_pos: float = progress * dur
-	track_pos = clamp(track_pos, 0.0, maxf(0.0, stream.get_length() - 0.5))
-	_active_bgm_player.play(track_pos)
+	period_changed.emit(current_period)
+	time_updated.emit(in_game_time)
+	_crossfade_to_period_bgm(current_period)
 
 func _crossfade_to_period_bgm(new_period: String) -> void:
 	var new_stream = _bgm_streams.get(new_period)
@@ -894,21 +925,18 @@ func _crossfade_to_period_bgm(new_period: String) -> void:
 	incoming_player.play(0.0)
 	
 	var tween = create_tween().set_parallel()
-	tween.tween_property(incoming_player, "volume_db", 0.0, 2.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(incoming_player, "volume_db", 0.0, 2.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	
 	if outgoing_player and outgoing_player.playing:
-		tween.tween_property(outgoing_player, "volume_db", -60.0, 2.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		tween.tween_property(outgoing_player, "volume_db", -60.0, 2.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 		tween.chain().tween_callback(func():
 			if outgoing_player != _active_bgm_player:
 				outgoing_player.stop()
 		)
 
 func _on_bgm_track_finished() -> void:
-	# Advance time cleanly to trigger period change if floating point precision caused slight drift
-	if current_period == "day" and in_game_time < 64800.0:
-		in_game_time = 64800.0
-	elif current_period == "night" and (in_game_time >= 64800.0 or in_game_time < 21600.0):
-		in_game_time = 21600.0
+	var next_period = "night" if current_period == "day" else "day"
+	_switch_period(next_period)
 
 func reset_game_data() -> void:
 	if FileAccess.file_exists(SAVE_PATH):
@@ -924,8 +952,9 @@ func reset_game_data() -> void:
 	equipped_bait = "bait_worm"
 	unlocked_catches.clear()
 	in_game_time = 21600.0
-	current_period = calculate_period(in_game_time)
-	_play_initial_bgm()
+	current_period = "day"
+	_period_elapsed_real_seconds = 0.0
+	_play_period_bgm("day", 0.0)
 	inventory_updated.emit()
 	bait_changed.emit(equipped_bait)
 	cahs_changed.emit(cahs)
