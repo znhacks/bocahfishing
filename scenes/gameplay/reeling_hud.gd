@@ -86,16 +86,12 @@ func start_reeling(fish_data: Dictionary) -> void:
 	lbl_tier.text = "[ %s ]" % tier_name.to_upper()
 	lbl_tier.modulate = tier_color
 	
-	var icon_tex_path = fish_data.get("icon_texture", "")
-	if icon_tex_path != "" and ResourceLoader.exists(icon_tex_path):
-		fish_texture.texture = load(icon_tex_path)
-		fish_texture.visible = true
-		fish_icon.visible = false
-	else:
-		fish_texture.visible = false
-		fish_icon.visible = true
-		fish_icon.text = fish_data.get("icon_symbol", "🐟")
-		fish_icon.modulate = Color.WHITE
+	# Hide specific fish illustration to keep the fish a mystery during the fight
+	fish_texture.visible = false
+	fish_icon.visible = true
+	fish_icon.text = "🐟"
+	fish_icon.scale = Vector2.ONE
+	fish_icon.modulate = Color.WHITE
 	
 	visible = true
 	is_active = true
