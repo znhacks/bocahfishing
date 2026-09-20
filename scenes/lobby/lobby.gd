@@ -25,6 +25,8 @@ extends Control
 @onready var stats_dialog: Control = $DialogLayer/StatsDialog
 
 @onready var title_container: Control = $HUD/TitleContainer
+@onready var joe_char: TextureRect = $HUD/JoeChar
+@onready var jia_char: TextureRect = $HUD/JiaChar
 @onready var water_texture: TextureRect = $BackgroundLayer/WaterTexture
 @onready var water_texture_fade: TextureRect = $BackgroundLayer/WaterTextureFade
 @onready var bg_texture: TextureRect = $BackgroundLayer/BgTexture
@@ -32,8 +34,17 @@ extends Control
 @onready var lbl_clock: Label = $HUD/TopLeftBar/ClockBadge/LblClock
 
 var _time_passed: float = 0.0
+var _title_base_y: float = 40.0
+var _joe_base_y: float = 0.0
+var _jia_base_y: float = 0.0
 
 func _ready() -> void:
+	if title_container:
+		_title_base_y = title_container.position.y
+	if joe_char:
+		_joe_base_y = joe_char.position.y
+	if jia_char:
+		_jia_base_y = jia_char.position.y
 	# GameManager signal connections
 	if GameManager:
 		GameManager.bait_changed.connect(_on_bait_changed)
@@ -76,13 +87,18 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_time_passed += delta
-	# Subtle floating motion on title
+	# Subtle floating motion on title logo
 	if title_container:
-		title_container.position.y += sin(_time_passed * 2.0) * 0.15
+		title_container.position.y = _title_base_y + sin(_time_passed * 1.8) * 3.5
 	# Gentle breathing animation on Play button
 	if btn_play:
 		var scale_factor = 1.0 + sin(_time_passed * 3.0) * 0.02
 		btn_play.scale = Vector2(scale_factor, scale_factor)
+	# Lively subtle idle sway on Joe and Jia
+	if joe_char:
+		joe_char.position.y = _joe_base_y + sin(_time_passed * 1.5) * 3.0
+	if jia_char:
+		jia_char.position.y = _jia_base_y + sin(_time_passed * 1.5 + 1.2) * 3.0
 
 func _start_intro_animation() -> void:
 	modulate.a = 0.0
