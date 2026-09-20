@@ -228,6 +228,8 @@ func _cast_line(target_pos: Vector2) -> void:
 	_spawn_water_ripple()
 	if splash_particles:
 		splash_particles.restart()
+	if GameManager:
+		GameManager.play_bobber_splash()
 	_set_state(FishingState.WAITING)
 	
 	# Random wait time until bite (significantly affected by bait tier & lure_speed)
@@ -285,6 +287,8 @@ func _trigger_bite() -> void:
 	
 	# Ripple water violently
 	_spawn_water_ripple()
+	if GameManager:
+		GameManager.play_sfx(GameManager.SFX_BOBBER_PLOP, 1.0, 1.15)
 	
 	_set_state(FishingState.BITING)
 	
@@ -333,6 +337,10 @@ func _on_reeling_finished(success: bool, fish_data: Dictionary) -> void:
 		_set_state(FishingState.RESULT)
 		_spawn_water_ripple()
 		bobber.visible = false
+		var tier = fish_data.get("tier", 1)
+		var is_heavy = (tier >= 4 or (fish_data.get("category", "") == "fish" and fish_data.get("size_range", [10, 20])[1] > 100.0))
+		if GameManager:
+			GameManager.play_catch_splash(is_heavy)
 		catch_dialog.show_catch(fish_data)
 	else:
 		_fish_escaped("The line snapped! The fish tore away.")

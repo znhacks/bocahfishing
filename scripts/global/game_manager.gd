@@ -337,10 +337,15 @@ var item_db: Dictionary = {
 const SAVE_PATH: String = "user://bocah_save.json"
 const WEB_STORAGE_KEY: String = "bocah_fishing_save_v1"
 
-# Audio Settings
+# Audio Settings & SFX Preloads
 var master_volume: float = 1.0
 var music_volume: float = 1.0
 var sfx_volume: float = 1.0
+
+const SFX_BOBBER_SPLASH = preload("res://assets/audio/sfx/bobber_splash.ogg")
+const SFX_BOBBER_PLOP = preload("res://assets/audio/sfx/bobber_plop.ogg")
+const SFX_CATCH_SPLASH = preload("res://assets/audio/sfx/catch_splash.ogg")
+const SFX_CATCH_SPLASH_HEAVY = preload("res://assets/audio/sfx/catch_splash_heavy.ogg")
 
 # Autosave timer
 var _autosave_timer: float = 0.0
@@ -788,6 +793,27 @@ func _apply_audio_volume(bus_name: String, val: float) -> void:
 		else:
 			AudioServer.set_bus_mute(bus_idx, false)
 			AudioServer.set_bus_volume_db(bus_idx, linear_to_db(val))
+
+func play_sfx(stream: AudioStream, volume_db: float = 0.0, pitch_scale: float = 1.0) -> AudioStreamPlayer:
+	if not stream:
+		return null
+	var player = AudioStreamPlayer.new()
+	player.stream = stream
+	player.bus = "SFX" if AudioServer.get_bus_index("SFX") >= 0 else "Master"
+	player.volume_db = volume_db
+	player.pitch_scale = pitch_scale
+	add_child(player)
+	player.finished.connect(player.queue_free)
+	player.play()
+	return player
+
+func play_bobber_splash() -> void:
+	play_sfx(SFX_BOBBER_SPLASH, -1.0, randf_range(0.96, 1.04))
+
+func play_catch_splash(is_heavy: bool = false) -> void:
+	var sfx = SFX_CATCH_SPLASH_HEAVY if is_heavy else SFX_CATCH_SPLASH
+	var vol = 1.5 if is_heavy else 0.5
+	play_sfx(sfx, vol, randf_range(0.97, 1.03))
 
 func reset_game_data() -> void:
 	if FileAccess.file_exists(SAVE_PATH):
