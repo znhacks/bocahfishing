@@ -30,7 +30,8 @@ var pending_fish: Dictionary = {}
 @onready var catch_dialog: Control = $HUD/CatchDialog
 @onready var tackle_dialog: Control = $HUD/TackleBoxDialog
 @onready var self_narration_badge: PanelContainer = $HUD/SelfNarrationBadge
-@onready var lbl_narration_avatar: Label = $HUD/SelfNarrationBadge/HBox/LblAvatar
+@onready var tex_narration_avatar: TextureRect = $HUD/SelfNarrationBadge/HBox/AvatarBox/TexAvatar
+@onready var lbl_narration_avatar: Label = $HUD/SelfNarrationBadge/HBox/AvatarBox/LblAvatar
 @onready var lbl_narration_name: Label = $HUD/SelfNarrationBadge/HBox/VBox/LblName
 @onready var lbl_narration_text: Label = $HUD/SelfNarrationBadge/HBox/VBox/LblText
 
@@ -707,8 +708,27 @@ func show_self_narration(text: String, angler_id: String = "") -> void:
 			avatar_icon = "🎣"
 			name_color = Color(0.85, 0.9, 0.95)
 			
-	if lbl_narration_avatar:
-		lbl_narration_avatar.text = avatar_icon
+	# Avatar: use portrait image for Jia/Joe, emoji label for others
+	var portrait_path: String = ""
+	match angler_id:
+		"jia":
+			portrait_path = "res://assets/player/jia_ico.png"
+			avatar_icon = ""
+		"joe":
+			portrait_path = "res://assets/player/joe_ico.png"
+			avatar_icon = ""
+		_:
+			portrait_path = ""
+	
+	if tex_narration_avatar and lbl_narration_avatar:
+		if portrait_path != "" and ResourceLoader.exists(portrait_path):
+			tex_narration_avatar.texture = load(portrait_path)
+			tex_narration_avatar.visible = true
+			lbl_narration_avatar.visible = false
+		else:
+			tex_narration_avatar.visible = false
+			lbl_narration_avatar.visible = true
+			lbl_narration_avatar.text = avatar_icon
 	if lbl_narration_name:
 		lbl_narration_name.text = char_name
 		lbl_narration_name.modulate = name_color

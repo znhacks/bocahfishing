@@ -419,11 +419,23 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_narration")
 [node name="HBox" type="HBoxContainer" parent="HUD/SelfNarrationBadge"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 10
 
-[node name="LblAvatar" type="Label" parent="HUD/SelfNarrationBadge/HBox"]
+[node name="AvatarBox" type="CenterContainer" parent="HUD/SelfNarrationBadge/HBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
+custom_minimum_size = Vector2(44, 44)
+
+[node name="TexAvatar" type="TextureRect" parent="HUD/SelfNarrationBadge/HBox/AvatarBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(44, 44)
+stretch_mode = 6
+expand_mode = 1
+visible = false
+
+[node name="LblAvatar" type="Label" parent="HUD/SelfNarrationBadge/HBox/AvatarBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(44, 44)
+theme_override_font_sizes/font_size = 30
 text = "🎣"
 horizontal_alignment = 1
 vertical_alignment = 1
