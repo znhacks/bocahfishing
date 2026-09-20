@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- Book Cover Background -->
+  <path d="M10 16 C10 16 18 13 32 17 C46 13 54 16 54 16 L54 50 C46 47 38 47 32 50 C26 47 18 47 10 50 Z" fill="#818CF8" stroke="#312E81" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Book Pages -->
+  <path d="M12 18 C12 18 20 15 32 19 L32 49 C22 46 14 48 12 48 Z" fill="#F8FAFC"/>
+  <path d="M52 18 C52 18 44 15 32 19 L32 49 C42 46 50 48 52 48 Z" fill="#F1F5F9"/>
+  <!-- Spine Line -->
+  <path d="M32 19 L32 50" stroke="#4338CA" stroke-width="2.5"/>
+  <!-- Fish Icon on right page -->
+  <path d="M38 32 C41 29 46 29 48 32 C47 34 44 35 40 33 L48 37 M48 27 L44 32" stroke="#0284C7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

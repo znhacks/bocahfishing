@@ -69,9 +69,9 @@ func refresh() -> void:
 		char_icon.visible = true
 		char_icon_fallback.visible = false
 	else:
-		char_icon.visible = false
-		char_icon_fallback.visible = true
-		char_icon_fallback.text = "🎣"
+		char_icon.texture = load("res://assets/textures/icons/icon_wardrobe.svg")
+		char_icon.visible = true
+		char_icon_fallback.visible = false
 		
 	# 2. Stats Rows
 	# Bar Scale
@@ -122,14 +122,13 @@ func refresh() -> void:
 	var bait_data = GameManager.get_equipped_bait_data()
 	var qty = GameManager.inventory.get(GameManager.equipped_bait, 0)
 	if bait_data.is_empty() or qty <= 0:
-		lbl_bait_status.text = "🪝 Bare Hook (No Bait)"
+		lbl_bait_status.text = "Bare Hook (No Bait)"
 		lbl_bait_status.modulate = Color(0.9, 0.75, 0.4)
 		lbl_bait_desc.text = "Slowest bite speed (6.5 - 9.5s) and 75% chance of snagging lake trash."
 	else:
 		var bait_name = bait_data.get("name", "Bait")
-		var icon = bait_data.get("icon_symbol", "🎣")
 		var tier = bait_data.get("tier", 1)
-		lbl_bait_status.text = "%s %s (x%d) • Tier %d" % [icon, bait_name, qty, tier]
+		lbl_bait_status.text = "%s (x%d) • Tier %d" % [bait_name, qty, tier]
 		lbl_bait_status.modulate = Color(0.4, 0.9, 1.0)
 		
 		var tags = bait_data.get("tags", [])
@@ -148,5 +147,5 @@ func refresh() -> void:
 	var caught = progress_dict.get("caught", 0)
 	var total = progress_dict.get("total", 12)
 	var pct = int((float(caught) / float(maxi(total, 1))) * 100.0)
-	lbl_career_almanac.text = "📖 Almanac: %d / %d (%d%%)" % [caught, total, pct]
-	lbl_career_cahs.text = "🪙 Balance: %d Cahs" % GameManager.cahs
+	lbl_career_almanac.text = "Almanac: %d / %d (%d%%)" % [caught, total, pct]
+	lbl_career_cahs.text = "Balance: %d Cahs" % GameManager.cahs

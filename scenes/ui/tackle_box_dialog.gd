@@ -42,7 +42,7 @@ func refresh_items() -> void:
 		return
 		
 	if lbl_cahs:
-		lbl_cahs.text = "🪙 %d Cahs" % GameManager.cahs
+		lbl_cahs.text = "%d Cahs" % GameManager.cahs
 	
 	for child in item_container.get_children():
 		child.queue_free()
@@ -56,7 +56,7 @@ func refresh_items() -> void:
 		item_container.add_child(empty_lbl)
 		
 		var btn_dig = Button.new()
-		btn_dig.text = "🪱 Dig for Earthworm (+1)"
+		btn_dig.text = "Dig for Earthworm (+1)"
 		btn_dig.custom_minimum_size = Vector2(220, 44)
 		btn_dig.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		btn_dig.pressed.connect(func():
@@ -162,7 +162,7 @@ func _create_item_card(item_id: String, data: Dictionary, amount: int) -> PanelC
 		var price = data.get("price_cahs", 0)
 		if price > 0:
 			var price_tag = Label.new()
-			price_tag.text = "• 🪙 %d Cahs each" % price
+			price_tag.text = "• %d Cahs each" % price
 			price_tag.modulate = Color(1.0, 0.88, 0.35, 0.95)
 			price_tag.add_theme_font_size_override("font_size", 12)
 			title_box.add_child(price_tag)
@@ -197,7 +197,7 @@ func _create_item_card(item_id: String, data: Dictionary, amount: int) -> PanelC
 	if data.get("category") == "fish" and data.get("price_cahs", 0) > 0:
 		var btn_sell = Button.new()
 		btn_sell.custom_minimum_size = Vector2(85, 40)
-		btn_sell.text = "Sell 🪙"
+		btn_sell.text = "Sell"
 		var sell_style = StyleBoxFlat.new()
 		sell_style.bg_color = Color(0.16, 0.38, 0.24, 0.88)
 		sell_style.border_width_left = 1
@@ -368,7 +368,7 @@ func _show_high_tier_warning(item_id: String, on_confirm: Callable) -> void:
 	fish_vbox.add_child(lbl_fname)
 	
 	var lbl_ftier = Label.new()
-	lbl_ftier.text = "[ %s ] • Value: 🪙 %d Cahs" % [tier_name.to_upper(), price]
+	lbl_ftier.text = "[ %s ] • Value: %d Cahs" % [tier_name.to_upper(), price]
 	lbl_ftier.add_theme_font_size_override("font_size", 12)
 	lbl_ftier.add_theme_color_override("font_color", Color(0.75, 0.88, 0.95))
 	fish_vbox.add_child(lbl_ftier)
@@ -460,7 +460,7 @@ func _show_high_tier_warning(item_id: String, on_confirm: Callable) -> void:
 func _on_sell_all_pressed() -> void:
 	var earned = GameManager.sell_all_fish()
 	if earned > 0 and btn_sell_all:
-		btn_sell_all.text = "Sold! +%d 🪙" % earned
+		btn_sell_all.text = "Sold! +%d Cahs" % earned
 		await get_tree().create_timer(1.2).timeout
 		if is_inside_tree() and btn_sell_all:
-			btn_sell_all.text = "Sell All Fish 🪙"
+			btn_sell_all.text = "Sell All Fish"

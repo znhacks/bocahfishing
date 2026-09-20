@@ -13,6 +13,11 @@
 [ext_resource type="Texture2D" path="res://assets/player/joe_ico.png" id="11_joe"]
 [ext_resource type="Texture2D" path="res://assets/player/jia_ico.png" id="12_jia"]
 [ext_resource type="Shader" path="res://shaders/soft_blur.gdshader" id="13_shader_blur"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/icon_wardrobe.svg" id="14_ico_wardrobe"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/icon_stats.svg" id="15_ico_stats"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/icon_almanac.svg" id="16_ico_almanac"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/icon_settings.svg" id="17_ico_settings"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/icon_backpack.svg" id="18_ico_backpack"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_clock_badge"]
 bg_color = Color(0.08, 0.12, 0.16, 0.9)
@@ -226,7 +231,7 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("7_font_outfit")
 theme_override_colors/font_color = Color(0.88, 0.95, 1, 1)
 theme_override_font_sizes/font_size = 15
-text = "☀️ 06:00 AM"
+text = "Day • 06:00 AM"
 vertical_alignment = 1
 
 [node name="TopRightBar" type="HBoxContainer" parent="HUD"]
@@ -250,44 +255,48 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("7_font_outfit")
 theme_override_colors/font_color = Color(1, 0.88, 0.35, 1)
 theme_override_font_sizes/font_size = 15
-text = "🪙 0 Cahs"
+text = "0 Cahs"
 vertical_alignment = 1
 
 [node name="BtnSkills" type="Button" parent="HUD/TopRightBar"]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
 tooltip_text = "Wardrobe & Anglers"
-theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_icon_btn")
 theme_override_styles/hover = SubResource("StyleBoxFlat_icon_btn_hover")
-text = "⚡"
+icon = ExtResource("14_ico_wardrobe")
+icon_alignment = 1
+expand_icon = true
 
 [node name="BtnStats" type="Button" parent="HUD/TopRightBar"]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
 tooltip_text = "Angler & Gear Stats"
-theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_icon_btn")
 theme_override_styles/hover = SubResource("StyleBoxFlat_icon_btn_hover")
-text = "📊"
+icon = ExtResource("15_ico_stats")
+icon_alignment = 1
+expand_icon = true
 
 [node name="BtnAlmanac" type="Button" parent="HUD/TopRightBar"]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
 tooltip_text = "Almanac"
-theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_icon_btn")
 theme_override_styles/hover = SubResource("StyleBoxFlat_icon_btn_hover")
-text = "📖"
+icon = ExtResource("16_ico_almanac")
+icon_alignment = 1
+expand_icon = true
 
 [node name="BtnSettings" type="Button" parent="HUD/TopRightBar"]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
 tooltip_text = "Settings"
-theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_icon_btn")
 theme_override_styles/hover = SubResource("StyleBoxFlat_icon_btn_hover")
-text = "⚙️"
+icon = ExtResource("17_ico_settings")
+icon_alignment = 1
+expand_icon = true
 
 [node name="TitleContainer" type="Control" parent="HUD"]
 anchors_preset = 5
@@ -372,7 +381,7 @@ theme_override_fonts/font = ExtResource("7_font_outfit")
 theme_override_font_sizes/font_size = 23
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_play")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_play_hover")
-text = "🎣 GO FISHING"
+text = "GO FISHING"
 
 [node name="BottomBar" type="HBoxContainer" parent="HUD"]
 anchors_preset = 12
@@ -451,10 +460,11 @@ custom_minimum_size = Vector2(74, 68)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Inventory"
-theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxFlat_icon_btn")
 theme_override_styles/hover = SubResource("StyleBoxFlat_icon_btn_hover")
-text = "🎒"
+icon = ExtResource("18_ico_backpack")
+icon_alignment = 1
+expand_icon = true
 
 [node name="DialogLayer" type="CanvasLayer" parent="."]
 layer = 10

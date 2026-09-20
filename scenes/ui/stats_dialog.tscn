@@ -111,7 +111,7 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_colors/font_color = Color(1, 0.9, 0.65, 1)
 theme_override_font_sizes/font_size = 22
-text = "📊 TOTAL ANGLER & GEAR STATS"
+text = "TOTAL ANGLER & GEAR STATS"
 
 [node name="Subtitle" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HeaderBox/TitleBox"]
 layout_mode = 2
@@ -154,7 +154,7 @@ visible = false
 custom_minimum_size = Vector2(44, 44)
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
-text = "🎣"
+text = ""
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -321,11 +321,11 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_colors/font_color = Color(0.7, 0.9, 1, 1)
 theme_override_font_sizes/font_size = 13
-text = "📖 Almanac: 2 / 12 (17%)"
+text = "Almanac: 2 / 12 (17%)"
 
 [node name="LblCahs" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/CareerBox/HBox"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_colors/font_color = Color(1, 0.88, 0.4, 1)
 theme_override_font_sizes/font_size = 13
-text = "🪙 Balance: 10 Cahs"
+text = "Balance: 10 Cahs"

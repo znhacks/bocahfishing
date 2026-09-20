@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- Wiggling Earthworm -->
+  <path d="M14 44 C12 36 20 28 28 32 C36 36 42 22 48 20 C53 18 56 22 54 26 C50 34 38 46 26 44 C20 43 15 50 14 44 Z" fill="#F87171" stroke="#DC2626" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Clitellum band -->
+  <path d="M26 31 C28 31 29 35 27 37" stroke="#EF4444" stroke-width="3" stroke-linecap="round"/>
+  <!-- Cute Eyes -->
+  <circle cx="51" cy="22" r="1.5" fill="#7F1D1D"/>
+</svg>

@@ -89,7 +89,8 @@ var item_db: Dictionary = {
 		"tags": ["organic", "wiggly"],
 		"desc": "A classic fisherman's staple. Loved by nimble small lake fish.",
 		"color": Color(0.85, 0.45, 0.45),
-		"icon_symbol": "🪱"
+		"icon_symbol": "🪱",
+		"icon_texture": "res://assets/textures/baits/bait_worm.svg"
 	},
 	"bait_bread": {
 		"id": "bait_bread",
@@ -99,7 +100,8 @@ var item_db: Dictionary = {
 		"tags": ["sweet", "carbs"],
 		"desc": "Leftover breakfast crust. Sweet and fragrant in the water.",
 		"color": Color(0.9, 0.75, 0.4),
-		"icon_symbol": "🍞"
+		"icon_symbol": "🍞",
+		"icon_texture": "res://assets/textures/baits/bait_bread.svg"
 	},
 	"bait_apple": {
 		"id": "bait_apple",
@@ -109,7 +111,8 @@ var item_db: Dictionary = {
 		"tags": ["sweet", "fruit"],
 		"desc": "Fresh sweet apple slice. Surprisingly attracts curious glistening fish.",
 		"color": Color(0.95, 0.25, 0.25),
-		"icon_symbol": "🍎"
+		"icon_symbol": "🍎",
+		"icon_texture": "res://assets/textures/baits/bait_apple.svg"
 	},
 	"bait_sock": {
 		"id": "bait_sock",
@@ -119,7 +122,8 @@ var item_db: Dictionary = {
 		"tags": ["junk", "stinky"],
 		"desc": "Who knew stinky lost laundry could lure deep bottom-dwellers?",
 		"color": Color(0.4, 0.5, 0.6),
-		"icon_symbol": "🧦"
+		"icon_symbol": "🧦",
+		"icon_texture": "res://assets/textures/baits/bait_sock.svg"
 	},
 	"bait_coin": {
 		"id": "bait_coin",
@@ -129,7 +133,8 @@ var item_db: Dictionary = {
 		"tags": ["shiny", "metal"],
 		"desc": "Flashes sunlight through murky waters. Irresistible to inquisitive fish.",
 		"color": Color(1.0, 0.85, 0.2),
-		"icon_symbol": "🪙"
+		"icon_symbol": "🪙",
+		"icon_texture": "res://assets/textures/baits/bait_coin.svg"
 	},
 	"bait_battery": {
 		"id": "bait_battery",
@@ -139,7 +144,8 @@ var item_db: Dictionary = {
 		"tags": ["electric", "bizarre"],
 		"desc": "Emits faint micro-sparks underwater. Attracts shocking anomalies!",
 		"color": Color(0.3, 0.8, 0.9),
-		"icon_symbol": "🔋"
+		"icon_symbol": "🔋",
+		"icon_texture": "res://assets/textures/baits/bait_battery.svg"
 	},
 	"bait_boot": {
 		"id": "bait_boot",
@@ -149,7 +155,8 @@ var item_db: Dictionary = {
 		"tags": ["junk", "rubber"],
 		"desc": "A heavy mossy boot dredged from the lake bed. Surprisingly good as heavy bait!",
 		"color": Color(0.45, 0.4, 0.35),
-		"icon_symbol": "🥾"
+		"icon_symbol": "🥾",
+		"icon_texture": "res://assets/textures/baits/bait_boot.svg"
 	},
 	"bait_can": {
 		"id": "bait_can",
@@ -159,7 +166,8 @@ var item_db: Dictionary = {
 		"tags": ["junk", "metal"],
 		"desc": "An old crushed tin can. Bottom-dwellers like catfish are drawn to it.",
 		"color": Color(0.6, 0.5, 0.4),
-		"icon_symbol": "🥫"
+		"icon_symbol": "🥫",
+		"icon_texture": "res://assets/textures/baits/bait_can.svg"
 	},
 	"bait_seaweed": {
 		"id": "bait_seaweed",
@@ -169,7 +177,8 @@ var item_db: Dictionary = {
 		"tags": ["organic", "plant"],
 		"desc": "A slimy clump of green weed pulled from the depths. Plant-eaters adore it.",
 		"color": Color(0.3, 0.65, 0.35),
-		"icon_symbol": "🌿"
+		"icon_symbol": "🌿",
+		"icon_texture": "res://assets/textures/baits/bait_seaweed.svg"
 	},
 
 	# --- Tier 1 Fish (Common - White: 1-2 Cahs) ---
@@ -648,8 +657,8 @@ func get_time_formatted() -> String:
 	var hour_12: int = hour_24 % 12
 	if hour_12 == 0:
 		hour_12 = 12
-	var icon: String = "☀️" if current_period == "day" else "🌙"
-	return "%s %02d:%02d %s" % [icon, hour_12, minute, period_str]
+	var period_label: String = "Day" if current_period == "day" else "Night"
+	return "%s • %02d:%02d %s" % [period_label, hour_12, minute, period_str]
 
 func get_time_clock_only() -> String:
 	var total_minutes: int = int(in_game_time / 60.0) % 1440

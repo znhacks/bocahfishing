@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- Gear Body -->
+  <path d="M28 8 L36 8 L37 14 C39 15 41 16 43 18 L48 15 L54 21 L51 26 C52 28 53 30 54 32 L60 33 L60 41 L54 42 C53 44 52 46 51 48 L54 53 L48 59 L43 56 C41 57 39 58 37 60 L36 64 L28 64 L27 60 C25 58 23 57 21 56 L16 59 L10 53 L13 48 C12 46 11 44 10 42 L4 41 L4 33 L10 32 C11 30 12 28 13 26 L10 21 L16 15 L21 18 C23 16 25 15 27 14 Z" fill="#94A3B8" stroke="#334155" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Center Hole -->
+  <circle cx="32" cy="36" r="9" fill="#1E293B" stroke="#0F172A" stroke-width="2"/>
+</svg>

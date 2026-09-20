@@ -202,7 +202,7 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("3_font_outfit")
 theme_override_colors/font_color = Color(1, 0.88, 0.35, 1)
 theme_override_font_sizes/font_size = 16
-text = "🪙 0 Cahs"
+text = "0 Cahs"
 
 [node name="StageArea" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -274,7 +274,7 @@ alignment = 1
 [node name="LblIcon" type="Label" parent="StageArea/CenterShowcase/Stage/SilhouetteBox/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 72
-text = "🎣"
+text = ""
 horizontal_alignment = 1
 
 [node name="LblTitle" type="Label" parent="StageArea/CenterShowcase/Stage/SilhouetteBox/VBox"]

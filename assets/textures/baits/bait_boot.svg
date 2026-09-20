@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- Boot Upper and Sole -->
+  <path d="M22 14 L34 14 L34 34 L48 40 C52 42 52 48 48 50 L18 50 C16 48 16 38 22 34 Z" fill="#78350F" stroke="#451A03" stroke-width="2.5"/>
+  <rect x="16" y="50" width="34" height="6" rx="2" fill="#292524" stroke="#1C1917" stroke-width="2"/>
+  <!-- Laces -->
+  <path d="M26 20 L30 20 M26 26 L30 26 M26 32 L30 32" stroke="#FDE68A" stroke-width="2"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- Eyelet -->
+  <circle cx="28" cy="14" r="5" stroke="#94A3B8" stroke-width="3" fill="none"/>
+  <!-- Hook Shank and Bend -->
+  <path d="M28 19 L28 42 C28 52 44 52 44 40 L44 32" stroke="#CBD5E1" stroke-width="4" stroke-linecap="round"/>
+  <!-- Barb -->
+  <path d="M44 32 L39 37" stroke="#CBD5E1" stroke-width="3" stroke-linecap="round"/>
+</svg>

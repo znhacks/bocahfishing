@@ -591,7 +591,7 @@ func _update_bait_display() -> void:
 	if not GameManager:
 		return
 	if lbl_cahs:
-		lbl_cahs.text = "🪙 %d Cahs" % GameManager.cahs
+		lbl_cahs.text = "%d Cahs" % GameManager.cahs
 	if not lbl_bait_info:
 		return
 	var bait_data = GameManager.get_equipped_bait_data()
@@ -599,19 +599,20 @@ func _update_bait_display() -> void:
 	var has_bait = not bait_data.is_empty() and qty > 0
 	if not has_bait:
 		if tex_bait:
-			tex_bait.visible = false
-		lbl_bait_info.text = "🪝 Bare Hook (No Bait)"
+			tex_bait.texture = load("res://assets/textures/icons/icon_hook.svg")
+			tex_bait.visible = true
+		lbl_bait_info.text = "Bare Hook (No Bait)"
 	else:
 		var tex_path: String = bait_data.get("icon_texture", "")
 		if tex_path != "" and ResourceLoader.exists(tex_path):
 			if tex_bait:
 				tex_bait.texture = load(tex_path)
 				tex_bait.visible = true
-			lbl_bait_info.text = "%s (x%d)" % [bait_data.get("name", ""), qty]
 		else:
 			if tex_bait:
-				tex_bait.visible = false
-			lbl_bait_info.text = "%s %s (x%d)" % [bait_data.get("icon_symbol", "🎣"), bait_data.get("name", ""), qty]
+				tex_bait.texture = load("res://assets/textures/icons/icon_hook.svg")
+				tex_bait.visible = true
+		lbl_bait_info.text = "%s (x%d)" % [bait_data.get("name", ""), qty]
 		
 	if current_state == FishingState.IDLE:
 		lbl_prompt.text = "Click water to cast line"
@@ -726,9 +727,9 @@ func show_self_narration(text: String, angler_id: String = "") -> void:
 			tex_narration_avatar.visible = true
 			lbl_narration_avatar.visible = false
 		else:
-			tex_narration_avatar.visible = false
-			lbl_narration_avatar.visible = true
-			lbl_narration_avatar.text = avatar_icon
+			tex_narration_avatar.texture = load("res://assets/textures/icons/icon_wardrobe.svg")
+			tex_narration_avatar.visible = true
+			lbl_narration_avatar.visible = false
 	if lbl_narration_name:
 		lbl_narration_name.text = char_name
 		lbl_narration_name.modulate = name_color

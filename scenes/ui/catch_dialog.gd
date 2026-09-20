@@ -28,13 +28,13 @@ func show_catch(fish_data: Dictionary) -> void:
 	var tier_color = GameManager.TIER_COLORS.get(tier, Color.WHITE)
 	
 	if is_fish:
-		lbl_header.text = "✨ FISH CAUGHT! ✨"
+		lbl_header.text = "FISH CAUGHT!"
 		var size_range = fish_data.get("size_range", [10.0, 20.0])
 		var weight = randf_range(size_range[0], size_range[1])
 		var price = fish_data.get("price_cahs", 0)
-		lbl_weight.text = "Weight: %.1f kg • Value: 🪙 %d Cahs" % [weight, price]
+		lbl_weight.text = "Weight: %.1f kg • Value: %d Cahs" % [weight, price]
 	else:
-		lbl_header.text = "📦 LAKE DEBRIS HOOKED! 📦"
+		lbl_header.text = "LAKE DEBRIS HOOKED!"
 		lbl_weight.text = "Lake Junk • Can be used as Bait!"
 	
 	var icon_tex_path = fish_data.get("icon_texture", "")
@@ -221,7 +221,7 @@ func _show_high_tier_warning(fish_data: Dictionary, on_confirm: Callable) -> voi
 	fish_vbox.add_child(lbl_fname)
 	
 	var lbl_ftier = Label.new()
-	lbl_ftier.text = "[ %s ] • Value: 🪙 %d Cahs" % [tier_name.to_upper(), price]
+	lbl_ftier.text = "[ %s ] • Value: %d Cahs" % [tier_name.to_upper(), price]
 	lbl_ftier.add_theme_font_size_override("font_size", 12)
 	lbl_ftier.add_theme_color_override("font_color", Color(0.75, 0.88, 0.95))
 	fish_vbox.add_child(lbl_ftier)

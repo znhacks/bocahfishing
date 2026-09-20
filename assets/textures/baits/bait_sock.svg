@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- Stinky Sock -->
+  <path d="M22 14 L34 14 L34 32 L46 42 C48 44 48 50 42 52 L26 52 C20 52 18 46 22 40 L22 14 Z" fill="#64748B" stroke="#334155" stroke-width="2.5"/>
+  <!-- Stripes -->
+  <path d="M22 20 L34 20 M22 24 L34 24" stroke="#94A3B8" stroke-width="2"/>
+  <!-- Stink lines -->
+  <path d="M38 12 C36 10 40 8 38 6 M44 14 C42 12 46 10 44 8" stroke="#84CC16" stroke-width="2" stroke-linecap="round"/>
+</svg>

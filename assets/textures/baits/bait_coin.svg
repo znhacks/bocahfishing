@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- Gold Coin -->
+  <circle cx="32" cy="32" r="22" fill="#FACC15" stroke="#CA8A04" stroke-width="3"/>
+  <circle cx="32" cy="32" r="16" fill="#FDE047" stroke="#EAB308" stroke-width="2"/>
+  <!-- Embossed Star -->
+  <path d="M32 20 L35 27 L42 28 L37 33 L38 40 L32 36 L26 40 L27 33 L22 28 L29 27 Z" fill="#CA8A04"/>
+</svg>

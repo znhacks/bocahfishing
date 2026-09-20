@@ -110,7 +110,7 @@ func _update_ui() -> void:
 		return
 		
 	if lbl_cahs:
-		lbl_cahs.text = "🪙 %d Cahs" % GameManager.cahs
+		lbl_cahs.text = "%d Cahs" % GameManager.cahs
 		
 	var bait_data = GameManager.get_equipped_bait_data()
 	var qty = GameManager.inventory.get(GameManager.equipped_bait, 0)
@@ -118,9 +118,10 @@ func _update_ui() -> void:
 	
 	if bait_data.is_empty() or qty <= 0:
 		if tex_equipped_icon:
-			tex_equipped_icon.visible = false
-		lbl_equipped_icon.visible = true
-		lbl_equipped_icon.text = "🪝"
+			tex_equipped_icon.texture = load("res://assets/textures/icons/icon_hook.svg")
+			tex_equipped_icon.visible = true
+		if lbl_equipped_icon:
+			lbl_equipped_icon.visible = false
 		lbl_equipped_name.text = "Bare Hook (No Bait)"
 		lbl_equipped_tags.text = "Angler: %s • Higher chance of snagging junk" % char_name
 		if btn_unequip:
@@ -130,12 +131,14 @@ func _update_ui() -> void:
 		if icon_tex_path != "" and ResourceLoader.exists(icon_tex_path) and tex_equipped_icon:
 			tex_equipped_icon.texture = load(icon_tex_path)
 			tex_equipped_icon.visible = true
-			lbl_equipped_icon.visible = false
+			if lbl_equipped_icon:
+				lbl_equipped_icon.visible = false
 		else:
 			if tex_equipped_icon:
-				tex_equipped_icon.visible = false
-			lbl_equipped_icon.visible = true
-			lbl_equipped_icon.text = bait_data.get("icon_symbol", "🎣")
+				tex_equipped_icon.texture = load("res://assets/textures/icons/icon_hook.svg")
+				tex_equipped_icon.visible = true
+			if lbl_equipped_icon:
+				lbl_equipped_icon.visible = false
 
 		lbl_equipped_name.text = "%s (x%d)" % [bait_data.get("name", "Bait"), qty]
 		

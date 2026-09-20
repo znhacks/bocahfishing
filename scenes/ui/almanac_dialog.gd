@@ -137,11 +137,11 @@ func _create_fish_card(data: Dictionary, is_caught: bool) -> PanelContainer:
 	top_box.add_child(name_lbl)
 	
 	var time_avail = data.get("time_available", "all")
-	var time_tag = "☀️/🌙 Anytime"
+	var time_tag = "Anytime"
 	if time_avail == "night":
-		time_tag = "🌙 Night Only"
+		time_tag = "Night Only"
 	elif time_avail == "day":
-		time_tag = "☀️ Day Only"
+		time_tag = "Day Only"
 
 	var tier_lbl = Label.new()
 	tier_lbl.text = "Tier %d • %s" % [data.get("tier", 1), time_tag]

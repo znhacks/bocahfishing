@@ -107,7 +107,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _update_cahs() -> void:
 	if lbl_cahs and GameManager:
-		lbl_cahs.text = "🪙 %d Cahs" % GameManager.cahs
+		lbl_cahs.text = "%d Cahs" % GameManager.cahs
 
 func _create_dots() -> void:
 	for child in dots_container.get_children():
@@ -270,18 +270,18 @@ func _display_character(idx: int, _with_anim: bool = false) -> void:
 		
 		if not is_prereq_unlocked:
 			var prereq_name: String = GameManager.character_db.get(prereq_id, {}).get("name", "Previous Angler")
-			lbl_cost_status.text = "🔒 Requires %s First" % prereq_name
+			lbl_cost_status.text = "Requires %s First" % prereq_name
 			lbl_cost_status.modulate = Color(1.0, 0.45, 0.45)
-			btn_action.text = "🔒 LOCKED (UNLOCK %s FIRST)" % prereq_name.to_upper()
+			btn_action.text = "LOCKED (UNLOCK %s FIRST)" % prereq_name.to_upper()
 			btn_action.disabled = true
 			lbl_insufficient.visible = true
 			lbl_insufficient.text = "You must unlock %s before unlocking %s!" % [prereq_name, char_data["name"]]
 			_set_btn_style(btn_action, Color(0.2, 0.2, 0.24, 0.7), Color(0.35, 0.35, 0.4, 0.5))
 		else:
 			var cost: int = char_data.get("cost", 50)
-			lbl_cost_status.text = "Price: 🪙 %d Cahs" % cost
+			lbl_cost_status.text = "Price: %d Cahs" % cost
 			lbl_cost_status.modulate = Color(1.0, 0.88, 0.35)
-			btn_action.text = "UNLOCK (50 CAHS 🪙)"
+			btn_action.text = "UNLOCK (%d CAHS)" % cost
 			if GameManager.cahs >= cost:
 				btn_action.disabled = false
 				_set_btn_style(btn_action, Color(0.5, 0.38, 0.12, 0.95), Color(1.0, 0.85, 0.3, 0.95))

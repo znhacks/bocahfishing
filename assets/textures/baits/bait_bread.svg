@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- Bread Crust Slice -->
+  <path d="M16 26 C16 16 24 14 32 14 C40 14 48 16 48 26 C48 30 46 48 44 50 C42 52 22 52 20 50 C18 48 16 30 16 26 Z" fill="#FDE68A" stroke="#B45309" stroke-width="3"/>
+  <path d="M16 26 C22 28 42 28 48 26" stroke="#D97706" stroke-width="2"/>
+</svg>

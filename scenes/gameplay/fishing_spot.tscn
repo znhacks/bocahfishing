@@ -8,6 +8,7 @@
 [ext_resource type="FontFile" path="res://assets/fonts/Outfit-Bold.ttf" id="6_font_outfit"]
 [ext_resource type="Texture2D" path="res://assets/textures/day_water.png" id="7_water"]
 [ext_resource type="Shader" path="res://shaders/water_waving.gdshader" id="8_shader_water"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/icon_backpack.svg" id="9_ico_backpack"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ripple"]
 bg_color = Color(1, 1, 1, 0)
@@ -326,7 +327,7 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("6_font_outfit")
 theme_override_colors/font_color = Color(0.88, 0.95, 1, 1)
 theme_override_font_sizes/font_size = 14
-text = "☀️ 06:00 AM"
+text = "Day • 06:00 AM"
 
 [node name="Spacer" type="Control" parent="HUD/TopBar"]
 layout_mode = 2
@@ -341,7 +342,7 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("6_font_outfit")
 theme_override_colors/font_color = Color(1, 0.88, 0.35, 1)
 theme_override_font_sizes/font_size = 14
-text = "🪙 0 Cahs"
+text = "0 Cahs"
 
 [node name="BaitCard" type="PanelContainer" parent="HUD/TopBar"]
 layout_mode = 2
@@ -364,16 +365,17 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("6_font_outfit")
 theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(1, 0.9, 0.6, 1)
-text = "🪱 Earthworm (x5)"
+text = "Earthworm (x5)"
 
 [node name="BtnTackle" type="Button" parent="HUD/TopBar"]
 custom_minimum_size = Vector2(46, 46)
 layout_mode = 2
 tooltip_text = "Tackle Box"
-theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_icon_btn")
 theme_override_styles/hover = SubResource("StyleBoxFlat_icon_btn_hover")
-text = "🧰"
+icon = ExtResource("9_ico_backpack")
+icon_alignment = 1
+expand_icon = true
 
 [node name="LblPrompt" type="Label" parent="HUD"]
 anchors_preset = 5
@@ -436,7 +438,7 @@ visible = false
 layout_mode = 2
 custom_minimum_size = Vector2(44, 44)
 theme_override_font_sizes/font_size = 30
-text = "🎣"
+text = ""
 horizontal_alignment = 1
 vertical_alignment = 1
 

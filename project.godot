@@ -12,9 +12,9 @@ config_version=5
 
 config/name="bocahfishing"
 run/main_scene="res://scenes/splash/splash.tscn"
-boot_splash/show_image=false
-boot_splash/bg_color=Color(0.039, 0.055, 0.082, 1)
 config/features=PackedStringArray("4.7", "GL Compatibility")
+boot_splash/bg_color=Color(0.039, 0.055, 0.082, 1)
+boot_splash/show_image=false
 config/icon="res://icon.svg"
 
 [autoload]
@@ -41,3 +41,4 @@ theme/custom_font="res://assets/fonts/PlusJakartaSans-SemiBold.ttf"
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

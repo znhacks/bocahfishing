@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- Hat -->
+  <path d="M12 28 C12 26 20 22 32 22 C44 22 52 26 52 28 C56 29 58 31 56 33 C52 35 44 35 32 35 C20 35 12 35 8 33 C6 31 8 29 12 28 Z" fill="#6EE7B7" stroke="#064E3B" stroke-width="2"/>
+  <path d="M22 23 C22 15 26 12 32 12 C38 12 42 15 42 23" fill="#34D399" stroke="#064E3B" stroke-width="2"/>
+  <rect x="22" y="21" width="20" height="3" fill="#047857"/>
+  <!-- Head -->
+  <circle cx="32" cy="38" r="8" fill="#FDE68A" stroke="#B45309" stroke-width="2"/>
+  <!-- Body/Vest -->
+  <path d="M18 56 C18 47 24 45 32 45 C40 45 46 47 46 56" fill="#059669" stroke="#064E3B" stroke-width="2.5"/>
+  <path d="M28 45 L28 56 M36 45 L36 56" stroke="#064E3B" stroke-width="1.5"/>
+</svg>

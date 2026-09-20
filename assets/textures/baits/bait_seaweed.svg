@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- Wavy Kelp Strands -->
+  <path d="M24 54 C22 44 32 38 26 26 C22 18 30 12 28 8" stroke="#10B981" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M38 54 C42 42 32 34 38 22 C42 14 36 10 38 8" stroke="#059669" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M31 54 C28 40 36 30 31 16" stroke="#34D399" stroke-width="3" stroke-linecap="round"/>
+  <!-- Sparkles -->
+  <circle cx="18" cy="22" r="2" fill="#6EE7B7"/>
+  <circle cx="46" cy="18" r="2" fill="#6EE7B7"/>
+</svg>
