@@ -12,11 +12,11 @@ signal time_updated(in_game_time: float)
 signal period_changed(new_period: String)
 
 # Day / Night Cycle
-# 1 full in-game day (24 hours) = 6 minutes (360 real seconds).
-# 1 in-game hour = 15 real seconds.
-const CYCLE_DURATION_REAL_SECONDS: float = 360.0
+# Cycle durations follow the exact audio duration of the respective period BGM:
+# Day: Cahs Day.mp3 (~186.84s / ~3m 07s)
+# Night: Cahs Night.mp3 (~203.11s / ~3m 23s)
 const SECONDS_PER_DAY: float = 86400.0
-const TIME_MULTIPLIER: float = SECONDS_PER_DAY / CYCLE_DURATION_REAL_SECONDS # 240.0x
+const SECONDS_PER_HALF_DAY: float = 43200.0
 
 const PERIOD_CONFIG: Dictionary = {
 	"day": {
@@ -26,7 +26,8 @@ const PERIOD_CONFIG: Dictionary = {
 		"end_hour": 18.0,
 		"bg_path": "res://assets/textures/day_bg.png",
 		"water_path": "res://assets/textures/day_water.png",
-		"texture_path": "res://assets/textures/day_bg.png"
+		"texture_path": "res://assets/textures/day_bg.png",
+		"bgm_path": "res://assets/audio/bgm/Cahs Day.mp3"
 	},
 	"night": {
 		"name": "Night",
@@ -35,7 +36,8 @@ const PERIOD_CONFIG: Dictionary = {
 		"end_hour": 6.0,
 		"bg_path": "res://assets/textures/night_bg.png",
 		"water_path": "res://assets/textures/night_water.png",
-		"texture_path": "res://assets/textures/night_bg.png"
+		"texture_path": "res://assets/textures/night_bg.png",
+		"bgm_path": "res://assets/audio/bgm/Cahs Night.mp3"
 	}
 }
 
@@ -43,6 +45,16 @@ var in_game_time: float = 21600.0 # 06:00 (Day) default
 var current_period: String = "day"
 var _cached_bg_textures: Dictionary = {}
 var _cached_water_textures: Dictionary = {}
+
+var period_durations: Dictionary = {
+	"day": 186.84,
+	"night": 203.11
+}
+
+var _bgm_streams: Dictionary = {}
+var _bgm_player_a: AudioStreamPlayer
+var _bgm_player_b: AudioStreamPlayer
+var _active_bgm_player: AudioStreamPlayer
 
 # Tier Metadata & Colors
 const TIER_COLORS = {
@@ -439,13 +451,20 @@ func _notification(what: int) -> void:
 
 func _ready() -> void:
 	_load_period_textures()
-	load_game()
+	var loaded = load_game()
+	if not loaded:
+		_apply_audio_volume("Master", master_volume)
+		_apply_audio_volume("Music", music_volume)
+		_apply_audio_volume("SFX", sfx_volume)
 	current_period = calculate_period(in_game_time)
+	_setup_bgm_system()
 	_validate_equipped_bait()
 	_setup_web_lifecycle()
 
 func _process(delta: float) -> void:
-	in_game_time += delta * TIME_MULTIPLIER
+	var current_duration: float = period_durations.get(current_period, 190.0)
+	var time_speed: float = SECONDS_PER_HALF_DAY / current_duration
+	in_game_time += delta * time_speed
 	if in_game_time >= SECONDS_PER_DAY:
 		in_game_time = fmod(in_game_time, SECONDS_PER_DAY)
 	
@@ -453,6 +472,7 @@ func _process(delta: float) -> void:
 	if new_period != current_period:
 		current_period = new_period
 		period_changed.emit(current_period)
+		_crossfade_to_period_bgm(current_period)
 	
 	time_updated.emit(in_game_time)
 	
@@ -815,6 +835,81 @@ func play_catch_splash(is_heavy: bool = false) -> void:
 	var vol = 1.5 if is_heavy else 0.5
 	play_sfx(sfx, vol, randf_range(0.97, 1.03))
 
+func _setup_bgm_system() -> void:
+	_bgm_player_a = AudioStreamPlayer.new()
+	_bgm_player_a.bus = "Music" if AudioServer.get_bus_index("Music") >= 0 else "Master"
+	_bgm_player_a.finished.connect(_on_bgm_track_finished)
+	add_child(_bgm_player_a)
+	
+	_bgm_player_b = AudioStreamPlayer.new()
+	_bgm_player_b.bus = "Music" if AudioServer.get_bus_index("Music") >= 0 else "Master"
+	_bgm_player_b.finished.connect(_on_bgm_track_finished)
+	add_child(_bgm_player_b)
+	
+	for p in PERIOD_CONFIG.keys():
+		var path: String = PERIOD_CONFIG[p].get("bgm_path", "")
+		if ResourceLoader.exists(path):
+			var stream = load(path)
+			if stream:
+				_bgm_streams[p] = stream
+				var len_sec = stream.get_length()
+				if len_sec > 0.0:
+					period_durations[p] = len_sec
+	
+	_play_initial_bgm()
+
+func _play_initial_bgm() -> void:
+	var stream = _bgm_streams.get(current_period)
+	if not stream:
+		return
+		
+	_active_bgm_player = _bgm_player_a
+	_active_bgm_player.stream = stream
+	_active_bgm_player.volume_db = 0.0
+	
+	# Calculate start offset proportional to elapsed time in current period
+	var progress: float = 0.0
+	if current_period == "day":
+		progress = clamp((in_game_time - 21600.0) / SECONDS_PER_HALF_DAY, 0.0, 1.0)
+	else:
+		var night_time = in_game_time - 64800.0 if in_game_time >= 64800.0 else in_game_time + 21600.0
+		progress = clamp(night_time / SECONDS_PER_HALF_DAY, 0.0, 1.0)
+		
+	var dur: float = period_durations.get(current_period, 190.0)
+	var track_pos: float = progress * dur
+	track_pos = clamp(track_pos, 0.0, maxf(0.0, stream.get_length() - 0.5))
+	_active_bgm_player.play(track_pos)
+
+func _crossfade_to_period_bgm(new_period: String) -> void:
+	var new_stream = _bgm_streams.get(new_period)
+	if not new_stream:
+		return
+		
+	var outgoing_player = _active_bgm_player
+	var incoming_player = _bgm_player_b if outgoing_player == _bgm_player_a else _bgm_player_a
+	_active_bgm_player = incoming_player
+	
+	incoming_player.stream = new_stream
+	incoming_player.volume_db = -60.0
+	incoming_player.play(0.0)
+	
+	var tween = create_tween().set_parallel()
+	tween.tween_property(incoming_player, "volume_db", 0.0, 2.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
+	if outgoing_player and outgoing_player.playing:
+		tween.tween_property(outgoing_player, "volume_db", -60.0, 2.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		tween.chain().tween_callback(func():
+			if outgoing_player != _active_bgm_player:
+				outgoing_player.stop()
+		)
+
+func _on_bgm_track_finished() -> void:
+	# Advance time cleanly to trigger period change if floating point precision caused slight drift
+	if current_period == "day" and in_game_time < 64800.0:
+		in_game_time = 64800.0
+	elif current_period == "night" and (in_game_time >= 64800.0 or in_game_time < 21600.0):
+		in_game_time = 21600.0
+
 func reset_game_data() -> void:
 	if FileAccess.file_exists(SAVE_PATH):
 		DirAccess.remove_absolute(SAVE_PATH)
@@ -830,6 +925,7 @@ func reset_game_data() -> void:
 	unlocked_catches.clear()
 	in_game_time = 21600.0
 	current_period = calculate_period(in_game_time)
+	_play_initial_bgm()
 	inventory_updated.emit()
 	bait_changed.emit(equipped_bait)
 	cahs_changed.emit(cahs)

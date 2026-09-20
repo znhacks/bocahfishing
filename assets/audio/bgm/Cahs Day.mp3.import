@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ct6yxt6sm755x"
+path="res://.godot/imported/Cahs Day.mp3-a4aaac5518e6529059c6017f2c0a3d23.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/bgm/Cahs Day.mp3"
+dest_files=["res://.godot/imported/Cahs Day.mp3-a4aaac5518e6529059c6017f2c0a3d23.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
