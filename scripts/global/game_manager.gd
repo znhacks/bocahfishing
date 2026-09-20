@@ -330,6 +330,16 @@ var item_db: Dictionary = {
 }
 
 const SAVE_PATH: String = "user://bocah_save.json"
+const WEB_STORAGE_KEY: String = "bocah_fishing_save_v1"
+
+# Audio Settings
+var master_volume: float = 1.0
+var music_volume: float = 1.0
+var sfx_volume: float = 1.0
+
+# Autosave timer
+var _autosave_timer: float = 0.0
+const AUTOSAVE_INTERVAL: float = 30.0
 
 # Character Database (Skills / Passives)
 var character_db: Dictionary = {
@@ -346,30 +356,56 @@ var character_db: Dictionary = {
 			"resilience": 1.0
 		}
 	},
-	"jia": {
-		"id": "jia",
-		"name": "Jia",
+	"pak_kumis": {
+		"id": "pak_kumis",
+		"name": "Pak Kumis",
 		"cost": 50,
-		"portrait": "res://assets/player/Jia.png",
-		"desc": "Energetic & sharp. Huge catch safe zone and swift bites, but fragile line tension.",
-		"buff_summary": "+25% Safe Bar • +25% Lure Speed • -20% Resilience",
+		"portrait": "res://assets/textures/characters/angler_pak_kumis.png",
+		"desc": "Local master with quick-reaction reflexes. Accelerates fish bite interest by 40%.",
+		"buff_summary": "+40% Lure Speed",
 		"modifiers": {
-			"bar_scale": 1.25,
-			"lure_speed": 1.25,
-			"resilience": 0.80
+			"bar_scale": 1.0,
+			"lure_speed": 1.4,
+			"resilience": 1.0
 		}
 	},
-	"joe": {
-		"id": "joe",
-		"name": "Joe",
-		"cost": 50,
-		"portrait": "res://assets/player/Joe.png",
-		"desc": "Patient & steadfast. High line resilience against thrashing, but narrower catch bar.",
-		"buff_summary": "+15% Lure Speed • +35% Resilience • -20% Safe Bar",
+	"bocah_udik": {
+		"id": "bocah_udik",
+		"name": "Bocah Udik",
+		"cost": 150,
+		"portrait": "res://assets/textures/characters/angler_bocah_udik.png",
+		"desc": "Patient village boy who knows river bends. Reduces line escape drag and line break penalty.",
+		"buff_summary": "+30% Line Resilience",
 		"modifiers": {
-			"bar_scale": 0.80,
-			"lure_speed": 1.15,
-			"resilience": 1.35
+			"bar_scale": 1.0,
+			"lure_speed": 1.0,
+			"resilience": 1.3
+		}
+	},
+	"si_bolang": {
+		"id": "si_bolang",
+		"name": "Si Bolang",
+		"cost": 300,
+		"portrait": "res://assets/textures/characters/angler_si_bolang.png",
+		"desc": "Bold lake wanderer with a wide casting net. Expands the safe catch bar by 25%.",
+		"buff_summary": "+25% Catch Bar Safe Zone",
+		"modifiers": {
+			"bar_scale": 1.25,
+			"lure_speed": 1.0,
+			"resilience": 1.0
+		}
+	},
+	"mbah_dukun": {
+		"id": "mbah_dukun",
+		"name": "Mbah Dukun",
+		"cost": 600,
+		"portrait": "res://assets/textures/characters/angler_mbah_dukun.png",
+		"desc": "Mystic elder wielding river amulets. Possesses immense mastery across all angling skills.",
+		"buff_summary": "+20% Safe Bar, +30% Lure, +25% Resilience",
+		"modifiers": {
+			"bar_scale": 1.2,
+			"lure_speed": 1.3,
+			"resilience": 1.25
 		}
 	}
 }
@@ -387,11 +423,16 @@ var inventory: Dictionary = {
 # Unlocked catches for Almanac (initially empty)
 var unlocked_catches: Array[String] = []
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		save_game()
+
 func _ready() -> void:
 	_load_period_textures()
 	load_game()
 	current_period = calculate_period(in_game_time)
 	_validate_equipped_bait()
+	_setup_web_lifecycle()
 
 func _process(delta: float) -> void:
 	in_game_time += delta * TIME_MULTIPLIER
@@ -404,6 +445,36 @@ func _process(delta: float) -> void:
 		period_changed.emit(current_period)
 	
 	time_updated.emit(in_game_time)
+	
+	# Periodic auto-save every 30 seconds
+	_autosave_timer += delta
+	if _autosave_timer >= AUTOSAVE_INTERVAL:
+		_autosave_timer = 0.0
+		save_game()
+
+func _setup_web_lifecycle() -> void:
+	if not OS.has_feature("web"):
+		return
+	var js = Engine.get_singleton("JavaScriptBridge")
+	if not js:
+		return
+	var script = """
+	(function() {
+		if (window._bocah_hooks_set) return;
+		window._bocah_hooks_set = true;
+		var triggerSync = function() {
+			if (window.FS && window.FS.syncfs) {
+				window.FS.syncfs(false, function(){});
+			}
+		};
+		window.addEventListener('beforeunload', triggerSync);
+		window.addEventListener('pagehide', triggerSync);
+		window.addEventListener('visibilitychange', function() {
+			if (document.visibilityState === 'hidden') triggerSync();
+		});
+	})();
+	"""
+	js.eval(script)
 
 func _load_period_textures() -> void:
 	for p in PERIOD_CONFIG.keys():
@@ -537,40 +608,128 @@ func sell_all_fish() -> int:
 
 func save_game() -> void:
 	var save_data = {
+		"version": 2,
+		"timestamp": Time.get_unix_time_from_system(),
 		"cahs": cahs,
 		"selected_character": selected_character,
 		"unlocked_characters": unlocked_characters,
 		"equipped_bait": equipped_bait,
 		"inventory": inventory,
 		"unlocked_catches": unlocked_catches,
-		"in_game_time": in_game_time
+		"in_game_time": in_game_time,
+		"settings": {
+			"master_volume": master_volume,
+			"music_volume": music_volume,
+			"sfx_volume": sfx_volume
+		}
 	}
+	var json_str = JSON.stringify(save_data, "\t")
+	
+	# 1. Primary Godot user:// storage (FileAccess)
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file:
-		var json_str = JSON.stringify(save_data, "\t")
 		file.store_string(json_str)
+		file.flush()
 		file.close()
+		
+	# 2. Web Dual-Storage: Mirror directly to browser localStorage & trigger IDBFS sync
+	if OS.has_feature("web"):
+		_save_to_web_storage(json_str)
+
+func _save_to_web_storage(json_str: String) -> void:
+	if not OS.has_feature("web"):
+		return
+	var js = Engine.get_singleton("JavaScriptBridge")
+	if not js:
+		return
+	var b64: String = Marshalls.utf8_to_base64(json_str)
+	var script = """
+	(function() {
+		try {
+			var raw = decodeURIComponent(escape(atob('%s')));
+			localStorage.setItem('%s', raw);
+			if (window.FS && window.FS.syncfs) {
+				window.FS.syncfs(false, function(err) {
+					if (err) console.warn('IDBFS sync warning:', err);
+				});
+			}
+		} catch (e) {
+			console.warn('Web storage save error:', e);
+		}
+	})();
+	""" % [b64, WEB_STORAGE_KEY]
+	js.eval(script)
 
 func load_game() -> bool:
-	if not FileAccess.file_exists(SAVE_PATH):
-		return false
-		
-	var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
-	if not file:
-		return false
-		
-	var content = file.get_as_text()
-	file.close()
+	var file_data: Dictionary = {}
+	var web_data: Dictionary = {}
 	
-	var json = JSON.new()
-	var parse_result = json.parse(content)
-	if parse_result != OK:
+	# 1. Primary: user:// storage
+	if FileAccess.file_exists(SAVE_PATH):
+		var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
+		if file:
+			var content = file.get_as_text()
+			file.close()
+			var json = JSON.new()
+			if json.parse(content) == OK and typeof(json.get_data()) == TYPE_DICTIONARY:
+				file_data = json.get_data()
+	
+	# 2. Web storage fallback & sync check
+	if OS.has_feature("web"):
+		var web_str = _load_from_web_storage()
+		if web_str != "":
+			var web_json = JSON.new()
+			if web_json.parse(web_str) == OK and typeof(web_json.get_data()) == TYPE_DICTIONARY:
+				web_data = web_json.get_data()
+	
+	# 3. Choose the most up-to-date or available data
+	var chosen_data: Dictionary = {}
+	if not file_data.is_empty() and not web_data.is_empty():
+		var file_time = float(file_data.get("timestamp", 0.0))
+		var web_time = float(web_data.get("timestamp", 0.0))
+		if web_time > file_time:
+			chosen_data = web_data
+		else:
+			chosen_data = file_data
+	elif not file_data.is_empty():
+		chosen_data = file_data
+	elif not web_data.is_empty():
+		chosen_data = web_data
+	else:
 		return false
 		
-	var data = json.get_data()
-	if typeof(data) != TYPE_DICTIONARY:
-		return false
+	_apply_save_data(chosen_data)
+	
+	# Auto-heal: If one storage medium was missing, re-save to sync both
+	if OS.has_feature("web") and (file_data.is_empty() or web_data.is_empty()):
+		save_game()
 		
+	return true
+
+func _load_from_web_storage() -> String:
+	if not OS.has_feature("web"):
+		return ""
+	var js = Engine.get_singleton("JavaScriptBridge")
+	if not js:
+		return ""
+	var script = """
+	(function() {
+		try {
+			var val = localStorage.getItem('%s');
+			if (!val) return '';
+			return btoa(unescape(encodeURIComponent(val)));
+		} catch (e) {
+			console.warn('Web storage load warning:', e);
+			return '';
+		}
+	})()
+	""" % WEB_STORAGE_KEY
+	var res = js.eval(script)
+	if res and typeof(res) == TYPE_STRING and res != "":
+		return Marshalls.base64_to_utf8(res)
+	return ""
+
+func _apply_save_data(data: Dictionary) -> void:
 	cahs = data.get("cahs", data.get("coins", 0))
 	selected_character = data.get("selected_character", "none")
 	
@@ -591,11 +750,32 @@ func load_game() -> bool:
 		
 	in_game_time = float(data.get("in_game_time", 21600.0))
 	current_period = calculate_period(in_game_time)
-	return true
+	
+	var settings = data.get("settings", {})
+	if typeof(settings) == TYPE_DICTIONARY and not settings.is_empty():
+		master_volume = float(settings.get("master_volume", 1.0))
+		music_volume = float(settings.get("music_volume", 1.0))
+		sfx_volume = float(settings.get("sfx_volume", 1.0))
+		_apply_audio_volume("Master", master_volume)
+		_apply_audio_volume("Music", music_volume)
+		_apply_audio_volume("SFX", sfx_volume)
+
+func _apply_audio_volume(bus_name: String, val: float) -> void:
+	var bus_idx = AudioServer.get_bus_index(bus_name)
+	if bus_idx >= 0:
+		if val <= 0.001:
+			AudioServer.set_bus_mute(bus_idx, true)
+		else:
+			AudioServer.set_bus_mute(bus_idx, false)
+			AudioServer.set_bus_volume_db(bus_idx, linear_to_db(val))
 
 func reset_game_data() -> void:
 	if FileAccess.file_exists(SAVE_PATH):
 		DirAccess.remove_absolute(SAVE_PATH)
+	if OS.has_feature("web"):
+		var js = Engine.get_singleton("JavaScriptBridge")
+		if js:
+			js.eval("try { localStorage.removeItem('%s'); } catch(e){}" % WEB_STORAGE_KEY)
 	cahs = 0
 	selected_character = "none"
 	unlocked_characters = ["none"]

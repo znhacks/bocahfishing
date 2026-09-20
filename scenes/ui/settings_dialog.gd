@@ -25,7 +25,12 @@ func _ready() -> void:
 	if confirm_modal:
 		confirm_modal.visible = false
 	
-	# Setup slider default values
+	# Setup slider default values from GameManager
+	if GameManager:
+		slider_master.value = GameManager.master_volume
+		slider_music.value = GameManager.music_volume
+		slider_sfx.value = GameManager.sfx_volume
+		
 	slider_master.value_changed.connect(_on_master_changed)
 	slider_music.value_changed.connect(_on_music_changed)
 	slider_sfx.value_changed.connect(_on_sfx_changed)
@@ -35,6 +40,10 @@ func _ready() -> void:
 	check_fullscreen.button_pressed = (DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN)
 
 func open() -> void:
+	if GameManager:
+		slider_master.value = GameManager.master_volume
+		slider_music.value = GameManager.music_volume
+		slider_sfx.value = GameManager.sfx_volume
 	visible = true
 	if confirm_modal:
 		confirm_modal.visible = false
@@ -43,6 +52,8 @@ func open() -> void:
 	tween.tween_property(self, "modulate:a", 1.0, 0.18)
 
 func close() -> void:
+	if GameManager:
+		GameManager.save_game()
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 0.15)
 	await tween.finished
@@ -56,12 +67,18 @@ func _on_close_pressed() -> void:
 
 func _on_master_changed(val: float) -> void:
 	_set_bus_volume("Master", val)
+	if GameManager:
+		GameManager.master_volume = val
 
 func _on_music_changed(val: float) -> void:
 	_set_bus_volume("Music", val)
+	if GameManager:
+		GameManager.music_volume = val
 
 func _on_sfx_changed(val: float) -> void:
 	_set_bus_volume("SFX", val)
+	if GameManager:
+		GameManager.sfx_volume = val
 
 func _set_bus_volume(bus_name: String, val: float) -> void:
 	var bus_idx = AudioServer.get_bus_index(bus_name)
