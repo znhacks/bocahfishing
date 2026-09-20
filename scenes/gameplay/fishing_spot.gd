@@ -29,6 +29,10 @@ var pending_fish: Dictionary = {}
 @onready var reeling_hud: Control = $HUD/ReelingHUD
 @onready var catch_dialog: Control = $HUD/CatchDialog
 @onready var tackle_dialog: Control = $HUD/TackleBoxDialog
+@onready var self_narration_badge: PanelContainer = $HUD/SelfNarrationBadge
+@onready var lbl_narration_avatar: Label = $HUD/SelfNarrationBadge/HBox/LblAvatar
+@onready var lbl_narration_name: Label = $HUD/SelfNarrationBadge/HBox/VBox/LblName
+@onready var lbl_narration_text: Label = $HUD/SelfNarrationBadge/HBox/VBox/LblText
 
 @onready var btn_back: Button = $HUD/TopBar/BtnBack
 @onready var btn_tackle: Button = $HUD/TopBar/BtnTackle
@@ -49,6 +53,148 @@ var _far_pos: Vector2 = Vector2(640.0, 400.0)
 var _reeling_progress: float = 0.35
 var _is_reeling_inside: bool = false
 var _is_reeling_active: bool = false
+var _narration_tween: Tween
+
+const NARRATION_LINES: Dictionary = {
+	"none": {
+		"no_bait": [
+			"No bait on the hook... maybe I can snag something from the bottom.",
+			"Just a bare hook today. Let's see what happens.",
+			"Forgot the bait. Well, everything can be bait if I'm lucky."
+		],
+		"cast": [
+			"Line casted! Let's wait quietly.",
+			"Cast away! Hope something bites today.",
+			"Bobber is settled on the water. Now we wait."
+		],
+		"bite": [
+			"Something is pulling the line!",
+			"A bite! Get ready to reel!",
+			"The bobber dipped! Strike now!"
+		],
+		"catch": [
+			"Nice catch! Got one in the bag!",
+			"Reeled it in safely! Good haul.",
+			"Whew! That was a solid catch."
+		]
+	},
+	"jia": {
+		"no_bait": [
+			"No bait? Pfft, watch me catch a monster with just a bare hook!",
+			"Empty hook challenge! I'm so hyped right now, let's go!!",
+			"No bait, no problem! My fishing skills are unmatched!"
+		],
+		"cast": [
+			"HYAAA! Fly far away, lucky bobber!!",
+			"Super cast! Come on fishies, bite bite bite!!",
+			"Go get 'em! Right into the deepest water!!"
+		],
+		"bite": [
+			"WOAH WOAH!! IT BIT!! HOLD ON TIGHT!!",
+			"YESSS!! A BIG ONE IS TUGGING THE LINE!!",
+			"FISH ON! THIS IS NOT A DRILL, PULL PULL!!"
+		],
+		"catch": [
+			"YEAAAH!! WE GOT IT!! That was SO AWESOME!!",
+			"VICTORY!! Look at this beauty! Woohoo!!",
+			"Haha! Told you I'd catch it! What a catch!!"
+		]
+	},
+	"joe": {
+		"no_bait": [
+			"*sigh* No bait... whatever, I'll just drop the hook and chill...",
+			"Forgot the bait. Too lazy to find one. The hook will do.",
+			"Empty hook. Less effort if nothing bites anyway..."
+		],
+		"cast": [
+			"*yawn* Casted... wake me up if the bobber sinks...",
+			"Plop. Now we stare at water for an hour... yay.",
+			"Line is out. I'd rather be taking a nap right now..."
+		],
+		"bite": [
+			"...Huh? Oh, the bobber moved. Guess I gotta pull.",
+			"Whoa... woke me up. Something is actually biting.",
+			"Ugh, it's pulling hard. Why can't fish be lazy too?"
+		],
+		"catch": [
+			"Oh, a fish. Cool, I guess. Can I sleep now?",
+			"Caught it. It's heavy. My arms are tired already.",
+			"Done. That was way too much cardio for one fish..."
+		]
+	},
+	"pak_kumis": {
+		"no_bait": [
+			"A true angler reads the river even without bait. Focus on the flow.",
+			"The water provides to those with patience, even with a bare hook."
+		],
+		"cast": [
+			"Smooth release. Right into the deep current pocket.",
+			"Feel the wind and the current. Perfect placement."
+		],
+		"bite": [
+			"Strike! Don't let the tension slack for a second!",
+			"Sharp tug! The predator has committed to the strike!"
+		],
+		"catch": [
+			"Hahaha! Decades of experience never betray an angler!",
+			"A fine specimen from the depths. Well reeled!"
+		]
+	},
+	"bocah_udik": {
+		"no_bait": [
+			"River kids don't always need fancy bait, the lake water gives anyway!",
+			"No bait? I used to catch river minnows with bare fingers!"
+		],
+		"cast": [
+			"Right near the lotus roots! That's where the big ones hide!",
+			"Plunged right into my favorite secret fishing hole!"
+		],
+		"bite": [
+			"Dug dug dug! The water is swirling wildly down there!",
+			"Ooi, it took it! Hold the bamboo rod steady!!"
+		],
+		"catch": [
+			"Mantap! Fresh catch straight from my home river!",
+			"Woohoo! Tonight's dinner is going to be legendary!"
+		]
+	},
+	"si_bolang": {
+		"no_bait": [
+			"Nothing on the hook? An adventure isn't fun if it's too easy!",
+			"A survival angling challenge! Let's explore what bites!"
+		],
+		"cast": [
+			"Casting across the lake horizon! The adventure begins!",
+			"Soaring through the breeze! Find us an adventure, bobber!"
+		],
+		"bite": [
+			"Oho! A challenger approaches from the deep unknown!",
+			"Adventure alert! It's tugging like a runaway train!"
+		],
+		"catch": [
+			"What a legendary find! Another milestone for our journal!",
+			"Incredible adventure! This lake is full of wonders!"
+		]
+	},
+	"mbah_dukun": {
+		"no_bait": [
+			"The water spirits whisper... even an empty hook carries destiny.",
+			"Bait is mere illusion. Intent is what lures the spirits."
+		],
+		"cast": [
+			"Into the sacred lake depths it descends...",
+			"Ripples of fate cast upon the mirror of the lake."
+		],
+		"bite": [
+			"The sacred ripples emerge! The spirit takes hold!",
+			"A guardian of the lake answers the call!"
+		],
+		"catch": [
+			"A blessing from the ancient lake ancestors. Cherish it.",
+			"The waters have bestowed their mystical bounty upon us."
+		]
+	}
+}
 
 func _ready() -> void:
 	btn_back.pressed.connect(_on_back_pressed)
@@ -60,7 +206,11 @@ func _ready() -> void:
 	catch_dialog.dialog_closed.connect(_on_catch_dialog_closed)
 	
 	if GameManager:
-		GameManager.bait_changed.connect(func(_b): _update_bait_display())
+		GameManager.bait_changed.connect(func(b):
+			_update_bait_display()
+			if b.is_empty() and current_state == FishingState.IDLE:
+				trigger_self_narration("no_bait")
+		)
 		GameManager.inventory_updated.connect(_update_bait_display)
 		GameManager.cahs_changed.connect(func(_c): _update_bait_display())
 		GameManager.time_updated.connect(_on_time_updated)
@@ -86,6 +236,13 @@ func _ready() -> void:
 	
 	_update_bait_display()
 	_set_state(FishingState.IDLE)
+	
+	# Initial self-narration if starting with no bait
+	if not GameManager or GameManager.equipped_bait.is_empty():
+		get_tree().create_timer(0.6).timeout.connect(func():
+			if current_state == FishingState.IDLE and (not GameManager or GameManager.equipped_bait.is_empty()):
+				trigger_self_narration("no_bait")
+		)
 
 func _on_reeling_tick(progress_ratio: float, is_inside: bool, is_active: bool) -> void:
 	_reeling_progress = progress_ratio
@@ -155,13 +312,8 @@ func _set_state(new_state: FishingState) -> void:
 	
 	match current_state:
 		FishingState.IDLE:
-			var has_bait = not GameManager.equipped_bait.is_empty() and GameManager.inventory.get(GameManager.equipped_bait, 0) > 0
-			if not has_bait:
-				lbl_prompt.text = "💭 \"I should get bait for fish...\""
-				lbl_prompt.modulate = Color(1.0, 0.9, 0.65, 0.95)
-			else:
-				lbl_prompt.text = "Click water to cast line"
-				lbl_prompt.modulate = Color(1, 0.95, 0.85, 0.8)
+			lbl_prompt.text = "Click water to cast line"
+			lbl_prompt.modulate = Color(1, 0.95, 0.85, 0.8)
 			alert_icon.visible = false
 			ripple_ring.visible = false
 			bobber.visible = false
@@ -269,11 +421,17 @@ func _cast_line(target_pos: Vector2) -> void:
 		GameManager.play_bobber_splash()
 	_set_state(FishingState.WAITING)
 	
+	var has_bait = not GameManager.equipped_bait.is_empty() and GameManager.inventory.get(GameManager.equipped_bait, 0) > 0
+	
+	if has_bait:
+		trigger_self_narration("cast")
+	else:
+		trigger_self_narration("no_bait")
+	
 	# Random wait time until bite (significantly affected by bait tier & lure_speed)
 	var mods = GameManager.get_character_modifiers() if GameManager else {}
 	var lure_speed_mult: float = mods.get("lure_speed", 1.0)
 	
-	var has_bait = not GameManager.equipped_bait.is_empty() and GameManager.inventory.get(GameManager.equipped_bait, 0) > 0
 	var base_wait: float
 	if not has_bait:
 		# Bare hook (no bait): Fish take noticeably longer to investigate an empty hook
@@ -368,6 +526,7 @@ func _trigger_bite() -> void:
 		GameManager.play_sfx(GameManager.SFX_BOBBER_PLOP, 1.0, 1.15)
 	
 	_set_state(FishingState.BITING)
+	trigger_self_narration("bite")
 	
 	# Auto-hook: Instantly enters reeling minigame without requiring an extra tap!
 	get_tree().create_timer(0.4).timeout.connect(func():
@@ -418,6 +577,7 @@ func _on_reeling_finished(success: bool, fish_data: Dictionary) -> void:
 		var is_heavy = (tier >= 4 or (fish_data.get("category", "") == "fish" and fish_data.get("size_range", [10, 20])[1] > 100.0))
 		if GameManager:
 			GameManager.play_catch_splash(is_heavy)
+		trigger_self_narration("catch")
 		catch_dialog.show_catch(fish_data)
 	else:
 		_fish_escaped("The line snapped! The fish tore away.")
@@ -453,12 +613,8 @@ func _update_bait_display() -> void:
 			lbl_bait_info.text = "%s %s (x%d)" % [bait_data.get("icon_symbol", "🎣"), bait_data.get("name", ""), qty]
 		
 	if current_state == FishingState.IDLE:
-		if not has_bait:
-			lbl_prompt.text = "💭 \"I should get bait for fish...\""
-			lbl_prompt.modulate = Color(1.0, 0.9, 0.65, 0.95)
-		else:
-			lbl_prompt.text = "Click water to cast line"
-			lbl_prompt.modulate = Color(1, 0.95, 0.85, 0.8)
+		lbl_prompt.text = "Click water to cast line"
+		lbl_prompt.modulate = Color(1, 0.95, 0.85, 0.8)
 
 func _on_tackle_pressed() -> void:
 	tackle_dialog.open()
@@ -501,3 +657,81 @@ func _on_period_changed(_new_period: String) -> void:
 		water_texture.texture = new_water
 	if water_texture_fade:
 		water_texture_fade.modulate.a = 0.0
+
+func trigger_self_narration(event: String) -> void:
+	var char_id: String = GameManager.selected_character if GameManager else "none"
+	var char_pool: Dictionary = NARRATION_LINES.get(char_id, NARRATION_LINES["none"])
+	var lines_list: Array = char_pool.get(event, [])
+	if lines_list.is_empty():
+		lines_list = NARRATION_LINES["none"].get(event, [])
+	if lines_list.is_empty():
+		return
+	var chosen: String = lines_list.pick_random()
+	show_self_narration(chosen, char_id)
+
+func show_self_narration(text: String, angler_id: String = "") -> void:
+	if not self_narration_badge or not lbl_narration_text:
+		return
+		
+	if _narration_tween and _narration_tween.is_valid():
+		_narration_tween.kill()
+		
+	if angler_id.is_empty():
+		angler_id = GameManager.selected_character if GameManager else "none"
+		
+	var char_data = GameManager.character_db.get(angler_id, GameManager.character_db.get("none", {})) if GameManager else {}
+	var char_name = char_data.get("name", "Angler")
+	
+	var avatar_icon = "🎣"
+	var name_color = Color(0.85, 0.9, 0.95)
+	match angler_id:
+		"jia":
+			avatar_icon = "⚡"
+			name_color = Color(1.0, 0.75, 0.3)
+		"joe":
+			avatar_icon = "💤"
+			name_color = Color(0.65, 0.8, 1.0)
+		"pak_kumis":
+			avatar_icon = "🧔"
+			name_color = Color(0.9, 0.65, 0.4)
+		"bocah_udik":
+			avatar_icon = "🌾"
+			name_color = Color(0.5, 0.9, 0.6)
+		"si_bolang":
+			avatar_icon = "🧭"
+			name_color = Color(0.4, 0.85, 0.95)
+		"mbah_dukun":
+			avatar_icon = "🔮"
+			name_color = Color(0.85, 0.5, 1.0)
+		_:
+			avatar_icon = "🎣"
+			name_color = Color(0.85, 0.9, 0.95)
+			
+	if lbl_narration_avatar:
+		lbl_narration_avatar.text = avatar_icon
+	if lbl_narration_name:
+		lbl_narration_name.text = char_name
+		lbl_narration_name.modulate = name_color
+		
+	lbl_narration_text.text = text
+	lbl_narration_text.visible_ratio = 0.0
+	self_narration_badge.visible = true
+	self_narration_badge.modulate.a = 1.0
+	
+	var char_count = text.length()
+	var type_in_dur = clampf(char_count * 0.028, 0.35, 1.3)
+	var type_out_dur = clampf(char_count * 0.016, 0.22, 0.7)
+	var hold_dur = 2.3
+	
+	_narration_tween = create_tween()
+	# 1. Type In Entrance
+	_narration_tween.tween_property(lbl_narration_text, "visible_ratio", 1.0, type_in_dur)
+	# 2. Hold momentarily
+	_narration_tween.tween_interval(hold_dur)
+	# 3. Type Out Exit
+	_narration_tween.tween_property(lbl_narration_text, "visible_ratio", 0.0, type_out_dur)
+	_narration_tween.parallel().tween_property(self_narration_badge, "modulate:a", 0.0, type_out_dur)
+	# 4. Hide when finished
+	_narration_tween.tween_callback(func():
+		self_narration_badge.visible = false
+	)

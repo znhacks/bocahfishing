@@ -108,6 +108,25 @@ shadow_size = 8
 shadow_offset = Vector2(0, 4)
 shadow_color = Color(0, 0, 0, 0.45)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_narration"]
+bg_color = Color(0.06, 0.09, 0.14, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.65, 0.9, 0.7)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_left = 14
+corner_radius_bottom_right = 14
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+shadow_size = 10
+shadow_offset = Vector2(0, 4)
+shadow_color = Color(0, 0, 0, 0.5)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_water"]
 shader = ExtResource("8_shader_water")
 shader_parameter/flow_speed = 0.04
@@ -383,3 +402,51 @@ visible = false
 
 [node name="TackleBoxDialog" parent="HUD" instance=ExtResource("5_tackle")]
 visible = false
+
+[node name="SelfNarrationBadge" type="PanelContainer" parent="HUD"]
+visible = false
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = -140.0
+offset_right = 440.0
+offset_bottom = -65.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_narration")
+
+[node name="HBox" type="HBoxContainer" parent="HUD/SelfNarrationBadge"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="LblAvatar" type="Label" parent="HUD/SelfNarrationBadge/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "🎣"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBox" type="VBoxContainer" parent="HUD/SelfNarrationBadge/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="LblName" type="Label" parent="HUD/SelfNarrationBadge/HBox/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_font_outfit")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.8, 0.9, 1, 0.9)
+text = "Angler"
+
+[node name="LblText" type="Label" parent="HUD/SelfNarrationBadge/HBox/VBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("6_font_outfit")
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.95, 0.97, 1, 0.98)
+text = "..."
+autowrap_mode = 2
