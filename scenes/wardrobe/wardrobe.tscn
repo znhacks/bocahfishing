@@ -168,7 +168,7 @@ theme_override_fonts/font = ExtResource("3_font_outfit")
 theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_back")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_back_hover")
-text = "← Lobby"
+text = "< Lobby"
 
 [node name="TitleBox" type="VBoxContainer" parent="TopBar/Margin/HBox"]
 layout_mode = 2
@@ -225,7 +225,7 @@ size_flags_vertical = 4
 theme_override_font_sizes/font_size = 28
 theme_override_styles/normal = SubResource("StyleBoxFlat_nav_btn")
 theme_override_styles/hover = SubResource("StyleBoxFlat_nav_btn_hover")
-text = "◀"
+text = "<"
 
 [node name="CenterShowcase" type="VBoxContainer" parent="StageArea"]
 layout_mode = 2
@@ -303,7 +303,7 @@ size_flags_vertical = 4
 theme_override_font_sizes/font_size = 28
 theme_override_styles/normal = SubResource("StyleBoxFlat_nav_btn")
 theme_override_styles/hover = SubResource("StyleBoxFlat_nav_btn_hover")
-text = "▶"
+text = ">"
 
 [node name="DetailPanel" type="PanelContainer" parent="StageArea"]
 custom_minimum_size = Vector2(440, 540)

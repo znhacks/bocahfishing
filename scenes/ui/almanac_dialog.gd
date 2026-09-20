@@ -116,7 +116,7 @@ func _create_fish_card(data: Dictionary, is_caught: bool) -> PanelContainer:
 			tex_rect.texture = load(icon_tex_path)
 			top_box.add_child(tex_rect)
 		else:
-			icon_lbl.text = data.get("icon_symbol", "🐟")
+			icon_lbl.text = ""
 			top_box.add_child(icon_lbl)
 	else:
 		name_lbl.text = "??? (Undiscovered)"
@@ -130,7 +130,7 @@ func _create_fish_card(data: Dictionary, is_caught: bool) -> PanelContainer:
 			tex_rect.modulate = Color(0.08, 0.12, 0.16, 0.85) # Mysterious silhouette!
 			top_box.add_child(tex_rect)
 		else:
-			icon_lbl.text = "❓"
+			icon_lbl.text = "?"
 			icon_lbl.modulate = Color(0.4, 0.45, 0.5)
 			top_box.add_child(icon_lbl)
 		

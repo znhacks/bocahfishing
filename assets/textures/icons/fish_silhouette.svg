@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 48" width="64" height="48" fill="none">
+  <!-- Fish Body -->
+  <path d="M54 24 C50 16 38 10 24 12 C14 13 6 18 2 24 C6 30 14 35 24 36 C38 38 50 32 54 24 Z" fill="#38BDF8" stroke="#0284C7" stroke-width="2.5"/>
+  <!-- Tail Fin -->
+  <path d="M50 24 L62 12 C60 20 60 28 62 36 Z" fill="#0EA5E9" stroke="#0284C7" stroke-width="2"/>
+  <!-- Dorsal Fin -->
+  <path d="M22 12 C26 6 34 8 38 12" fill="#0284C7"/>
+  <!-- Eye -->
+  <circle cx="12" cy="22" r="3.5" fill="#FFFFFF"/>
+  <circle cx="11" cy="22" r="2" fill="#0F172A"/>
+  <!-- Gills line -->
+  <path d="M19 18 C22 22 22 26 19 30" stroke="#0284C7" stroke-width="2" stroke-linecap="round"/>
+</svg>

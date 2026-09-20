@@ -166,7 +166,7 @@ func _show_high_tier_warning(fish_data: Dictionary, on_confirm: Callable) -> voi
 	margin.add_child(vbox)
 	
 	var lbl_title = Label.new()
-	lbl_title.text = "⚠️ RARE BAIT WARNING! ⚠️"
+	lbl_title.text = "RARE BAIT WARNING!"
 	lbl_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl_title.add_theme_font_override("font", FONT_OUTFIT)
 	lbl_title.add_theme_font_size_override("font_size", 19)
@@ -247,7 +247,7 @@ func _show_high_tier_warning(fish_data: Dictionary, on_confirm: Callable) -> voi
 	hbox_btns.add_theme_constant_override("separation", 16)
 	
 	var btn_cancel = Button.new()
-	btn_cancel.text = "✕ Cancel"
+	btn_cancel.text = "Cancel"
 	btn_cancel.custom_minimum_size = Vector2(130, 42)
 	btn_cancel.add_theme_font_override("font", FONT_OUTFIT)
 	var cancel_style = StyleBoxFlat.new()
@@ -264,7 +264,7 @@ func _show_high_tier_warning(fish_data: Dictionary, on_confirm: Callable) -> voi
 	btn_cancel.add_theme_stylebox_override("normal", cancel_style)
 	
 	var btn_confirm = Button.new()
-	btn_confirm.text = "🪝 Equip as Bait"
+	btn_confirm.text = "Equip as Bait"
 	btn_confirm.custom_minimum_size = Vector2(185, 42)
 	btn_confirm.add_theme_font_override("font", FONT_OUTFIT)
 	var confirm_style = StyleBoxFlat.new()

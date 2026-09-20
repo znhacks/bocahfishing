@@ -116,7 +116,7 @@ custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_font_sizes/font_size = 16
-text = "✕"
+text = "X"
 
 [node name="HSeparator" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -187,7 +187,7 @@ alignment = 1
 [node name="BtnReset" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxReset"]
 custom_minimum_size = Vector2(200, 36)
 layout_mode = 2
-text = "🗑️ Reset All Progress"
+text = "Reset All Progress"
 
 [node name="ConfirmModal" type="Control" parent="."]
 visible = false
@@ -238,7 +238,7 @@ alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.45, 0.45, 1)
 theme_override_font_sizes/font_size = 17
-text = "⚠️ Reset All Progress?"
+text = "Reset All Progress?"
 horizontal_alignment = 1
 
 [node name="LblWarningDesc" type="Label" parent="ConfirmModal/Panel/Margin/VBox"]

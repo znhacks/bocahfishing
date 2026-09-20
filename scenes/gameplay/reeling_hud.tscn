@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/gameplay/reeling_hud.gd" id="1_script"]
 [ext_resource type="FontFile" path="res://assets/fonts/Outfit-Bold.ttf" id="2_font_outfit"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/fish_silhouette.svg" id="3_ico_fish"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
 bg_color = Color(0.06, 0.09, 0.14, 0.96)
@@ -139,7 +140,7 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(0.4, 1, 0.65, 1)
-text = "▲ REEL +28%"
+text = "REEL +28%"
 vertical_alignment = 1
 
 [node name="Track" type="Control" parent="Panel/Margin/VBox"]
@@ -167,6 +168,7 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_catchbar")
 
 [node name="FishIcon" type="Label" parent="Panel/Margin/VBox/Track"]
+visible = false
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -178,12 +180,11 @@ offset_bottom = 16.0
 grow_vertical = 2
 pivot_offset = Vector2(15, 15)
 theme_override_font_sizes/font_size = 24
-text = "🐟"
+text = ""
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="FishTexture" type="TextureRect" parent="Panel/Margin/VBox/Track"]
-visible = false
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -194,5 +195,6 @@ offset_right = 248.0
 offset_bottom = 18.0
 grow_vertical = 2
 pivot_offset = Vector2(18, 18)
+texture = ExtResource("3_ico_fish")
 expand_mode = 1
 stretch_mode = 5

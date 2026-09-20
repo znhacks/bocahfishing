@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Spindle / Tip -->
+  <rect x="22" y="2" width="4" height="12" rx="2" fill="#F97316" stroke="#C2410C" stroke-width="1.5"/>
+  <circle cx="24" cy="3" r="2.5" fill="#EF4444"/>
+  <!-- Main Sphere Shadow -->
+  <circle cx="24" cy="27" r="17" fill="#0F172A" opacity="0.3"/>
+  <!-- Top Half (Red) -->
+  <path d="M7 27 A 17 17 0 0 1 41 27 Z" fill="#EF4444" stroke="#B91C1C" stroke-width="1.5"/>
+  <!-- Bottom Half (White) -->
+  <path d="M7 27 A 17 17 0 0 0 41 27 Z" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+  <!-- Center Seam -->
+  <line x1="7" y1="27" x2="41" y2="27" stroke="#1E293B" stroke-width="2"/>
+  <!-- Gloss / Highlight -->
+  <ellipse cx="18" cy="18" rx="4" ry="2.5" fill="#FFFFFF" opacity="0.6" transform="rotate(-30 18 18)"/>
+</svg>

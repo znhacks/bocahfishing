@@ -86,12 +86,10 @@ func start_reeling(fish_data: Dictionary) -> void:
 	lbl_tier.text = "[ %s ]" % tier_name.to_upper()
 	lbl_tier.modulate = tier_color
 	
-	# Hide specific fish illustration to keep the fish a mystery during the fight
-	fish_texture.visible = false
-	fish_icon.visible = true
-	fish_icon.text = "🐟"
-	fish_icon.scale = Vector2.ONE
-	fish_icon.modulate = Color.WHITE
+	# Show clean fish silhouette during the fight
+	fish_texture.texture = load("res://assets/textures/icons/fish_silhouette.svg")
+	fish_texture.visible = true
+	fish_icon.visible = false
 	
 	visible = true
 	is_active = true
@@ -168,7 +166,7 @@ func _process(delta: float) -> void:
 	if is_inside:
 		progress += FILL_RATE * delta
 		catch_bar.modulate = Color(0.4, 1.0, 0.5, 1.0)
-		lbl_status.text = "▲ REEL +%d%%" % int(FILL_RATE)
+		lbl_status.text = "REEL +%d%%" % int(FILL_RATE)
 		lbl_status.modulate = Color(0.35, 1.0, 0.65)
 	else:
 		# Resilience scales escape drain significantly
@@ -182,13 +180,13 @@ func _process(delta: float) -> void:
 		catch_bar.modulate = Color(1.0, 0.45, 0.35, 0.85)
 		
 		if resilience >= 1.15:
-			lbl_status.text = "▼ ESC -%d%% [🛡️ Resilient]" % int(effective_drain)
+			lbl_status.text = "ESC -%d%% [Resilient]" % int(effective_drain)
 			lbl_status.modulate = Color(1.0, 0.7, 0.4)
 		elif resilience <= 0.85:
-			lbl_status.text = "▼ ESC -%d%% [⚠️ Fragile]" % int(effective_drain)
+			lbl_status.text = "ESC -%d%% [Fragile]" % int(effective_drain)
 			lbl_status.modulate = Color(1.0, 0.25, 0.25)
 		else:
-			lbl_status.text = "▼ ESC -%d%%" % int(effective_drain)
+			lbl_status.text = "ESC -%d%%" % int(effective_drain)
 			lbl_status.modulate = Color(1.0, 0.45, 0.4)
 		
 	progress = clamp(progress, 0.0, 100.0)

@@ -113,7 +113,7 @@ func _on_confirm_reset_pressed() -> void:
 	if GameManager:
 		GameManager.reset_game_data()
 	if btn_reset:
-		btn_reset.text = "✓ Progress Reset!"
+		btn_reset.text = "Progress Reset!"
 		await get_tree().create_timer(1.5).timeout
 		if is_inside_tree() and btn_reset:
-			btn_reset.text = "🗑️ Reset All Progress"
+			btn_reset.text = "Reset All Progress"

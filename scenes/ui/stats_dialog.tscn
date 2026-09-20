@@ -125,7 +125,7 @@ layout_mode = 2
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("2_font_outfit")
 theme_override_font_sizes/font_size = 16
-text = "✕"
+text = "X"
 
 [node name="HSeparator1" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -195,7 +195,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
 theme_override_font_sizes/font_size = 13
-text = "🎯 Catch Bar Safe Zone:"
+text = "Catch Bar Safe Zone:"
 
 [node name="LblValue" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ContentBox/StatsGrid/RowBar/VBox/Header"]
 layout_mode = 2
@@ -226,7 +226,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
 theme_override_font_sizes/font_size = 13
-text = "⏱️ Lure Speed (Bite Rate):"
+text = "Lure Speed (Bite Rate):"
 
 [node name="LblValue" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ContentBox/StatsGrid/RowLure/VBox/Header"]
 layout_mode = 2
@@ -257,7 +257,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
 theme_override_font_sizes/font_size = 13
-text = "🛡️ Line Resilience:"
+text = "Line Resilience:"
 
 [node name="LblValue" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ContentBox/StatsGrid/RowResilience/VBox/Header"]
 layout_mode = 2
@@ -288,7 +288,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
 theme_override_font_sizes/font_size = 13
-text = "🪱 Active Bait & Bonus:"
+text = "Active Bait & Bonus:"
 
 [node name="LblValue" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ContentBox/StatsGrid/RowBait/VBox/Header"]
 layout_mode = 2

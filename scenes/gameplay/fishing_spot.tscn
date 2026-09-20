@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" path="res://assets/textures/day_water.png" id="7_water"]
 [ext_resource type="Shader" path="res://shaders/water_waving.gdshader" id="8_shader_water"]
 [ext_resource type="Texture2D" path="res://assets/textures/icons/icon_backpack.svg" id="9_ico_backpack"]
+[ext_resource type="Texture2D" path="res://assets/textures/icons/bobber.svg" id="10_ico_bobber"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ripple"]
 bg_color = Color(1, 1, 1, 0)
@@ -257,7 +258,7 @@ scale_amount_min = 2.5
 scale_amount_max = 4.5
 color = Color(0.75, 0.9, 1, 0.9)
 
-[node name="BobberIcon" type="Label" parent="Bobber"]
+[node name="BobberTexture" type="TextureRect" parent="Bobber"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -270,10 +271,9 @@ offset_right = 16.0
 offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 24
-text = "🔴"
-horizontal_alignment = 1
-vertical_alignment = 1
+texture = ExtResource("10_ico_bobber")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="AlertIcon" type="Label" parent="Bobber"]
 layout_mode = 1
@@ -316,7 +316,7 @@ theme_override_fonts/font = ExtResource("6_font_outfit")
 theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_back")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_back_hover")
-text = "← Retreat"
+text = "< Retreat"
 
 [node name="ClockCard" type="PanelContainer" parent="HUD/TopBar"]
 layout_mode = 2

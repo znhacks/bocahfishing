@@ -106,11 +106,11 @@ func refresh() -> void:
 	var resilience: float = mods.get("resilience", 1.0)
 	var res_pct: int = int(round((resilience - 1.0) * 100))
 	if resilience > 1.0:
-		lbl_resilience.text = "+%d%% Line Resilience (🛡️ Resilient Grip)" % res_pct
+		lbl_resilience.text = "+%d%% Line Resilience (Resilient Grip)" % res_pct
 		lbl_resilience.modulate = Color(0.35, 0.95, 0.55)
 		lbl_resilience_desc.text = "Tough line tension (-13%/s escape drain) and dampens violent thrashing."
 	elif resilience < 1.0:
-		lbl_resilience.text = "%d%% Line Resilience (⚠️ Fragile Line)" % res_pct
+		lbl_resilience.text = "%d%% Line Resilience (Fragile Line)" % res_pct
 		lbl_resilience.modulate = Color(1.0, 0.4, 0.4)
 		lbl_resilience_desc.text = "Delicate line tension (-30%/s escape drain if fish slips outside)."
 	else:

@@ -215,7 +215,7 @@ func _display_character(idx: int, _with_anim: bool = false) -> void:
 		buff_box.add_theme_stylebox_override("panel", style)
 		
 		var buff_lbl = Label.new()
-		buff_lbl.text = "🟩 " + buff
+		buff_lbl.text = "+ " + buff
 		buff_lbl.add_theme_font_size_override("font_size", 13)
 		buff_lbl.add_theme_color_override("font_color", Color(0.85, 1.0, 0.9))
 		buff_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -243,7 +243,7 @@ func _display_character(idx: int, _with_anim: bool = false) -> void:
 		debuff_box.add_theme_stylebox_override("panel", style)
 		
 		var debuff_lbl = Label.new()
-		debuff_lbl.text = "🟥 " + debuff
+		debuff_lbl.text = "- " + debuff
 		debuff_lbl.add_theme_font_size_override("font_size", 13)
 		debuff_lbl.add_theme_color_override("font_color", Color(1.0, 0.85, 0.85))
 		debuff_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -255,7 +255,7 @@ func _display_character(idx: int, _with_anim: bool = false) -> void:
 	if is_selected:
 		lbl_cost_status.text = "Active Angler"
 		lbl_cost_status.modulate = Color(0.4, 0.95, 0.6)
-		btn_action.text = "✓ SELECTED"
+		btn_action.text = "SELECTED"
 		btn_action.disabled = true
 		_set_btn_style(btn_action, Color(0.15, 0.4, 0.25, 0.8), Color(0.4, 0.9, 0.5, 0.9))
 	elif is_unlocked:

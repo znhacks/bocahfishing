@@ -20,7 +20,7 @@ var pending_fish: Dictionary = {}
 @onready var water_surface: Control = $WaterArea
 @onready var fishing_line: Line2D = $FishingLine
 @onready var bobber: Control = $Bobber
-@onready var bobber_icon: Label = $Bobber/BobberIcon
+@onready var bobber_texture: TextureRect = $Bobber/BobberTexture
 @onready var alert_icon: Label = $Bobber/AlertIcon
 @onready var ripple_ring: Panel = $Bobber/RippleRing
 @onready var splash_particles: CPUParticles2D = $Bobber/SplashParticles
@@ -684,29 +684,21 @@ func show_self_narration(text: String, angler_id: String = "") -> void:
 	var char_data = GameManager.character_db.get(angler_id, GameManager.character_db.get("none", {})) if GameManager else {}
 	var char_name = char_data.get("name", "Angler")
 	
-	var avatar_icon = "🎣"
 	var name_color = Color(0.85, 0.9, 0.95)
 	match angler_id:
 		"jia":
-			avatar_icon = "⚡"
 			name_color = Color(1.0, 0.75, 0.3)
 		"joe":
-			avatar_icon = "💤"
 			name_color = Color(0.65, 0.8, 1.0)
 		"pak_kumis":
-			avatar_icon = "🧔"
 			name_color = Color(0.9, 0.65, 0.4)
 		"bocah_udik":
-			avatar_icon = "🌾"
 			name_color = Color(0.5, 0.9, 0.6)
 		"si_bolang":
-			avatar_icon = "🧭"
 			name_color = Color(0.4, 0.85, 0.95)
 		"mbah_dukun":
-			avatar_icon = "🔮"
 			name_color = Color(0.85, 0.5, 1.0)
 		_:
-			avatar_icon = "🎣"
 			name_color = Color(0.85, 0.9, 0.95)
 			
 	# Avatar: use portrait image for Jia/Joe, emoji label for others
@@ -714,10 +706,8 @@ func show_self_narration(text: String, angler_id: String = "") -> void:
 	match angler_id:
 		"jia":
 			portrait_path = "res://assets/player/jia_ico.png"
-			avatar_icon = ""
 		"joe":
 			portrait_path = "res://assets/player/joe_ico.png"
-			avatar_icon = ""
 		_:
 			portrait_path = ""
 	
