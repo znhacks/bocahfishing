@@ -34,7 +34,7 @@ extends Control
 @onready var lbl_clock: Label = $HUD/TopLeftBar/ClockBadge/LblClock
 
 var _time_passed: float = 0.0
-var _title_base_y: float = 40.0
+var _title_base_y: float = 65.0
 var _joe_base_y: float = 0.0
 var _jia_base_y: float = 0.0
 
