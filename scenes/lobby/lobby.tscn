@@ -297,34 +297,34 @@ texture = ExtResource("10_title_icon")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="JoeChar" type="TextureRect" parent="HUD"]
+[node name="JiaChar" type="TextureRect" parent="HUD"]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 15.0
-offset_top = -420.0
-offset_right = 325.0
-offset_bottom = -95.0
+offset_left = -15.0
+offset_top = -375.0
+offset_right = 335.0
+offset_bottom = 10.0
 grow_vertical = 0
 mouse_filter = 2
-texture = ExtResource("11_joe")
+texture = ExtResource("12_jia")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="JiaChar" type="TextureRect" parent="HUD"]
+[node name="JoeChar" type="TextureRect" parent="HUD"]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -325.0
-offset_top = -420.0
-offset_right = -15.0
-offset_bottom = -95.0
+offset_left = -350.0
+offset_top = -375.0
+offset_right = 10.0
+offset_bottom = 10.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
-texture = ExtResource("12_jia")
+texture = ExtResource("11_joe")
 expand_mode = 1
 stretch_mode = 5
 
@@ -364,10 +364,10 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 36.0
-offset_top = -100.0
-offset_right = -36.0
-offset_bottom = -26.0
+offset_left = 320.0
+offset_top = -96.0
+offset_right = -320.0
+offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 16
