@@ -1046,15 +1046,8 @@ func remove_from_inventory(item_id: String, amount: int = 1) -> bool:
 		if inventory[item_id] <= 0:
 			inventory.erase(item_id)
 			if equipped_bait == item_id:
-				var found_new: bool = false
-				for k in inventory.keys():
-					if inventory[k] > 0:
-						set_equipped_bait(k)
-						found_new = true
-						break
-				if not found_new:
-					equipped_bait = ""
-					bait_changed.emit("")
+				equipped_bait = ""
+				bait_changed.emit("")
 		inventory_updated.emit()
 		save_game()
 		return true
@@ -1065,19 +1058,25 @@ func consume_equipped_bait() -> bool:
 		inventory[equipped_bait] -= 1
 		if inventory[equipped_bait] <= 0:
 			inventory.erase(equipped_bait)
-			var found_new: bool = false
-			for item_id in inventory.keys():
-				if inventory[item_id] > 0:
-					set_equipped_bait(item_id)
-					found_new = true
-					break
-			if not found_new:
-				equipped_bait = ""
-				bait_changed.emit("")
+			equipped_bait = ""
+			bait_changed.emit("")
 		inventory_updated.emit()
 		save_game()
 		return true
 	return false
+
+func get_max_fish_tier() -> int:
+	var max_t: int = 1
+	for id in item_db:
+		if item_db[id].get("category", "") == "fish":
+			max_t = maxi(max_t, item_db[id].get("tier", 1))
+	return max_t
+
+func is_highest_tier_fish(item_id: String) -> bool:
+	var item = get_item_data(item_id)
+	if item.is_empty() or item.get("category", "") != "fish":
+		return false
+	return item.get("tier", 1) >= get_max_fish_tier()
 
 func is_unlocked(item_id: String) -> bool:
 	return unlocked_catches.has(item_id)
