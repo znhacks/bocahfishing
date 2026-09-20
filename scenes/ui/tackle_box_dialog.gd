@@ -313,7 +313,7 @@ func _show_high_tier_warning(item_id: String, on_confirm: Callable) -> void:
 	margin.add_child(vbox)
 	
 	var lbl_title = Label.new()
-	lbl_title.text = "⚠️ PERINGATAN UMPAN LANGKA! ⚠️"
+	lbl_title.text = "⚠️ RARE BAIT WARNING! ⚠️"
 	lbl_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl_title.add_theme_font_override("font", FONT_OUTFIT)
 	lbl_title.add_theme_font_size_override("font_size", 19)
@@ -368,7 +368,7 @@ func _show_high_tier_warning(item_id: String, on_confirm: Callable) -> void:
 	fish_vbox.add_child(lbl_fname)
 	
 	var lbl_ftier = Label.new()
-	lbl_ftier.text = "[ %s ] • Nilai Jual: 🪙 %d Cahs" % [tier_name.to_upper(), price]
+	lbl_ftier.text = "[ %s ] • Value: 🪙 %d Cahs" % [tier_name.to_upper(), price]
 	lbl_ftier.add_theme_font_size_override("font_size", 12)
 	lbl_ftier.add_theme_color_override("font_color", Color(0.75, 0.88, 0.95))
 	fish_vbox.add_child(lbl_ftier)
@@ -379,7 +379,7 @@ func _show_high_tier_warning(item_id: String, on_confirm: Callable) -> void:
 	
 	# Warning description
 	var lbl_msg = Label.new()
-	lbl_msg.text = "Ikan ini adalah ikan tier tertinggi (Legendary) yang bernilai sangat tinggi! Jika dipasang sebagai umpan, ikan ini akan TERPAKAI dan HILANG dari tas saat memancing.\n\nApakah kamu yakin ingin menggunakannya sebagai umpan?"
+	lbl_msg.text = "This is a highest-tier fish (Legendary) with exceptional value!\nIf used as bait, this rare catch will be CONSUMED and PERMANENTLY LOST upon casting/hooking a fish.\n\nAre you sure you want to equip it as bait?"
 	lbl_msg.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	lbl_msg.add_theme_font_size_override("font_size", 13)
 	lbl_msg.add_theme_color_override("font_color", Color(0.9, 0.92, 0.95, 0.92))
@@ -394,7 +394,7 @@ func _show_high_tier_warning(item_id: String, on_confirm: Callable) -> void:
 	hbox_btns.add_theme_constant_override("separation", 16)
 	
 	var btn_cancel = Button.new()
-	btn_cancel.text = "✕ Batal"
+	btn_cancel.text = "✕ Cancel"
 	btn_cancel.custom_minimum_size = Vector2(130, 42)
 	btn_cancel.add_theme_font_override("font", FONT_OUTFIT)
 	var cancel_style = StyleBoxFlat.new()
@@ -411,7 +411,7 @@ func _show_high_tier_warning(item_id: String, on_confirm: Callable) -> void:
 	btn_cancel.add_theme_stylebox_override("normal", cancel_style)
 	
 	var btn_confirm = Button.new()
-	btn_confirm.text = "🪝 Tetap Pasang Umpan"
+	btn_confirm.text = "🪝 Equip as Bait"
 	btn_confirm.custom_minimum_size = Vector2(185, 42)
 	btn_confirm.add_theme_font_override("font", FONT_OUTFIT)
 	var confirm_style = StyleBoxFlat.new()

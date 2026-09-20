@@ -290,13 +290,13 @@ grow_horizontal = 2
 theme_override_constants/separation = 14
 
 [node name="BtnBack" type="Button" parent="HUD/TopBar"]
-custom_minimum_size = Vector2(110, 46)
+custom_minimum_size = Vector2(118, 46)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("6_font_outfit")
 theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_back")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_back_hover")
-text = "← Lobby"
+text = "← Retreat"
 
 [node name="ClockCard" type="PanelContainer" parent="HUD/TopBar"]
 layout_mode = 2
