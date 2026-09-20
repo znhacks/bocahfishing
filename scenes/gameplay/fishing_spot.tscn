@@ -110,15 +110,19 @@ shadow_color = Color(0, 0, 0, 0.45)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_water"]
 shader = ExtResource("8_shader_water")
-shader_parameter/wave_speed = 1.0
-shader_parameter/wave_freq = 11.0
-shader_parameter/wave_amp = 0.0035
+shader_parameter/flow_speed = 0.04
+shader_parameter/wave_speed = 1.35
+shader_parameter/wave_height = 0.022
+shader_parameter/wave_freq = 8.5
+shader_parameter/trail_strength = 0.45
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_water_fade"]
 shader = ExtResource("8_shader_water")
-shader_parameter/wave_speed = 1.0
-shader_parameter/wave_freq = 11.0
-shader_parameter/wave_amp = 0.0035
+shader_parameter/flow_speed = 0.04
+shader_parameter/wave_speed = 1.35
+shader_parameter/wave_height = 0.022
+shader_parameter/wave_freq = 8.5
+shader_parameter/trail_strength = 0.45
 
 [node name="FishingSpot" type="Control"]
 layout_mode = 3
